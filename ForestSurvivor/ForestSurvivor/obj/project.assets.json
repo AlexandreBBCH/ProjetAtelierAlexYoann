@@ -107,11 +107,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alexandrebbch\\Documents\\01Lundi\\ModuleProgramationCsharp\\CalculMenu\\ForestSurvivor\\ForestSurvivor\\ForestSurvivor.csproj",
+      "projectUniqueName": "C:\\Users\\alexandrebbch\\Documents\\02Mardi\\ProjetAlexYoann\\ProjetMonogame\\ProjetAtelierAlexYoann\\ForestSurvivor\\ForestSurvivor\\ForestSurvivor.csproj",
       "projectName": "ForestSurvivor",
-      "projectPath": "C:\\Users\\alexandrebbch\\Documents\\01Lundi\\ModuleProgramationCsharp\\CalculMenu\\ForestSurvivor\\ForestSurvivor\\ForestSurvivor.csproj",
+      "projectPath": "C:\\Users\\alexandrebbch\\Documents\\02Mardi\\ProjetAlexYoann\\ProjetMonogame\\ProjetAtelierAlexYoann\\ForestSurvivor\\ForestSurvivor\\ForestSurvivor.csproj",
       "packagesPath": "C:\\Users\\alexandrebbch\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alexandrebbch\\Documents\\01Lundi\\ModuleProgramationCsharp\\CalculMenu\\ForestSurvivor\\ForestSurvivor\\obj\\",
+      "outputPath": "C:\\Users\\alexandrebbch\\Documents\\02Mardi\\ProjetAlexYoann\\ProjetMonogame\\ProjetAtelierAlexYoann\\ForestSurvivor\\ForestSurvivor\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\alexandrebbch\\AppData\\Roaming\\NuGet\\NuGet.Config",

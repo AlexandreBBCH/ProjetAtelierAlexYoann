@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>DesktopGL</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/Environnement/bush.png</File>
+    <File>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/Monster/Slime/Slime01.png</File>
+    <File>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/Player/HunterBot.png</File>
+    <File>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/Player/HunterBotLeft.png</File>
+    <File>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/Player/HunterBotRight.png</File>
+    <File>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/Player/HunterRight.png</File>
+    <File>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/Player/HunterTop.png</File>
+    <File>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/Player/HunterTopLeft.png</File>
+    <File>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/Player/HunterTopRight.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
