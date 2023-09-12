@@ -91,9 +91,9 @@ namespace ForestSurvivor
                 {
                     // monte la dificulté
                     Level++;
-                    if (TimeBetweenMonsterSpawn > 1f)
+                    if (TimeBetweenMonsterSpawn >= 0.5f)
                     {
-                        TimeBetweenMonsterSpawn += 0.2f;
+                        TimeBetweenMonsterSpawn -= 0.2f;
                     }
                     DifficultyLevel += Level * 2;
                     NbTotalMonster -= DifficultyLevel / 2;
