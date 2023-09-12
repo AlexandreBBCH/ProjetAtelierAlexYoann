@@ -3,6 +3,7 @@ using ForestSurvivor.AllGlobals;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace ForestSurvivor
@@ -21,6 +22,10 @@ namespace ForestSurvivor
 
         private int mouvementDirection;
         private bool canShoot;
+        private float timerEnnemiHurt;
+        bool hasShootTouchEnnemi = false;
+
+        Ennemies ennemiesShoot = new Ennemies(0, 0, 0, 0, 0);
 
         public Texture2D Texture { get => _texture; set => _texture = value; }
         public int Width { get => _width; set => _width = value; }
@@ -43,7 +48,7 @@ namespace ForestSurvivor
             Life = life;
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             KeyboardState keyPress = Keyboard.GetState();
 
@@ -238,7 +243,6 @@ namespace ForestSurvivor
             #endregion
 
             #region collision bullet with ennemies
-            bool hasShootTouchEnnemi = false;
             foreach (Shoot shoot in Globals.listShoots)
             {
                 foreach (Ennemies ennemies in Globals.listEnnemies)
@@ -247,6 +251,7 @@ namespace ForestSurvivor
                     {
                         Globals.listShoots.Remove(shoot);
                         ennemies.Life -= shoot.Damage;
+                        ennemiesShoot = ennemies;
                         hasShootTouchEnnemi = true;
 
                         if (ennemies.Life <= 0)
@@ -262,9 +267,24 @@ namespace ForestSurvivor
                     break;
                 }
             }
+            // Change la couleur de l'ennemi après avoir été touché
+            if (hasShootTouchEnnemi)
+            {
+                timerEnnemiHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (timerEnnemiHurt <= 0.2f)
+                {
+                    ennemiesShoot.Color = Color.Red;
+                }
+                else if (timerEnnemiHurt >= 0.2f)
+                {
+                    ennemiesShoot.Color = Color.White;
+                    hasShootTouchEnnemi = false;
+                    timerEnnemiHurt = 0f;
+                }
+            }
             #endregion
         }
-
+        
         public Rectangle GetPlayerRectangle()
         {
             return new Rectangle(X, Y, Width, Height);

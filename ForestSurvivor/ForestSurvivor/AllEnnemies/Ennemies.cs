@@ -20,6 +20,8 @@ namespace ForestSurvivor.AllEnnemies
         private int _damage;
         private bool _isDead;
 
+        private Color _color;
+
         private Random rnd;
 
         public Texture2D Texture { get => texture; set => texture = value; }
@@ -31,6 +33,7 @@ namespace ForestSurvivor.AllEnnemies
         public int Speed { get => _speed; set => _speed = value; }
         public int Damage { get => _damage; set => _damage = value; }
         public bool IsDead { get => _isDead; set => _isDead = value; }
+        public Color Color { get => _color; set => _color = value; }
 
         public Ennemies(int width, int height, int life, int speed, int damage)
         {
@@ -66,6 +69,7 @@ namespace ForestSurvivor.AllEnnemies
             Life = life;
             Speed = speed;
             Damage = damage;
+            Color = Color.White;
             IsDead = false;
         }
 
@@ -98,7 +102,7 @@ namespace ForestSurvivor.AllEnnemies
 
         public void Draw()
         {
-            Globals.SpriteBatch.Draw(Texture, GetEnnemieRectangle(), Color.White);
+            Globals.SpriteBatch.Draw(Texture, GetEnnemieRectangle(), Color);
         }
 
     }
