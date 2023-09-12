@@ -1,4 +1,5 @@
-﻿using ForestSurvivor.AllGlobals;
+﻿using ForestSurvivor.AllEnnemies;
+using ForestSurvivor.AllGlobals;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -224,8 +225,46 @@ namespace ForestSurvivor
                 }
             }
             #endregion
+
+            #region collision ennemies with player
+            foreach (Ennemies ennemies in Globals.listEnnemies)
+            {
+                if (ennemies.GetEnnemieRectangle().Intersects(GetPlayerRectangle()))
+                {
+                    Life -= ennemies.Damage;
+                    break;
+                }
+            }
+            #endregion
+
+            #region collision bullet with ennemies
+            bool hasShootTouchEnnemi = false;
+            foreach (Shoot shoot in Globals.listShoots)
+            {
+                foreach (Ennemies ennemies in Globals.listEnnemies)
+                {
+                    if (shoot.GetShootRectangle().Intersects(ennemies.GetEnnemieRectangle()))
+                    {
+                        Globals.listShoots.Remove(shoot);
+                        ennemies.Life -= shoot.Damage;
+                        hasShootTouchEnnemi = true;
+
+                        if (ennemies.Life <= 0)
+                        {
+                            Globals.listEnnemies.Remove(ennemies);
+                        }
+                        break;
+                    }
+                }
+                // Pour sortir du foreach sinon il y a une erreur car on supprime un élément de la liste que l'on parcourt
+                if (hasShootTouchEnnemi)
+                {
+                    break;
+                }
+            }
+            #endregion
         }
-        
+
         public Rectangle GetPlayerRectangle()
         {
             return new Rectangle(X, Y, Width, Height);

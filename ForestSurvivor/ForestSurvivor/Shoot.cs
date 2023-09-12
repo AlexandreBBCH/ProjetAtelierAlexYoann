@@ -18,6 +18,7 @@ namespace ForestSurvivor
         private int _y;
         private int _speed;
         private int _direction;
+        private int _damage;
         private bool _destroy;
 
         public int Width { get => _width; set => _width = value; }
@@ -28,6 +29,7 @@ namespace ForestSurvivor
         public Texture2D Texture { get => _texture; set => _texture = value; }
         public int Direction { get => _direction; set => _direction = value; }
         public bool Destroy { get => _destroy; set => _destroy = value; }
+        public int Damage { get => _damage; set => _damage = value; }
 
         public Shoot(int x, int y, int direction)
         {
@@ -37,6 +39,7 @@ namespace ForestSurvivor
             _width = 40;
             _height = 10;
             _speed = 20;
+            _damage = 1;
             _destroy = false;
             Texture = GlobalsTexture.shootTexture;
         }
@@ -135,6 +138,11 @@ namespace ForestSurvivor
                     Destroy = true;
                 }
             }
+        }
+
+        public Rectangle GetShootRectangle()
+        {
+            return new Rectangle(X, Y, Width, Height);
         }
 
         public void Draw()
