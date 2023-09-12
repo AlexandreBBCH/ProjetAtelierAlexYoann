@@ -14,5 +14,8 @@ namespace ForestSurvivor.AllGlobals
         public static SpriteFont titleFont;
         public static Texture2D MainMenu2D;
         public static Texture2D Slime2D;
+
+        public static List<Texture2D> listTexturesPlayer;
+        public static Texture2D shootTexture;
     }
 }

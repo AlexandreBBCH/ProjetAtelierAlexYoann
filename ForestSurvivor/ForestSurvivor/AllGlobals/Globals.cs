@@ -1,4 +1,5 @@
-﻿using ForestSurvivor.Ui;
+﻿using ForestSurvivor.AllEnnemies;
+using ForestSurvivor.Ui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -24,5 +25,14 @@ namespace ForestSurvivor.AllGlobals
         public static bool LauchGame = false;
         public static bool Exit = false;
         public static List<OptionClickable> optionClickables = new List<OptionClickable>();
+
+
+        public static List<Shoot> listShoots = new List<Shoot>();
+        public static List<Ennemies> listEnnemies = new List<Ennemies>();
+
+
+        public static int ScreenWidth;
+        public static int ScreenHeight;
+
     }
 }

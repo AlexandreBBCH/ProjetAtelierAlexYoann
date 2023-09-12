@@ -1,9 +1,11 @@
-﻿using ForestSurvivor.AllGlobals;
+﻿using ForestSurvivor.AllEnnemies;
+using ForestSurvivor.AllGlobals;
 using ForestSurvivor.Ui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace ForestSurvivor
 {
@@ -13,7 +15,9 @@ namespace ForestSurvivor
         private SpriteBatch _spriteBatch;
         public OptionPause _optionPause;
         public MainMenu _mainMenu;
-        
+        Player player;
+        SpawnManager spawnManager;
+
 
         public Game1()
         {
@@ -22,13 +26,25 @@ namespace ForestSurvivor
             IsMouseVisible = true;
             Globals.graphics.PreferredBackBufferWidth = 2560; // Largeur
             Globals.graphics.PreferredBackBufferHeight = 1440; // Hauteur
+
+            Globals.ScreenHeight = Globals.graphics.PreferredBackBufferHeight;
+            Globals.ScreenWidth = Globals.graphics.PreferredBackBufferWidth;
             //Globals.graphics.IsFullScreen = true;
             Globals.graphics.ApplyChanges();
             _optionPause = new OptionPause();
             _mainMenu = new MainMenu();
 
-        }
 
+
+        }
+        protected override void Initialize()
+        {
+
+            player = new Player(120, 120, 500, 500, 8, 10);
+            spawnManager = new SpawnManager();
+
+            base.Initialize();
+        }
 
         protected override void LoadContent()
         {
@@ -40,12 +56,23 @@ namespace ForestSurvivor
             GlobalsTexture.Slime2D = Content.Load<Texture2D>("Monster/Slime/Slime01");
             Globals.SpriteBatch = _spriteBatch;
 
-        }
-        protected override void Initialize()
-        {
+            GlobalsTexture.listTexturesPlayer = new List<Texture2D>
+            {
+                Content.Load<Texture2D>("Player/HunterBot"),
+                Content.Load<Texture2D>("Player/HunterBotLeft"),
+                Content.Load<Texture2D>("Player/HunterBotRight"),
+                Content.Load<Texture2D>("Player/HunterLeft"),
+                Content.Load<Texture2D>("Player/HunterRight"),
+                Content.Load<Texture2D>("Player/HunterTop"),
+                Content.Load<Texture2D>("Player/HunterTopLeft"),
+                Content.Load<Texture2D>("Player/HunterTopRight"),
+            };
+            GlobalsTexture.shootTexture = Content.Load<Texture2D>("Player/HunterTopRight");
 
-            base.Initialize();
+
+            player.Texture = GlobalsTexture.listTexturesPlayer[0];
         }
+       
 
         protected override void Update(GameTime gameTime)
         {
@@ -55,18 +82,41 @@ namespace ForestSurvivor
             _mainMenu.UpdateMainMenu(gameTime,mouseState);
             _optionPause.OptionUpdate(gameTime,mouseState);
 
+            spawnManager.Update(gameTime, this);
+            player.Update(gameTime);
+            foreach (Shoot shoot in Globals.listShoots)
+            {
+                shoot.Update();
+            }
+            foreach (Ennemies ennemies in Globals.listEnnemies)
+            {
+                ennemies.Update(player);
+            }
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             MouseState mouseState = Mouse.GetState();
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.LightGreen);
             _spriteBatch.Begin(default,null,SamplerState.PointClamp);
             _optionPause.DrawOption();
             _mainMenu.DrawMainMenu();
             //Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "text", new Vector2(499, 400), Color.Red);
             //Globals.SpriteBatch.Draw(GlobalsTexture.MainMenu2D, new Rectangle(0,0, Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight), Color.White);
+
+            player.Draw();
+
+            foreach (Ennemies ennemies in Globals.listEnnemies)
+            {
+                ennemies.Draw();
+            }
+
+            foreach (Shoot shoot in Globals.listShoots)
+            {
+                shoot.Draw();
+            }
 
             _spriteBatch.End();
 
