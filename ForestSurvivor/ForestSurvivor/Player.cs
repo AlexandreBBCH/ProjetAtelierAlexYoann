@@ -51,6 +51,7 @@ namespace ForestSurvivor
         public void Update(GameTime gameTime)
         {
             KeyboardState keyPress = Keyboard.GetState();
+            MouseState mouseState = Mouse.GetState();
 
             #region Top Left Mouvement
             if (keyPress.IsKeyDown(Keys.W) && keyPress.IsKeyDown(Keys.A))
@@ -165,7 +166,7 @@ namespace ForestSurvivor
             #endregion
 
             #region add Shoot
-            if (keyPress.IsKeyDown(Keys.Enter) && canShoot)
+            if (mouseState.LeftButton == ButtonState.Pressed && canShoot)
             {
                 int x = 0;
                 int y = 0;
@@ -214,7 +215,7 @@ namespace ForestSurvivor
                 canShoot = false;
             }
 
-            if (keyPress.IsKeyUp(Keys.Enter))
+            if (mouseState.LeftButton == ButtonState.Released)
             {
                 canShoot = true;
             }

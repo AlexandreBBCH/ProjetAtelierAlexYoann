@@ -82,16 +82,20 @@ namespace ForestSurvivor
             _mainMenu.UpdateMainMenu(gameTime,mouseState);
             _optionPause.OptionUpdate(gameTime,mouseState);
 
-            spawnManager.Update(gameTime, this);
-            player.Update(gameTime);
-            foreach (Shoot shoot in Globals.listShoots)
+            if (!_optionPause.IsResume)
             {
-                shoot.Update();
+                spawnManager.Update(gameTime, this);
+                player.Update(gameTime);
+                foreach (Shoot shoot in Globals.listShoots)
+                {
+                    shoot.Update();
+                }
+                foreach (Ennemies ennemies in Globals.listEnnemies)
+                {
+                    ennemies.Update(player);
+                }
             }
-            foreach (Ennemies ennemies in Globals.listEnnemies)
-            {
-                ennemies.Update(player);
-            }
+  
 
             base.Update(gameTime);
         }
@@ -101,22 +105,27 @@ namespace ForestSurvivor
             MouseState mouseState = Mouse.GetState();
             GraphicsDevice.Clear(Color.LightGreen);
             _spriteBatch.Begin(default,null,SamplerState.PointClamp);
+            if (Globals.LauchGame)
+            {
+                player.Draw();
+
+                foreach (Ennemies ennemies in Globals.listEnnemies)
+                {
+                    ennemies.Draw();
+                }
+
+                foreach (Shoot shoot in Globals.listShoots)
+                {
+                    shoot.Draw();
+                }
+            }
             _optionPause.DrawOption();
             _mainMenu.DrawMainMenu();
             //Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "text", new Vector2(499, 400), Color.Red);
             //Globals.SpriteBatch.Draw(GlobalsTexture.MainMenu2D, new Rectangle(0,0, Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight), Color.White);
 
-            player.Draw();
-
-            foreach (Ennemies ennemies in Globals.listEnnemies)
-            {
-                ennemies.Draw();
-            }
-
-            foreach (Shoot shoot in Globals.listShoots)
-            {
-                shoot.Draw();
-            }
+       
+    
 
             _spriteBatch.End();
 
