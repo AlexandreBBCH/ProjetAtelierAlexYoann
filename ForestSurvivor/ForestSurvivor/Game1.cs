@@ -24,15 +24,14 @@ namespace ForestSurvivor
             Globals.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Globals.graphics.PreferredBackBufferWidth = 2560; // Largeur
-            Globals.graphics.PreferredBackBufferHeight = 1440; // Hauteur
+            Globals.graphics.PreferredBackBufferWidth = 1920; // Largeur
+            Globals.graphics.PreferredBackBufferHeight = 1080; // Hauteur
 
             Globals.ScreenHeight = Globals.graphics.PreferredBackBufferHeight;
             Globals.ScreenWidth = Globals.graphics.PreferredBackBufferWidth;
             //Globals.graphics.IsFullScreen = true;
             Globals.graphics.ApplyChanges();
-            _optionPause = new OptionPause();
-            _mainMenu = new MainMenu();
+ 
 
 
 
@@ -53,6 +52,11 @@ namespace ForestSurvivor
             
 
             GlobalsTexture.MainMenu2D = Content.Load<Texture2D>("Ui/MainMenu/MainMenu");
+            GlobalsTexture.PauseBackground2D = Content.Load<Texture2D>("Ui/MainMenu/BackgroundPause");
+
+            GlobalsTexture.Minus = Content.Load<Texture2D>("Ui/Button/minus");
+            GlobalsTexture.Plus = Content.Load<Texture2D>("Ui/Button/plus");
+
             GlobalsTexture.Slime2D = Content.Load<Texture2D>("Monster/Slime/Slime01");
             Globals.SpriteBatch = _spriteBatch;
 
@@ -71,6 +75,8 @@ namespace ForestSurvivor
 
 
             player.Texture = GlobalsTexture.listTexturesPlayer[0];
+            _optionPause = new OptionPause();
+            _mainMenu = new MainMenu();
         }
        
 
@@ -82,7 +88,7 @@ namespace ForestSurvivor
             _mainMenu.UpdateMainMenu(gameTime,mouseState);
             _optionPause.OptionUpdate(gameTime,mouseState);
 
-            if (!_optionPause.IsResume)
+            if (!_optionPause.IsResume && Globals.LauchGame)
             {
                 spawnManager.Update(gameTime, this);
                 player.Update(gameTime);
@@ -119,13 +125,14 @@ namespace ForestSurvivor
                     shoot.Draw();
                 }
             }
-            _optionPause.DrawOption();
             _mainMenu.DrawMainMenu();
+            _optionPause.DrawOption();
+
             //Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "text", new Vector2(499, 400), Color.Red);
             //Globals.SpriteBatch.Draw(GlobalsTexture.MainMenu2D, new Rectangle(0,0, Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight), Color.White);
 
-       
-    
+
+
 
             _spriteBatch.End();
 

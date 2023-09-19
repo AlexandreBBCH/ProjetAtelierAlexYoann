@@ -20,20 +20,22 @@ namespace ForestSurvivor.Ui
         private string _buttonName;
         private float brightness = 1f;
         private float elapsedClickTime = float.MaxValue;
-        private int _x;
-        private int _y;
+        private float _x;
+        private float _y;
         private int _width;
         private int _height;
         private string _text;
         private Rectangle _collider;
         private string _where;
-
+        private Texture2D _texture2D;
+        private string _typeTexture;
         public string ButtonName { get => _buttonName; set => _buttonName = value; }
         public string Where { get => _where; set => _where = value; }
 
-        public OptionClickable(int x, int y, int width, int height, SpriteFont font, string text, string buttonName,string where)
+        public OptionClickable(float x, float y, int width, int height,  string text, string buttonName,string where,string typeTexture, SpriteFont font, Texture2D texture2D)
         {
             _font = font;
+            _texture2D = texture2D;
             _buttonName = buttonName;
             _text = text;
             _x = x;
@@ -41,6 +43,7 @@ namespace ForestSurvivor.Ui
             _width = width;
             _height = height;
             _where = where;
+            _typeTexture = typeTexture;
             Globals.optionClickables.Add(this);
         }
 
@@ -54,30 +57,63 @@ namespace ForestSurvivor.Ui
         public void DrawTextClickable()
         {
             //Globals.SpriteBatch.Draw(GlobalsTexture.MainMenu2D, GetRectangle(), Color.White);
-            Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, _text, new Vector2(_x, _y), Color.White);
+            if (_typeTexture == "Font")
+            {
+                Globals.SpriteBatch.DrawString(_font, _text, new Vector2(_x, _y), Color.White);
+            }
+            else if(_typeTexture == "Image")
+            {
+                Globals.SpriteBatch.Draw(_texture2D,new Rectangle((int)_x, (int)_y,_width,_height), Color.White);
+            }
+     
         }
 
         public Rectangle GetRectangle()
         {
-            return new Rectangle(_x, _y, _width, _height);
+            return new Rectangle((int)_x, (int)_y, _width, _height);
         }
 
         public void UseIt()
         {
-            if (_buttonName == "Start")
-            {
-                Globals.LauchGame = true;
-            }
-            if (_buttonName == "Exit")
-            {
-                Globals.Exit = true;
 
+            switch (_buttonName)
+            {
+
+                case "Start":
+                    Globals.LauchGame = true;
+                    break;
+                case "Option":
+                    Globals.IsResume = true;
+                    break;
+                case "BackMenu":
+                        Globals.Back = true;
+                        Globals.LauchGame = false;
+                    break;
+                case "Resume":
+                    Globals.Back = true;
+                    break;
+                case "Exit":
+                    Globals.Exit = true;
+                    break;
+                case "AddMusique":
+                    if (GlobalsSounds.Musique <= 95) GlobalsSounds.Musique += 5;
+                    break;
+                case "RetireMusique":
+                    if (GlobalsSounds.Musique >= 5) GlobalsSounds.Musique -= 5;
+                    break;
+                case "AddSound":
+                    if (GlobalsSounds.Sound <= 95) GlobalsSounds.Sound += 5;
+                    break;
+                case "RetireSound":
+                    if (GlobalsSounds.Sound >= 5) GlobalsSounds.Sound -= 5;
+                    break;
+                default:
+                    break;
             }
         }
 
         public bool IsClicked(MouseState mouseState)
         {
-            // Verify the position of the mouse cursor and its state (pressed or not)
             if (GetRectangle().Contains(mouseState.Position) && mouseState.LeftButton == ButtonState.Pressed)
             {
                 if (!wasLeftButtonPressedLastFrame)
