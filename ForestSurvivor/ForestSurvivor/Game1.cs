@@ -1,5 +1,6 @@
 ﻿using ForestSurvivor.AllEnnemies;
 using ForestSurvivor.AllGlobals;
+using ForestSurvivor.AllItems;
 using ForestSurvivor.Ui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,8 +18,7 @@ namespace ForestSurvivor
         public MainMenu _mainMenu;
         Player player;
         SpawnManager spawnManager;
-
-
+        Items apple;
         public Game1()
         {
             Globals.graphics = new GraphicsDeviceManager(this);
@@ -26,6 +26,7 @@ namespace ForestSurvivor
             IsMouseVisible = true;
             Globals.graphics.PreferredBackBufferWidth = 1500; // Largeur
             Globals.graphics.PreferredBackBufferHeight = 800; // Hauteur
+
 
             Globals.ScreenHeight = Globals.graphics.PreferredBackBufferHeight;
             Globals.ScreenWidth = Globals.graphics.PreferredBackBufferWidth;
@@ -50,7 +51,14 @@ namespace ForestSurvivor
             GlobalsTexture.textGamefont = Content.Load<SpriteFont>("Font/gameText");
 
             GlobalsTexture.MainMenu2D = Content.Load<Texture2D>("Ui/MainMenu/MainMenu");
+            GlobalsTexture.PauseBackground2D = Content.Load<Texture2D>("Ui/MainMenu/BackgroundPause");
+            GlobalsTexture.Minus = Content.Load<Texture2D>("Ui/Button/minus");
+            GlobalsTexture.Plus = Content.Load<Texture2D>("Ui/Button/plus");
+
             GlobalsTexture.Slime2D = Content.Load<Texture2D>("Monster/Slime/Slime01");
+
+            GlobalsTexture.Apple = Content.Load<Texture2D>("Items/apple");
+
             Globals.SpriteBatch = _spriteBatch;
 
             GlobalsTexture.listTexturesPlayer = new List<Texture2D>
@@ -68,8 +76,12 @@ namespace ForestSurvivor
 
 
             player.Texture = GlobalsTexture.listTexturesPlayer[0];
+            _optionPause = new OptionPause();
+            _mainMenu = new MainMenu();
+             apple = new Items(800, 500, "Apple", "Soin",player);
+
         }
-       
+
 
         protected override void Update(GameTime gameTime)
         {
@@ -79,7 +91,7 @@ namespace ForestSurvivor
             _mainMenu.UpdateMainMenu(gameTime,mouseState);
             _optionPause.OptionUpdate(gameTime,mouseState);
 
-            if (!_optionPause.IsResume)
+            if (!_optionPause.IsResume && Globals.LauchGame)
             {
                 spawnManager.Update(gameTime, this);
                 foreach (Shoot shoot in Globals.listShoots)
@@ -100,6 +112,17 @@ namespace ForestSurvivor
                     shooterSLime.Shoot(gameTime, player);
                 }
                 player.Update(gameTime, this);
+
+                foreach (var item in Globals.listItems)
+                {
+                    if (item.IsCollected)
+                    {
+                        Globals.listItems.Remove(item);
+                        break;
+                    }
+                }
+
+                Globals.listItems.ForEach(item => item.UpdateItems(player));
 
             }
 
@@ -134,14 +157,13 @@ namespace ForestSurvivor
                 {
                     shoot.Draw();
                 }
-            }
-            _optionPause.DrawOption();
-            _mainMenu.DrawMainMenu();
-            //Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "text", new Vector2(499, 400), Color.Red);
-            //Globals.SpriteBatch.Draw(GlobalsTexture.MainMenu2D, new Rectangle(0,0, Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight), Color.White);
 
-       
-    
+            }
+            Globals.listItems.ForEach(item => item.DrawItems());
+
+            _mainMenu.DrawMainMenu();
+            _optionPause.DrawOption();
+
 
             _spriteBatch.End();
 

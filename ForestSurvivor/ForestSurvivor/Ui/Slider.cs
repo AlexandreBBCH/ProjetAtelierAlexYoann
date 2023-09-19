@@ -22,7 +22,9 @@ namespace ForestSurvivor.Ui
         private int _height;
         private bool wasLeftButtonPressedLastFrame;
         private string _buttonName;
-        public Slider(int x, int y, int width, int height) 
+        private string _name;
+        bool isPress;
+        public Slider(int x, int y, int width, int height,string name) 
         {
             _x = x;
             _xButton = x;
@@ -30,12 +32,16 @@ namespace ForestSurvivor.Ui
             _yButton = y;
             _width = width;
             _height = height;
+            _name = name;
+            Globals.allSliders.Add(this);
+
         }
 
         public int X { get => _x; set => _x = value; }
         public int Y { get => _y; set => _y = value; }
         public int XButton { get => _xButton; set => _xButton = value; }
         public int YButton { get => _yButton; set => _yButton = value; }
+        public string Name { get => _name; set => _name = value; }
 
         public void DrawSlider()
         {
@@ -50,7 +56,36 @@ namespace ForestSurvivor.Ui
         {
             return new Rectangle(_xButton-20, _yButton, 50, 70);
         }
-
+      
+        public void ManageSound(MouseState mouseState)
+        {
+            if (mouseState.LeftButton == ButtonState.Pressed && !isPress)
+            {
+                if (Name == "MusiqueAdd")
+                {
+                    GlobalsSounds.Musique += 20;
+                }
+                if (Name == "SoundAdd")
+                {
+                    GlobalsSounds.Sound += 20;
+                }
+                if (Name == "Musique")
+                {
+                    GlobalsSounds.Musique -= 20;
+                }
+                if (Name == "Sound")
+                {
+                    GlobalsSounds.Sound -= 20;
+                }
+                isPress = true;
+            }
+            if (mouseState.LeftButton == ButtonState.Released)
+            {
+                isPress = false;
+            }
+        }
+       
+     
         public bool IsClicked(MouseState mouseState)
         {
             // Verify the position of the mouse cursor and its state (pressed or not)

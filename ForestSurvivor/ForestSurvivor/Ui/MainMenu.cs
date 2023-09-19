@@ -14,9 +14,9 @@ namespace ForestSurvivor.Ui
 {
     public class MainMenu
     {
-        OptionClickable _textLauchGame = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3 + 250, 500, 200, 80, GlobalsTexture.titleFont, "Play", "Start","MainMenu");
-        OptionClickable _textOption = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3 + 250, 700, 300, 80, GlobalsTexture.titleFont, "Option", "Option", "/*MainMenu*/");
-        OptionClickable _textQuitGame = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3 + 250, 900, 200, 80, GlobalsTexture.titleFont, "Quit", "Exit", "MainMenu");
+        OptionClickable _textLauchGame = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.3f, Globals.graphics.PreferredBackBufferHeight / 3f, 200, 80, "Play", "Start","MainMenu","Font" ,GlobalsTexture.titleFont,null);
+        OptionClickable _textOption = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.3f, Globals.graphics.PreferredBackBufferHeight / 2.4f, 300, 80, "Option", "Option", "MainMenu","Font", GlobalsTexture.titleFont, null);
+        OptionClickable _textQuitGame = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.3f, Globals.graphics.PreferredBackBufferHeight / 2f, 200, 80, "Quit", "Exit", "MainMenu","Font", GlobalsTexture.titleFont, null);
 
 
 
@@ -32,7 +32,7 @@ namespace ForestSurvivor.Ui
 
       
             Globals.SpriteBatch.Draw(GlobalsTexture.MainMenu2D, new Rectangle(0,0,Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight), Color.White);
-            Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "Survival Forest ", new Vector2(Globals.graphics.PreferredBackBufferWidth / 3, 100), Color.White);
+            Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "Survival Forest ", new Vector2(Globals.graphics.PreferredBackBufferWidth / 3,  Globals.graphics.PreferredBackBufferHeight / 5f), Color.White);
 
                 foreach (var textClick in Globals.optionClickables)
                 {
@@ -54,7 +54,15 @@ namespace ForestSurvivor.Ui
             {
                 if (button.IsClicked(mouseState))
                 {
-                    button.UseIt();
+                    if (!Globals.LauchGame && button.Where == "MainMenu"  && Globals.ButtonEnabledMain)
+                    {
+                        button.UseIt();
+                    }
+                    else if ( button.Where == "Option" && Globals.ButtonEnabled)
+                    {
+                        button.UseIt();
+                    }
+     
                 }
             }
 
