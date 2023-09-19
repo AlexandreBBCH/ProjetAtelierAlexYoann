@@ -24,7 +24,7 @@ namespace ForestSurvivor
         private bool betweenLevel;
         private int nbSlime;
         private int nbMonster2;
-        private int nbMonster3;
+        private int nbBigSlime;
 
         public int Level { get => _level; set => _level = value; }
         public int NbTotalMonster { get => _nbTotalMonster; set => _nbTotalMonster = value; }
@@ -44,7 +44,7 @@ namespace ForestSurvivor
 
             nbSlime = DifficultyLevel;
             nbMonster2 = 0;
-            nbMonster3 = 0;
+            nbBigSlime = 1;
         }
 
         public void Update(GameTime gameTime, Game game)
@@ -68,26 +68,26 @@ namespace ForestSurvivor
                     // Spawn les ennemies
                     if (nbSlime > 0)
                     {
-                        Globals.listEnnemies.Add(CreateSlime(game));
+                        Globals.listLittleSlime.Add(CreateSlime(game));
                         nbSlime--;
                     }
 
                     if (nbMonster2 > 0)
                     {
-                        // Create monster
+                        // A faire
                         nbMonster2--;
                     }
 
-                    if (nbMonster3 > 0)
+                    if (nbBigSlime > 0)
                     {
-                        // Create monster
-                        nbMonster3--;
+                        Globals.listBigSlime.Add(CreateBigSlime(game));
+                        nbBigSlime--;
                     }
                     timerBetweenSpawn = 0f;
                 }
 
                 // Si tous les ennemies on été tués
-                if (Globals.listEnnemies.Count == 0 && nbSlime == 0 && nbMonster2 == 0 && nbMonster3 == 0)
+                if (Globals.listLittleSlime.Count == 0 && nbSlime == 0 && nbMonster2 == 0 && nbBigSlime == 0)
                 {
                     // monte la dificulté
                     Level++;
@@ -108,7 +108,7 @@ namespace ForestSurvivor
                     int tmpdifficulty = DifficultyLevel;
                     int tmpSlime = nbSlime;
                     int tmpMonster2 = 0;
-                    int tmpMonster3 = 0;
+                    int tmpBigSlime = 0;
 
                     while (tmpdifficulty > 0)
                     {
@@ -123,7 +123,7 @@ namespace ForestSurvivor
 
                         if (tmpdifficulty >= 3)
                         {
-                            tmpMonster3 += 1;
+                            tmpBigSlime += 1;
                             tmpdifficulty -= 3;
                         }
 
@@ -136,17 +136,24 @@ namespace ForestSurvivor
                     // New monster number
                     nbSlime += tmpSlime;
                     nbMonster2 = tmpMonster2;
-                    nbMonster3 = tmpMonster3;
+                    nbBigSlime = tmpBigSlime;
 
                     betweenLevel = true;
                 }
             }
         }
 
-        public Ennemies CreateSlime(Game game)
+        public static Ennemies CreateSlime(Game game)
         {
-            Ennemies ennemies = new Ennemies(69, 47, 2, 5, 1);
+            Ennemies ennemies = new Ennemies(Globals.WIDTH_LITTLE_SLIME, Globals.HEIGHT_LITTLE_SLIME, Globals.LIFE_LITTLE_SLIME ,Globals.SPEED_LITTLE_SLIME, Globals.DAMAGE_LITTLE_SLIME, Globals.DAMAGE_SPEED_LITTLE_SLIME);
             ennemies.Texture =  ennemies.Texture = game.Content.Load<Texture2D>("Monster/Slime/Slime01");
+            return ennemies;
+        }
+
+        public static BigSlime CreateBigSlime(Game game)
+        {
+            BigSlime ennemies = new BigSlime(115, 78, 5, 3, 2, 3);
+            ennemies.Texture = game.Content.Load<Texture2D>("Monster/Slime/SlimeBig");
             return ennemies;
         }
     }

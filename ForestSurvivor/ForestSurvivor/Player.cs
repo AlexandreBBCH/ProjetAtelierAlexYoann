@@ -10,6 +10,8 @@ namespace ForestSurvivor
 {
     internal class Player
     {
+        public const float TIME_COLOR_RED = 0.2f;
+
         private Texture2D _texture;
         private int _width;
         private int _height;
@@ -19,13 +21,10 @@ namespace ForestSurvivor
         private int _life;
         private int _score;
         private int _highscore;
+        private Color _color;
 
         private int mouvementDirection;
         private bool canShoot;
-        private float timerEnnemiHurt;
-        bool hasShootTouchEnnemi = false;
-
-        Ennemies ennemiesShoot = new Ennemies(0, 0, 0, 0, 0);
 
         public Texture2D Texture { get => _texture; set => _texture = value; }
         public int Width { get => _width; set => _width = value; }
@@ -36,19 +35,21 @@ namespace ForestSurvivor
         public int Life { get => _life; set => _life = value; }
         public int Score { get => _score; set => _score = value; }
         public int Highscore { get => _highscore; set => _highscore = value; }
+        public Color PlayerColor { get => _color; set => _color = value; }
 
-        public Player(int width, int height, int x, int y, int speed, int life)
+        public Player(int width, int height, int x, int y, int speed, int life, Color color)
         {
             Width = width;
             Height = height;
             X = x;
             Y = y;
+            PlayerColor = color;
             mouvementDirection = 1;
             Speed = speed;
             Life = life;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Game game)
         {
             KeyboardState keyPress = Keyboard.GetState();
             MouseState mouseState = Mouse.GetState();
@@ -232,68 +233,90 @@ namespace ForestSurvivor
             }
             #endregion
 
-            #region collision ennemies with player
-            foreach (Ennemies ennemies in Globals.listEnnemies)
-            {
-                if (ennemies.GetEnnemieRectangle().Intersects(GetPlayerRectangle()))
-                {
-                    Life -= ennemies.Damage;
-                    break;
-                }
-            }
-            #endregion
-
             #region collision bullet with ennemies
+            bool hasKilled = false;
             foreach (Shoot shoot in Globals.listShoots)
             {
-                foreach (Ennemies ennemies in Globals.listEnnemies)
+                foreach (Ennemies ennemies in Globals.listLittleSlime)
                 {
-                    if (shoot.GetShootRectangle().Intersects(ennemies.GetEnnemieRectangle()))
+                    hasKilled = ennemies.CollisionWithBullet(gameTime, shoot);
+                    if (hasKilled)
                     {
-                        Globals.listShoots.Remove(shoot);
-                        ennemies.Life -= shoot.Damage;
-                        ennemiesShoot = ennemies;
-                        hasShootTouchEnnemi = true;
-
-                        if (ennemies.Life <= 0)
-                        {
-                            Globals.listEnnemies.Remove(ennemies);
-                        }
                         break;
                     }
                 }
-                // Pour sortir du foreach sinon il y a une erreur car on supprime un élément de la liste que l'on parcourt
-                if (hasShootTouchEnnemi)
+                if (hasKilled)
                 {
                     break;
                 }
             }
-            // Change la couleur de l'ennemi après avoir été touché
-            if (hasShootTouchEnnemi)
+
+            hasKilled = false;
+            foreach (Shoot shoot in Globals.listShoots)
             {
-                timerEnnemiHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (timerEnnemiHurt <= 0.2f)
+                foreach (BigSlime ennemies in Globals.listBigSlime)
                 {
-                    ennemiesShoot.Color = Color.Red;
+                    hasKilled = ennemies.CollisionWithBullet(gameTime, shoot);
+                    if (hasKilled)
+                    {
+                        break;
+                    }
                 }
-                else if (timerEnnemiHurt >= 0.2f)
+                if (hasKilled)
                 {
-                    ennemiesShoot.Color = Color.White;
-                    hasShootTouchEnnemi = false;
-                    timerEnnemiHurt = 0f;
+                    break;
                 }
             }
             #endregion
+
+            foreach (Ennemies ennemies in Globals.listLittleSlime)
+            {
+                ennemies.CollisionWithPlayer(this, gameTime);
+            }
+
+            foreach (BigSlime bigSlime in Globals.listBigSlime)
+            {
+                bigSlime.CollisionWithPlayer(this, gameTime);
+            }
+            foreach (BigSlime bigSlime in Globals.listBigSlime)
+            {
+                bool hasBigSlimeDied = false;
+                hasBigSlimeDied = bigSlime.CreateNewLittleSlime(game);
+                if (hasBigSlimeDied)
+                {
+                    break;
+                }
+            }
+
+            #region player is dead
+            if (Life == 0)
+            {
+
+            }
+
+            #endregion
         }
-        
+
         public Rectangle GetPlayerRectangle()
         {
             return new Rectangle(X, Y, Width, Height);
         }
 
+        /// <summary>
+        /// Draw the player
+        /// </summary>
         public void Draw()
         {
-            Globals.SpriteBatch.Draw(Texture, GetPlayerRectangle(), Color.White);
+            Globals.SpriteBatch.Draw(Texture, GetPlayerRectangle(), PlayerColor);
         }
+
+        /// <summary>
+        /// Draw the life of the player
+        /// </summary>
+        public void DrawLife()
+        {
+            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Life : {Life}", new Vector2(0, 0), Color.White);
+        }
+
     }
 }

@@ -18,9 +18,19 @@ namespace ForestSurvivor.AllEnnemies
         private int _life;
         private int _speed;
         private int _damage;
+        private float _damageSpeed;
         private bool _isDead;
-
         private Color _color;
+
+        // Ennemi touch player
+        bool isHurt = false;
+        float timerPlayerHurt = 0;
+        float timerHurt = 0;
+        bool isPlayerHurt = false;
+
+        // Shoot touch ennemi
+        private float timerEnnemiHurt;
+        bool hasShootTouchEnnemi = false;
 
         private Random rnd;
 
@@ -34,8 +44,9 @@ namespace ForestSurvivor.AllEnnemies
         public int Damage { get => _damage; set => _damage = value; }
         public bool IsDead { get => _isDead; set => _isDead = value; }
         public Color Color { get => _color; set => _color = value; }
+        public float DamageSpeed { get => _damageSpeed; set => _damageSpeed = value; }
 
-        public Ennemies(int width, int height, int life, int speed, int damage)
+        public Ennemies(int width, int height, int life, int speed, int damage, float damageSpeed)
         {
             // Random spawn
             rnd = new Random();
@@ -63,12 +74,12 @@ namespace ForestSurvivor.AllEnnemies
                     Y = Globals.ScreenHeight;
                     break;
             }
-
             Width = width;
             Height = height;
             Life = life;
             Speed = speed;
             Damage = damage;
+            DamageSpeed = damageSpeed;
             Color = Color.White;
             IsDead = false;
         }
@@ -80,8 +91,9 @@ namespace ForestSurvivor.AllEnnemies
             bool moreYcollided = false;
             bool lessYcollided = false;
 
-            foreach (Ennemies ennemies in Globals.listEnnemies)
+            foreach (Ennemies ennemies in Globals.listLittleSlime)
             {
+                // If it's not us
                 if (GetEnnemieRectangle() != ennemies.GetEnnemieRectangle())
                 {
                     if (GetEnnemieRectangle().Intersects(ennemies.GetEnnemieRectangle()))
@@ -123,7 +135,7 @@ namespace ForestSurvivor.AllEnnemies
             else if (Y + Height <= player.Y && !lessYcollided)
             {
                 Y += Speed;
-            }
+            }            
         }
 
         public Rectangle GetEnnemieRectangle()
@@ -136,5 +148,92 @@ namespace ForestSurvivor.AllEnnemies
             Globals.SpriteBatch.Draw(Texture, GetEnnemieRectangle(), Color);
         }
 
+
+        /// <summary>
+        /// Collision with player : the player take damage and his color change to red for a few seconds
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="gameTime"></param>
+        public void CollisionWithPlayer(Player player, GameTime gameTime)
+        {
+            if (isHurt)
+            {
+                timerHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (timerHurt >= DamageSpeed)
+                {
+                    isHurt = false;
+                    timerHurt = 0;
+                }
+            }
+            if (GetEnnemieRectangle().Intersects(player.GetPlayerRectangle()))
+            {
+                // Player take damage
+                if (!isHurt)
+                {
+                    if (player.Life - Damage < 0)
+                    {
+                        player.Life = 0;
+                    }
+                    else
+                    {
+                        player.Life -= Damage;
+                    }
+                    isHurt = true;
+                    isPlayerHurt = true;
+                }
+            }
+            // Change la couleur dU joueur après avoir été touché
+            if (isPlayerHurt)
+            {
+                timerPlayerHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (timerPlayerHurt <= Player.TIME_COLOR_RED)
+                {
+                    player.PlayerColor = Color.Red;
+                }
+                else if (timerPlayerHurt >= Player.TIME_COLOR_RED)
+                {
+                    player.PlayerColor = Color.White;
+                    isPlayerHurt = false;
+                    timerPlayerHurt = 0f;
+                }
+            }
+        }
+
+        public bool CollisionWithBullet(GameTime gameTime, Shoot shoot)
+        {
+            
+            if (shoot.GetShootRectangle().Intersects(GetEnnemieRectangle()))
+            {
+                Globals.listShoots.Remove(shoot);
+                Life -= shoot.Damage;
+                hasShootTouchEnnemi = true;
+                if (Life <= 0)
+                {
+                    IsDead = true;
+                    if (GetType() == typeof(Ennemies))
+                    {
+                        Globals.listLittleSlime.Remove(this);
+                    }
+                }
+            }    
+            
+            // Change la couleur de l'ennemi après avoir été touché
+            if (hasShootTouchEnnemi)
+            {
+                timerEnnemiHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (timerEnnemiHurt <= Player.TIME_COLOR_RED)
+                {
+                    Color = Color.Red;
+                }
+                else if (timerEnnemiHurt >= Player.TIME_COLOR_RED)
+                {
+                    Color = Color.White;
+                    hasShootTouchEnnemi = false;
+                    timerEnnemiHurt = 0f;
+                }
+            }
+
+            return hasShootTouchEnnemi;
+        }
     }
 }
