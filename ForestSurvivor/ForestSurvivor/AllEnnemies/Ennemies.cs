@@ -75,21 +75,52 @@ namespace ForestSurvivor.AllEnnemies
 
         public void Update(Player player)
         {
-            if (X + Width <= player.X)
+            bool moreXcollided = false;
+            bool lessXcollided = false;
+            bool moreYcollided = false;
+            bool lessYcollided = false;
+
+            foreach (Ennemies ennemies in Globals.listEnnemies)
+            {
+                if (GetEnnemieRectangle() != ennemies.GetEnnemieRectangle())
+                {
+                    if (GetEnnemieRectangle().Intersects(ennemies.GetEnnemieRectangle()))
+                    {
+                        if (X >= ennemies.X)
+                        {
+                            moreXcollided = true;
+                        }
+                        if (X <= ennemies.X)
+                        {
+                            lessXcollided = true;
+                        }
+                        if (Y >= ennemies.Y)
+                        {
+                            moreYcollided = true;
+                        }
+                        if (Y <= ennemies.Y)
+                        {
+                            lessYcollided = true;
+                        }
+                    }
+                }
+            }
+
+            if (X + Width <= player.X && !lessXcollided)
             {
                 X += Speed;
 
             }
-            else if (X >= player.X + player.Width)
+            else if (X >= player.X + player.Width && !moreXcollided)
             {
                 X -= Speed;
             }
 
-            if (Y >= player.Y + player.Height)
+            if (Y >= player.Y + player.Height && !moreYcollided)
             {
                 Y -= Speed;
             }
-            else if (Y + Height <= player.Y)
+            else if (Y + Height <= player.Y && !lessYcollided)
             {
                 Y += Speed;
             }
