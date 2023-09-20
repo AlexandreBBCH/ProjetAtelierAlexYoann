@@ -42,8 +42,8 @@ namespace ForestSurvivor
             _difficultyLevel = 5;
             betweenLevel = false;
 
-            nbSlime = 0;
-            nbSlimeShoot = 1;
+            nbSlime = DifficultyLevel;
+            nbSlimeShoot = 0;
             nbBigSlime = 0;
         }
 

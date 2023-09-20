@@ -32,8 +32,6 @@ namespace ForestSurvivor
             Globals.ScreenWidth = Globals.graphics.PreferredBackBufferWidth;
             //Globals.graphics.IsFullScreen = true;
             Globals.graphics.ApplyChanges();
-            _optionPause = new OptionPause();
-            _mainMenu = new MainMenu();
         }
         protected override void Initialize()
         {
@@ -78,18 +76,18 @@ namespace ForestSurvivor
             player.Texture = GlobalsTexture.listTexturesPlayer[0];
             _optionPause = new OptionPause();
             _mainMenu = new MainMenu();
-             apple = new Items(800, 500, "Apple", "Soin",player);
+            apple = new Items(800, 500, "Apple", "Soin", player);
 
         }
 
 
         protected override void Update(GameTime gameTime)
         {
-            if(Globals.Exit)Exit();
+            if (Globals.Exit) Exit();
             MouseState mouseState = Mouse.GetState();
 
-            _mainMenu.UpdateMainMenu(gameTime,mouseState);
-            _optionPause.OptionUpdate(gameTime,mouseState);
+            _mainMenu.UpdateMainMenu(gameTime, mouseState);
+            _optionPause.OptionUpdate(gameTime, mouseState);
 
             if (!_optionPause.IsResume && Globals.LauchGame)
             {
@@ -134,7 +132,7 @@ namespace ForestSurvivor
         {
             MouseState mouseState = Mouse.GetState();
             GraphicsDevice.Clear(Color.LightGreen);
-            _spriteBatch.Begin(default,null,SamplerState.PointClamp);
+            _spriteBatch.Begin(default, null, SamplerState.PointClamp);
             if (Globals.LauchGame)
             {
                 player.Draw();

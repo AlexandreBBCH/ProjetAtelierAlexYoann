@@ -35,8 +35,18 @@ namespace ForestSurvivor.AllGlobals
 
 
         public static List<Shoot> listShoots = new List<Shoot>();
-        public static List<Ennemies> listEnnemies = new List<Ennemies>();
+        public static List<Ennemies> listLittleSlime = new List<Ennemies>();
+        public static List<SlimeShooter> listShootSlime = new List<SlimeShooter>();
+        public static List<BigSlime> listBigSlime = new List<BigSlime>();
         public static List<Items> listItems = new List<Items>();
+
+
+        public static int WIDTH_LITTLE_SLIME = 69;
+        public static int HEIGHT_LITTLE_SLIME = 47;
+        public static int SPEED_LITTLE_SLIME = 5;
+        public static int DAMAGE_LITTLE_SLIME = 1;
+        public static float DAMAGE_SPEED_LITTLE_SLIME = 1;
+        public static int LIFE_LITTLE_SLIME = 2;
 
 
 

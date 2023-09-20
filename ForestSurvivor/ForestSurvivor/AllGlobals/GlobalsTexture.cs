@@ -12,6 +12,7 @@ namespace ForestSurvivor.AllGlobals
 
         public static SpriteFont font;
         public static SpriteFont titleFont;
+        public static SpriteFont textGamefont;
         public static Texture2D MainMenu2D;
         public static Texture2D PauseBackground2D;
         public static Texture2D Minus;
