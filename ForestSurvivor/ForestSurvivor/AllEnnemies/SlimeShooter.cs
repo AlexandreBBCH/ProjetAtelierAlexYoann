@@ -14,8 +14,8 @@ namespace ForestSurvivor.AllEnnemies
     {
         private float timerShoot;
         private bool canShoot;
-        private int xPlayer;
-        private int yPlayer;
+        private float xPlayer;
+        private float yPlayer;
         private int shootSpeed;
         private Texture2D _shootTexture;
         private int _xBullet;
