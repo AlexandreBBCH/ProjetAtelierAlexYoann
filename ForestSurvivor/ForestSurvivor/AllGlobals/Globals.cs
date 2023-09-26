@@ -1,5 +1,6 @@
 ﻿using ForestSurvivor.AllEnnemies;
 using ForestSurvivor.AllItems;
+using ForestSurvivor.Environment;
 using ForestSurvivor.Ui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -39,6 +40,8 @@ namespace ForestSurvivor.AllGlobals
         public static List<SlimeShooter> listShootSlime = new List<SlimeShooter>();
         public static List<BigSlime> listBigSlime = new List<BigSlime>();
         public static List<Items> listItems = new List<Items>();
+        public static List<Spawner> listEnvironment = new List<Spawner>();
+
 
 
         public static int WIDTH_LITTLE_SLIME = 69;
@@ -46,7 +49,7 @@ namespace ForestSurvivor.AllGlobals
         public static int SPEED_LITTLE_SLIME = 5;
         public static int DAMAGE_LITTLE_SLIME = 1;
         public static float DAMAGE_SPEED_LITTLE_SLIME = 1;
-        public static int LIFE_LITTLE_SLIME = 2;
+        public static int LIFE_LITTLE_SLIME = 3;
 
 
 

@@ -19,15 +19,35 @@ namespace ForestSurvivor.AllItems
         private Texture2D texture2D;
         private int _width;
         private int _height;
-        public bool IsCollected { get => _isCollected; set => _isCollected = value; }
+        private float _globalSpeed;
+        private float _speed;
+        private int _globalHeal;
+        private int _heal;
+        private float _damage;
+        private float _globalDamage;
 
-        public Items(int x,int y, string itemName,string bonusName,Player player)
+        public bool IsCollected { get => _isCollected; set => _isCollected = value; }
+        public int X { get => _x; set => _x = value; }
+        public int Y { get => _y; set => _y = value; }
+        public bool IsCollected1 { get => _isCollected; set => _isCollected = value; }
+        public string ItemName { get => _itemName; set => _itemName = value; }
+        public string BonusName { get => _bonusName; set => _bonusName = value; }
+        public Texture2D Texture2D { get => texture2D; set => texture2D = value; }
+        public int Width { get => _width; set => _width = value; }
+        public int Height { get => _height; set => _height = value; }
+        public float GlobalSpeed { get => _globalSpeed; set => _globalSpeed = value; }
+        public float Speed { get => _speed; set => _speed = value; }
+        public int GlobalHeal { get => _globalHeal; set => _globalHeal = value; }
+        public int Heal { get => _heal; set => _heal = value; }
+        public float Damage { get => _damage; set => _damage = value; }
+        public float GlobalDamage { get => _globalDamage; set => _globalDamage = value; }
+
+        public Items(int x,int y, string itemName,Player player)
         {
             _x = x;
             _y = y;
 
      
-            _bonusName = bonusName;
             _itemName = itemName;
             SetItem(_itemName, player);
 
@@ -52,7 +72,13 @@ namespace ForestSurvivor.AllItems
 
             if (GetItemRectangle().Intersects(player.GetPlayerRectangle()))
             {
-             return _isCollected = true;
+            player.PvMax += GlobalHeal;
+            player.SpeedMax += GlobalSpeed;
+            player.AddItemDamage(Damage);
+            player.AddItemSpeed(Speed);
+            player.DamageMax += GlobalDamage; 
+            if (player.Life + Heal >= player.PvMax) player.Life = player.PvMax;
+            return _isCollected = true;
             }
             return false;
         }
@@ -65,15 +91,52 @@ namespace ForestSurvivor.AllItems
         //Fonction qui sert juste a init les items de base sans intelligence
         public void SetItem(string itemName,Player player)
         {
-            if (itemName == "Apple")//pv
-            {
-                texture2D = GlobalsTexture.Apple;
-                _width = 35;
-                _height = 35;
-                player.Life += 50;
 
+            switch (itemName)
+            {
+                case "HealMax":
+                    texture2D = GlobalsTexture.Apple;
+                    Width = 35;
+                    Height = 35;
+                    GlobalHeal = 2;
+                    Heal = 2;
+                    break;
+                case "Heal":
+                    texture2D = GlobalsTexture.GreenApple;
+                    Width = 35;
+                    Height = 35;
+                    Heal = 5;
+                    break;
+                case "SpeedMax":
+                    texture2D = GlobalsTexture.Mushroom;
+                    Width = 45;
+                    Height = 45;
+                    GlobalSpeed = 0.2f;
+                    Speed = 0.2f;
+                    break;
+                case "Speed":
+                    texture2D = GlobalsTexture.BrownMushroom;
+                    Width = 45;
+                    Height = 45;
+                    Speed = 3f;
+                    break;
+                case "Damage":
+                    texture2D = GlobalsTexture.Carrot;
+                    Width = 45;
+                    Height = 45;
+                    Damage = 2f;
+                    break;
+                case "DamageMax":
+                    texture2D = GlobalsTexture.Steak;
+                    Width = 45;
+                    Height = 45;
+                    GlobalDamage = 0.5f;
+                    Damage = 0.5f;
+                    break;
             }
-      
+
+    
+
         }
 
 

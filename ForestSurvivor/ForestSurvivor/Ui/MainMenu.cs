@@ -31,7 +31,7 @@ namespace ForestSurvivor.Ui
             {
 
       
-            Globals.SpriteBatch.Draw(GlobalsTexture.MainMenu2D, new Rectangle(0,0,Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight), Color.White);
+            Globals.SpriteBatch.Draw(GlobalsTexture.Background2D, new Rectangle(0,0,Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight), Color.White);
             Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "Survival Forest ", new Vector2(Globals.graphics.PreferredBackBufferWidth / 3,  Globals.graphics.PreferredBackBufferHeight / 5f), Color.White);
 
                 foreach (var textClick in Globals.optionClickables)
