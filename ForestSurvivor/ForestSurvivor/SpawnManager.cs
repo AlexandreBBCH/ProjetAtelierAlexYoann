@@ -148,5 +148,10 @@ namespace ForestSurvivor
             ennemies.ShootTexture = GlobalsTexture.SlimeShooterAmmo;
             return ennemies;
         }
+
+        public void DrawLevel()
+        {
+            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Level: {Level}", new Vector2(Globals.ScreenWidth - 300, 0), Color.White);
+        }
     }
 }

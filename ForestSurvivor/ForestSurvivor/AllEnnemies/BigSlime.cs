@@ -46,6 +46,7 @@ namespace ForestSurvivor.AllEnnemies
                     }
                     Globals.listLittleSlime.Add(ennemies);
                 }
+                GlobalsSounds.slimeDeath.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
                 Globals.listBigSlime.Remove(this);
                 return true;
             }

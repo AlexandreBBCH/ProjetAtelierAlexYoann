@@ -18,6 +18,7 @@ namespace ForestSurvivor
         public MainMenu _mainMenu;
         Player player;
         SpawnManager spawnManager;
+        MusicManager musicManager;
         Items apple;
         public Game1()
         {
@@ -26,7 +27,6 @@ namespace ForestSurvivor
             IsMouseVisible = true;
             Globals.graphics.PreferredBackBufferWidth = 1500; // Largeur
             Globals.graphics.PreferredBackBufferHeight = 800; // Hauteur
-
 
             Globals.ScreenHeight = Globals.graphics.PreferredBackBufferHeight;
             Globals.ScreenWidth = Globals.graphics.PreferredBackBufferWidth;
@@ -72,6 +72,9 @@ namespace ForestSurvivor
             };
             GlobalsTexture.shootTexture = Content.Load<Texture2D>("Player/HunterTopRight");
 
+            musicManager = new MusicManager();
+            musicManager.LoadMusic(Content);
+            musicManager.LoadAllSoundEffect(Content);
 
             player.Texture = GlobalsTexture.listTexturesPlayer[0];
             _optionPause = new OptionPause();
@@ -88,25 +91,28 @@ namespace ForestSurvivor
 
             _mainMenu.UpdateMainMenu(gameTime, mouseState);
             _optionPause.OptionUpdate(gameTime, mouseState);
+            musicManager.Update();
 
             if (!_optionPause.IsResume && Globals.LauchGame)
             {
                 spawnManager.Update(gameTime, this);
                 foreach (Shoot shoot in Globals.listShoots)
                 {
-                    shoot.Update();
+                    shoot.Update(player);
                 }
+                Shoot.DeleteShootInBorder();
+                Shoot.CollsionBulletWithEnnemies();
                 foreach (Ennemies ennemies in Globals.listLittleSlime)
                 {
-                    ennemies.Update(player);
+                    ennemies.Update(player, gameTime);
                 }
                 foreach (BigSlime bigSLime in Globals.listBigSlime)
                 {
-                    bigSLime.Update(player);
+                    bigSLime.Update(player, gameTime);
                 }
                 foreach (SlimeShooter shooterSLime in Globals.listShootSlime)
                 {
-                    shooterSLime.Update(player);
+                    shooterSLime.Update(player, gameTime);
                     shooterSLime.Shoot(gameTime, player);
                 }
                 player.Update(gameTime, this);
@@ -137,6 +143,7 @@ namespace ForestSurvivor
             {
                 player.Draw();
                 player.DrawLife();
+                spawnManager.DrawLevel();
 
                 foreach (Ennemies ennemies in Globals.listLittleSlime)
                 {

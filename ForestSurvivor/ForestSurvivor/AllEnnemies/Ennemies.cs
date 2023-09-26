@@ -15,7 +15,7 @@ namespace ForestSurvivor.AllEnnemies
         private int _y;
         private int _width;
         private int _height;
-        private int _life;
+        private float _life;
         private int _speed;
         private int _damage;
         private float _damageSpeed;
@@ -24,22 +24,21 @@ namespace ForestSurvivor.AllEnnemies
 
         // Ennemi touch player
         bool isHurt = false;
-        float timerPlayerHurt = 0;
         float timerHurt = 0;
-        bool isPlayerHurt = false;
 
         // Shoot touch ennemi
         private float timerEnnemiHurt;
         bool hasShootTouchEnnemi = false;
 
         private Random rnd;
+        private float timerSound;
 
         public Texture2D Texture { get => texture; set => texture = value; }
         public int X { get => _x; set => _x = value; }
         public int Y { get => _y; set => _y = value; }
         public int Width { get => _width; set => _width = value; }
         public int Height { get => _height; set => _height = value; }
-        public int Life { get => _life; set => _life = value; }
+        public float Life { get => _life; set => _life = value; }
         public int Speed { get => _speed; set => _speed = value; }
         public int Damage { get => _damage; set => _damage = value; }
         public bool IsDead { get => _isDead; set => _isDead = value; }
@@ -55,6 +54,7 @@ namespace ForestSurvivor.AllEnnemies
             Damage = damage;
             DamageSpeed = damageSpeed;
             Color = Color.White;
+            timerSound = 0;
             IsDead = false;
             // Random spawn
             rnd = new Random();
@@ -143,6 +143,14 @@ namespace ForestSurvivor.AllEnnemies
                 }
             }
 
+            // Slime sound
+            timerSound += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (timerSound >= 2)
+            {
+                GlobalsSounds.slimeMove.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
+                timerSound = 0;
+            }
+
 
             // Color Ennemies
             if (hasShootTouchEnnemi)
@@ -191,22 +199,7 @@ namespace ForestSurvivor.AllEnnemies
                         player.Life -= Damage;
                     }
                     isHurt = true;
-                    isPlayerHurt = true;
-                }
-            }
-            // Change la couleur dU joueur après avoir été touché
-            if (isPlayerHurt)
-            {
-                timerPlayerHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (timerPlayerHurt <= Player.TIME_COLOR_RED)
-                {
-                    player.PlayerColor = Color.Red;
-                }
-                else if (timerPlayerHurt >= Player.TIME_COLOR_RED)
-                {
-                    player.PlayerColor = Color.White;
-                    isPlayerHurt = false;
-                    timerPlayerHurt = 0f;
+                    player.IsPlayerHurt = true;
                 }
             }
         }
@@ -225,9 +218,12 @@ namespace ForestSurvivor.AllEnnemies
                     if (GetType() == typeof(Ennemies))
                     {
                         Globals.listLittleSlime.Remove(this);
-                    }else if (GetType() == typeof(SlimeShooter))
+                        GlobalsSounds.slimeDeath.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
+                    }
+                    else if (GetType() == typeof(SlimeShooter))
                     {
                         Globals.listShootSlime.Remove((SlimeShooter)this);
+                        GlobalsSounds.slimeDeath.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
                     }
                 }
             }

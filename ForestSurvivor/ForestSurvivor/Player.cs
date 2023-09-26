@@ -24,9 +24,13 @@ namespace ForestSurvivor
         private float _speedMax;
         private int _highscore;
         private Color _color;
+        private bool _isPlayerHurt;
 
         private int mouvementDirection;
         private bool canShoot;
+        private float timerPlayerHurt;
+        private Random rnd;
+        private bool canMakeSoundHurt;
 
         public Texture2D Texture { get => _texture; set => _texture = value; }
         public float Width { get => _width; set => _width = value; }
@@ -40,6 +44,7 @@ namespace ForestSurvivor
         public Color PlayerColor { get => _color; set => _color = value; }
         public int PvMax { get => _pvMax; set => _pvMax = value; }
         public float SpeedMax { get => _speedMax; set => _speedMax = value; }
+        public bool IsPlayerHurt { get => _isPlayerHurt; set => _isPlayerHurt = value; }
 
         public Player(int width, int height, int x, int y, int speed, int life, Color color)
         {
@@ -51,6 +56,10 @@ namespace ForestSurvivor
             mouvementDirection = 1;
             Speed = speed;
             Life = life;
+            IsPlayerHurt = false;
+            timerPlayerHurt = 0;
+            rnd = new Random();
+            canMakeSoundHurt = false;
         }
 
         public void Update(GameTime gameTime, Game game)
@@ -216,7 +225,8 @@ namespace ForestSurvivor
                     y = Y + Height / 4;
                 }
 
-                Globals.listShoots.Add(new Shoot(x, y, mouvementDirection));
+                Globals.listShoots.Add(new Shoot(x, y));
+                GlobalsSounds.shootEffect.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
                 canShoot = false;
             }
 
@@ -226,67 +236,28 @@ namespace ForestSurvivor
             }
             #endregion
 
-            #region collision bullet with ennemies
-            bool hasKilled = false;
-            foreach (Shoot shoot in Globals.listShoots)
+            // Change la couleur du joueur après avoir été touché
+            if (IsPlayerHurt)
             {
-                foreach (Ennemies ennemies in Globals.listLittleSlime)
+                if (!canMakeSoundHurt)
                 {
-                    hasKilled = ennemies.CollisionWithBullet(shoot);
-                    if (hasKilled)
-                    {
-                        break;
-                    }
+                    int rndSound = rnd.Next(0, GlobalsSounds.listPlayerHurt.Count);
+                    GlobalsSounds.listPlayerHurt[rndSound].Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
+                    canMakeSoundHurt = true;
                 }
-                if (hasKilled)
+                timerPlayerHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (timerPlayerHurt <= TIME_COLOR_RED)
                 {
-                    break;
+                    PlayerColor = Color.Red;
+                }
+                else if (timerPlayerHurt >= TIME_COLOR_RED)
+                {
+                    PlayerColor = Color.White;
+                    IsPlayerHurt = false;
+                    timerPlayerHurt = 0f;
+                    canMakeSoundHurt = false;
                 }
             }
-            hasKilled = false;
-            foreach (Shoot shoot in Globals.listShoots)
-            {
-                foreach (BigSlime ennemies in Globals.listBigSlime)
-                {
-                    hasKilled = ennemies.CollisionWithBullet(shoot);
-                    if (hasKilled)
-                    {
-                        break;
-                    }
-                }
-                if (hasKilled)
-                {
-                    break;
-                }
-            }
-            hasKilled = false;
-            foreach (Shoot shoot in Globals.listShoots)
-            {
-                foreach (SlimeShooter ennemies in Globals.listShootSlime)
-                {
-                    hasKilled = ennemies.CollisionWithBullet(shoot);
-                    if (hasKilled)
-                    {
-                        break;
-                    }
-                }
-                if (hasKilled)
-                {
-                    break;
-                }
-            }
-            #endregion
-
-            #region delete bullet in border
-            foreach (Shoot shoot in Globals.listShoots)
-            {
-                if (shoot.Destroy)
-                {
-                    Globals.listShoots.Remove(shoot);
-                    break;
-                }
-            }
-            #endregion
 
             foreach (Ennemies ennemies in Globals.listLittleSlime)
             {
@@ -340,7 +311,7 @@ namespace ForestSurvivor
         /// </summary>
         public void DrawLife()
         {
-            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Life : {Life}", new Vector2(0, 0), Color.White);
+            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Life : {Life}", new Vector2(50, 0), Color.White);
         }
 
     }
