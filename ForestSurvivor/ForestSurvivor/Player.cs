@@ -31,7 +31,12 @@ namespace ForestSurvivor
         private float timerPlayerHurt;
         private Random rnd;
         private bool canMakeSoundHurt;
-
+        private bool _isSpeedItemAcivated;
+        private float _tmpSpeedTimer;
+        private bool _isDamageItemAcivated;
+        private float _tmpDamageTimer;
+        private float _actualDamage;
+        private float _damageMax;
         public Texture2D Texture { get => _texture; set => _texture = value; }
         public float Width { get => _width; set => _width = value; }
         public float Height { get => _height; set => _height = value; }
@@ -46,7 +51,14 @@ namespace ForestSurvivor
         public float SpeedMax { get => _speedMax; set => _speedMax = value; }
         public bool IsPlayerHurt { get => _isPlayerHurt; set => _isPlayerHurt = value; }
 
-        public Player(int width, int height, int x, int y, int speed, int life, Color color)
+        public float ActualDamage { get => _actualDamage; set => _actualDamage = value; }
+        public float DamageMax { get => _damageMax; set => _damageMax = value; }
+        public float TmpSpeedTimer { get => _tmpSpeedTimer; set => _tmpSpeedTimer = value; }
+        public bool IsSpeedItemAcivated { get => _isSpeedItemAcivated; set => _isSpeedItemAcivated = value; }
+        public bool IsDamageItemAcivated { get => _isDamageItemAcivated; set => _isDamageItemAcivated = value; }
+        public float TmpDamageTimer { get => _tmpDamageTimer; set => _tmpDamageTimer = value; }
+
+        public Player(int width, int height, int x, int y, float speedMax, int lifeMax, float damageMax, Color color)
         {
             Width = width;
             Height = height;
@@ -54,15 +66,20 @@ namespace ForestSurvivor
             Y = y;
             PlayerColor = color;
             mouvementDirection = 1;
-            Speed = speed;
-            Life = life;
+            Speed = speedMax;
+            SpeedMax = speedMax;
+            Life = lifeMax;
+            PvMax = lifeMax;
+            DamageMax = damageMax;
+            ActualDamage = damageMax;
+            IsSpeedItemAcivated = false;
             IsPlayerHurt = false;
             timerPlayerHurt = 0;
             rnd = new Random();
             canMakeSoundHurt = false;
         }
 
-        public void Update(GameTime gameTime, Game game)
+        public void Update(GameTime gameTime)
         {
             KeyboardState keyPress = Keyboard.GetState();
             MouseState mouseState = Mouse.GetState();
@@ -225,7 +242,7 @@ namespace ForestSurvivor
                     y = Y + Height / 4;
                 }
 
-                Globals.listShoots.Add(new Shoot(x, y));
+                Globals.listShoots.Add(new Shoot(x, y, this));
                 GlobalsSounds.shootEffect.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
                 canShoot = false;
             }
@@ -277,7 +294,7 @@ namespace ForestSurvivor
             foreach (BigSlime bigSlime in Globals.listBigSlime)
             {
                 bool hasBigSlimeDied = false;
-                hasBigSlimeDied = bigSlime.CreateNewLittleSlime(game);
+                hasBigSlimeDied = bigSlime.CreateNewLittleSlime();
                 if (hasBigSlimeDied)
                 {
                     break;
@@ -291,6 +308,8 @@ namespace ForestSurvivor
             }
 
             #endregion
+            if (IsSpeedItemAcivated) ResetSpeed(gameTime);
+            if (IsDamageItemAcivated) ResetDamage(gameTime);
         }
 
         public Rectangle GetPlayerRectangle()
@@ -309,9 +328,51 @@ namespace ForestSurvivor
         /// <summary>
         /// Draw the life of the player
         /// </summary>
-        public void DrawLife()
+        public void DrawInfos()
         {
-            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Life : {Life}", new Vector2(50, 0), Color.White);
+            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Life : {Math.Round((decimal)Life)}" + " / " + Math.Round((decimal)PvMax), new Vector2(0, 0), Color.White);
+            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Speed : {Math.Round((decimal)Speed)}" + " / " + Math.Round((decimal)SpeedMax), new Vector2(0, 50), Color.White);
+            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Damage : {Math.Round((decimal)ActualDamage)}" + " / " + Math.Round((decimal)DamageMax), new Vector2(0, 100), Color.White);
+
+
+        }
+
+        public void ResetSpeed(GameTime gameTime)
+        {
+            TmpSpeedTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TmpSpeedTimer >= 5f)
+            {
+                Speed = SpeedMax;
+                IsSpeedItemAcivated = false;
+                TmpSpeedTimer = 0;
+            }
+
+        }
+
+        public void AddItemSpeed(float speed)
+        {
+            if (!IsSpeedItemAcivated && speed > 0)
+                Speed += speed;
+            IsSpeedItemAcivated = true;
+        }
+
+        public void ResetDamage(GameTime gameTime)
+        {
+            TmpDamageTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (TmpDamageTimer >= 5f)
+            {
+                ActualDamage = DamageMax;
+                IsDamageItemAcivated = false;
+                TmpSpeedTimer = 0;
+            }
+
+        }
+
+        public void AddItemDamage(float damage)
+        {
+            if (!IsDamageItemAcivated && damage > 0)
+                ActualDamage += damage;
+            IsDamageItemAcivated = true;
         }
 
     }

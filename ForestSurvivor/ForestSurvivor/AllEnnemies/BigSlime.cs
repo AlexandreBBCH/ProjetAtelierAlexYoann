@@ -17,13 +17,13 @@ namespace ForestSurvivor.AllEnnemies
         /// <summary>
         /// Create 4 new slime when it died
         /// </summary>
-        public bool CreateNewLittleSlime(Game game)
+        public bool CreateNewLittleSlime()
         {
             if (Life <= 0)
             {
                 for (int i = 1; i <= NB_SLIME_CREATE_WHEN_DIED; i++) 
                 {
-                    Ennemies ennemies = SpawnManager.CreateSlime(game);
+                    Ennemies ennemies = SpawnManager.CreateSlime();
                     if (i == 1)
                     {
                         ennemies.X = X - 100;

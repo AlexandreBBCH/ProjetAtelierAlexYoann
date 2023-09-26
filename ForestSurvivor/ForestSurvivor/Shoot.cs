@@ -20,7 +20,7 @@ namespace ForestSurvivor
         private float _x;
         private float _y;
         private int _speed;
-        private int _damage;
+        private float _damage;
         private bool _destroy;
         private Vector2 directionTir;
         private Vector2 positionTir;
@@ -33,19 +33,19 @@ namespace ForestSurvivor
         public int Speed { get => _speed; set => _speed = value; }
         public Texture2D Texture { get => _texture; set => _texture = value; }
         public bool Destroy { get => _destroy; set => _destroy = value; }
-        public int Damage { get => _damage; set => _damage = value; }
+        public float Damage { get => _damage; set => _damage = value; }
 
-        public Shoot(float x, float y)
+        public Shoot(float x, float y, Player player)
         {
             _x = x;
             _y = y;
             _width = 40;
             _height = 10;
             _speed = 20;
-            _damage = 1;
+            _damage = player.DamageMax;
             _destroy = false;
             Texture = GlobalsTexture.shootTexture;
-
+          
             mouseState = Mouse.GetState();
             directionTir = new Vector2(mouseState.X - X, mouseState.Y - Y);
             directionTir.Normalize();

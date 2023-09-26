@@ -1,6 +1,7 @@
 ﻿using ForestSurvivor.AllEnnemies;
 using ForestSurvivor.AllGlobals;
 using ForestSurvivor.AllItems;
+using ForestSurvivor.Environment;
 using ForestSurvivor.Ui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,7 +20,8 @@ namespace ForestSurvivor
         Player player;
         SpawnManager spawnManager;
         MusicManager musicManager;
-        Items apple;
+        ItemsGenerator itemGenerator;
+        EnvironmentInit environmentInitialisation;
         public Game1()
         {
             Globals.graphics = new GraphicsDeviceManager(this);
@@ -35,10 +37,8 @@ namespace ForestSurvivor
         }
         protected override void Initialize()
         {
-
-            player = new Player(120, 120, 500, 500, 8, 10, Color.White);
+            player = new Player(120, 120, 500, 500, 8f, 10, 1f, Color.White);
             spawnManager = new SpawnManager();
-
             base.Initialize();
         }
 
@@ -50,12 +50,31 @@ namespace ForestSurvivor
 
             GlobalsTexture.MainMenu2D = Content.Load<Texture2D>("Ui/MainMenu/MainMenu");
             GlobalsTexture.PauseBackground2D = Content.Load<Texture2D>("Ui/MainMenu/BackgroundPause");
+            GlobalsTexture.Background2D = Content.Load<Texture2D>("Environment/grassV1");
             GlobalsTexture.Minus = Content.Load<Texture2D>("Ui/Button/minus");
             GlobalsTexture.Plus = Content.Load<Texture2D>("Ui/Button/plus");
 
             GlobalsTexture.Slime2D = Content.Load<Texture2D>("Monster/Slime/Slime01");
+            GlobalsTexture.SlimeShooter2D = Content.Load<Texture2D>("Monster/Slime/SlimeShooter");
+            GlobalsTexture.SlimeShooterAmmo = Content.Load<Texture2D>("Monster/Slime/SlimeShooterShot");
+            GlobalsTexture.BigSlime2D = Content.Load<Texture2D>("Monster/Slime/SlimeBig");
+
+
 
             GlobalsTexture.Apple = Content.Load<Texture2D>("Items/apple");
+            GlobalsTexture.Mushroom = Content.Load<Texture2D>("Items/mushroom");
+            GlobalsTexture.BrownMushroom = Content.Load<Texture2D>("Items/BrownMushroom");
+            GlobalsTexture.GreenApple = Content.Load<Texture2D>("Items/greenApple");
+            GlobalsTexture.Steak = Content.Load<Texture2D>("Items/steak");
+            GlobalsTexture.Carrot = Content.Load<Texture2D>("Items/carrot");
+
+            GlobalsTexture.Bush = Content.Load<Texture2D>("Environment/bushV2");
+            GlobalsTexture.Rock = Content.Load<Texture2D>("Environment/RockV2");
+
+
+
+
+
 
             Globals.SpriteBatch = _spriteBatch;
 
@@ -79,7 +98,10 @@ namespace ForestSurvivor
             player.Texture = GlobalsTexture.listTexturesPlayer[0];
             _optionPause = new OptionPause();
             _mainMenu = new MainMenu();
-            apple = new Items(800, 500, "Apple", "Soin", player);
+
+            itemGenerator = new ItemsGenerator();
+            environmentInitialisation = new EnvironmentInit(20);
+            environmentInitialisation.GenerateEnvironment();
 
         }
 
@@ -95,7 +117,8 @@ namespace ForestSurvivor
 
             if (!_optionPause.IsResume && Globals.LauchGame)
             {
-                spawnManager.Update(gameTime, this);
+                spawnManager.Update(gameTime);
+                itemGenerator.GenerateItem(player, gameTime, 8f);
                 foreach (Shoot shoot in Globals.listShoots)
                 {
                     shoot.Update(player);
@@ -115,7 +138,7 @@ namespace ForestSurvivor
                     shooterSLime.Update(player, gameTime);
                     shooterSLime.Shoot(gameTime, player);
                 }
-                player.Update(gameTime, this);
+                player.Update(gameTime);
 
                 foreach (var item in Globals.listItems)
                 {
@@ -127,6 +150,7 @@ namespace ForestSurvivor
                 }
 
                 Globals.listItems.ForEach(item => item.UpdateItems(player));
+                Globals.listEnvironment.ForEach(spawner => spawner.UpdateSpawner(player));
 
             }
 
@@ -139,10 +163,12 @@ namespace ForestSurvivor
             MouseState mouseState = Mouse.GetState();
             GraphicsDevice.Clear(Color.LightGreen);
             _spriteBatch.Begin(default, null, SamplerState.PointClamp);
+            Globals.SpriteBatch.Draw(GlobalsTexture.Background2D, new Rectangle(0,0,Globals.ScreenWidth,Globals.ScreenHeight),Color.White);
+
             if (Globals.LauchGame)
             {
                 player.Draw();
-                player.DrawLife();
+                player.DrawInfos();
                 spawnManager.DrawLevel();
 
                 foreach (Ennemies ennemies in Globals.listLittleSlime)
@@ -165,6 +191,7 @@ namespace ForestSurvivor
 
             }
             Globals.listItems.ForEach(item => item.DrawItems());
+            Globals.listEnvironment.ForEach(Spawner => Spawner.DrawEnvironment());
 
             _mainMenu.DrawMainMenu();
             _optionPause.DrawOption();
