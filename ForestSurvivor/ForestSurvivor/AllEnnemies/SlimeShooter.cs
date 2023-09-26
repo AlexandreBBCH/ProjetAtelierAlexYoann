@@ -16,12 +16,12 @@ namespace ForestSurvivor.AllEnnemies
         private bool canShoot;
         private int xPlayer;
         private int yPlayer;
-        private int xBetween;
-        private int yBetween;
         private int shootSpeed;
         private Texture2D _shootTexture;
         private int _xBullet;
         private int _yBullet;
+        private Vector2 projectilePosition;
+        private Vector2 direction;
 
         public Texture2D ShootTexture { get => _shootTexture; set => _shootTexture = value; }
         public int XBullet { get => _xBullet; set => _xBullet = value; }
@@ -31,13 +31,11 @@ namespace ForestSurvivor.AllEnnemies
         {
             timerShoot = 0;
             canShoot = false;
-            xPlayer = 0;
-            yPlayer = 0;
-            xBetween = 0;
-            yBetween = 0;
-            shootSpeed = 10;
-            XBullet = 0;
-            YBullet = 0;
+            shootSpeed = 15;
+            XBullet = X;
+            YBullet = Y;
+            // Position initiale du tir
+            projectilePosition = new Vector2(XBullet, YBullet);
         }
 
         public void Shoot(GameTime gameTime, Player player)
@@ -48,55 +46,49 @@ namespace ForestSurvivor.AllEnnemies
                 canShoot = true;
                 XBullet = X;
                 YBullet = Y;
-                xPlayer = player.X;
-                yPlayer = player.Y;
+                xPlayer = player.X + player.Width / 2;
+                yPlayer = player.Y + player.Height / 2;
                 timerShoot = 0;
+
+                // Position initiale du tir
+                projectilePosition = new Vector2(XBullet, YBullet);
+                // Direction du tir
+                direction = new Vector2(xPlayer - XBullet, yPlayer - YBullet);
+                direction.Normalize();
             }
 
             if (canShoot)
             {
-                xBetween = XBullet - xPlayer;
-                yBetween = YBullet - yPlayer;
+                projectilePosition += direction * shootSpeed;
+            }
 
-                if (xBetween != 0)
+            if (GetRectangleShoot().Intersects(player.GetPlayerRectangle()) && canShoot)
+            {
+                projectilePosition.X = X;
+                projectilePosition.Y = Y;
+                direction = new Vector2(0, 0);
+                canShoot = false;
+                if (player.Life - Damage < 0)
                 {
-                    if (xBetween < 0)
-                    {
-                        XBullet += shootSpeed;
-                        xBetween += shootSpeed;
-                    }
-                    else
-                    {
-                        XBullet -= shootSpeed;
-                        xBetween -= shootSpeed;
-                    }
-                    
+                    player.Life = 0;
                 }
-                if (yBetween != 0)
+                else
                 {
-                    if (yBetween < 0)
-                    {
-                        YBullet += shootSpeed;
-                        yBetween += shootSpeed;
-                    }
-                    else
-                    {
-                        YBullet -= shootSpeed;
-                        yBetween -= shootSpeed;
-                    }
-                }
-                if (xBetween == 0 && yBetween == 0)
-                {
-                    XBullet = -1;
-                    YBullet = -1;
+                    player.Life -= Damage;
                 }
             }
         }
 
-        public void DrawBullet()
+        public Rectangle GetRectangleShoot()
         {
-            Globals.SpriteBatch.Draw(ShootTexture, new Rectangle(XBullet, YBullet, 20, 10), Color);
+            return new Rectangle((int)projectilePosition.X, (int)projectilePosition.Y, 20, 10);
         }
 
+        public void DrawBullet()
+        {
+            Globals.SpriteBatch.Draw(ShootTexture, GetRectangleShoot(), Color);
+        }
+
+        
     }
 }

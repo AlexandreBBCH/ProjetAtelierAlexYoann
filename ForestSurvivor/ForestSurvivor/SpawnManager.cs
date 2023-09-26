@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -14,10 +15,8 @@ namespace ForestSurvivor
     internal class SpawnManager
     {
         private int _level;
-        private Random random;
         private float timerBetweenSpawn;
         private float timerBetweenLevel;
-        private int _nbTotalMonster;
         private int _difficultyLevel;
         private const int TIME_BETWEEN_LEVEL = 5;
         private float _timeBetweenMonsterSpawn;
@@ -27,18 +26,15 @@ namespace ForestSurvivor
         private int nbBigSlime;
 
         public int Level { get => _level; set => _level = value; }
-        public int NbTotalMonster { get => _nbTotalMonster; set => _nbTotalMonster = value; }
         public int DifficultyLevel { get => _difficultyLevel; set => _difficultyLevel = value; }
         public float TimeBetweenMonsterSpawn { get => _timeBetweenMonsterSpawn; set => _timeBetweenMonsterSpawn = value; }
 
         public SpawnManager() 
         {
-            random = new Random();
             _level = 1;
             _timeBetweenMonsterSpawn = 3f;
             timerBetweenSpawn = 0f;
             timerBetweenLevel = 0f;
-            _nbTotalMonster = 5;
             _difficultyLevel = 5;
             betweenLevel = false;
 
@@ -87,7 +83,7 @@ namespace ForestSurvivor
                 }
 
                 // Si tous les ennemies on été tués
-                if (Globals.listLittleSlime.Count == 0 && nbSlime == 0 && nbSlimeShoot == 0 && nbBigSlime == 0)
+                if (Globals.listLittleSlime.Count == 0 && Globals.listShootSlime.Count == 0 && Globals.listBigSlime.Count == 0 && nbSlime == 0 && nbSlimeShoot == 0 && nbBigSlime == 0)
                 {
                     // monte la dificulté
                     Level++;
@@ -95,49 +91,37 @@ namespace ForestSurvivor
                     {
                         TimeBetweenMonsterSpawn -= 0.2f;
                     }
-                    DifficultyLevel += Level * 2;
-                    NbTotalMonster -= DifficultyLevel / 2;
-
-                    nbSlime = DifficultyLevel - Level;
-                    // Pour qu'il y est toujours 2 slime
-                    if (nbSlime <= 2)
-                    {
-                        nbSlime = 2;
-                    }
+                    DifficultyLevel += Level;
 
                     int tmpdifficulty = DifficultyLevel;
-                    int tmpSlime = nbSlime;
+                    int tmpSlime = 0;
                     int tmpSlimeShoot = 0;
                     int tmpBigSlime = 0;
 
                     while (tmpdifficulty > 0)
                     {
-                        tmpdifficulty -= tmpdifficulty;
-                        tmpSlime = 0;
-
-                        if (tmpdifficulty >= 2)
-                        {
-                            tmpSlimeShoot += 1;
-                            tmpdifficulty -= 2;
-                        }
-
-                        if (tmpdifficulty >= 3)
-                        {
-                            tmpBigSlime += 1;
-                            tmpdifficulty -= 3;
-                        }
-
-                        if (tmpdifficulty == 1)
+                        if (tmpdifficulty >= 1)
                         {
                             tmpSlime += 1;
                             tmpdifficulty -= 1;
                         }
+
+                        if (tmpdifficulty >= 3)
+                        {
+                            tmpSlimeShoot += 1;
+                            tmpdifficulty -= 3;
+                        }
+
+                        if (tmpdifficulty >= 5)
+                        {
+                            tmpBigSlime += 1;
+                            tmpdifficulty -= 5;
+                        }
                     }
                     // New monster number
-                    nbSlime += tmpSlime;
+                    nbSlime += tmpSlime + 1;
                     nbSlimeShoot = tmpSlimeShoot;
                     nbBigSlime = tmpBigSlime;
-
                     betweenLevel = true;
                 }
             }

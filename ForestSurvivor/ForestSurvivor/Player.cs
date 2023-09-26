@@ -222,24 +222,13 @@ namespace ForestSurvivor
             }
             #endregion
 
-            #region delete bullet in border
-            foreach (Shoot shoot in Globals.listShoots)
-            {
-                if (shoot.Destroy)
-                {
-                    Globals.listShoots.Remove(shoot);
-                    break;
-                }
-            }
-            #endregion
-
             #region collision bullet with ennemies
             bool hasKilled = false;
             foreach (Shoot shoot in Globals.listShoots)
             {
                 foreach (Ennemies ennemies in Globals.listLittleSlime)
                 {
-                    hasKilled = ennemies.CollisionWithBullet(gameTime, shoot);
+                    hasKilled = ennemies.CollisionWithBullet(shoot);
                     if (hasKilled)
                     {
                         break;
@@ -250,13 +239,12 @@ namespace ForestSurvivor
                     break;
                 }
             }
-
             hasKilled = false;
             foreach (Shoot shoot in Globals.listShoots)
             {
                 foreach (BigSlime ennemies in Globals.listBigSlime)
                 {
-                    hasKilled = ennemies.CollisionWithBullet(gameTime, shoot);
+                    hasKilled = ennemies.CollisionWithBullet(shoot);
                     if (hasKilled)
                     {
                         break;
@@ -264,6 +252,33 @@ namespace ForestSurvivor
                 }
                 if (hasKilled)
                 {
+                    break;
+                }
+            }
+            hasKilled = false;
+            foreach (Shoot shoot in Globals.listShoots)
+            {
+                foreach (SlimeShooter ennemies in Globals.listShootSlime)
+                {
+                    hasKilled = ennemies.CollisionWithBullet(shoot);
+                    if (hasKilled)
+                    {
+                        break;
+                    }
+                }
+                if (hasKilled)
+                {
+                    break;
+                }
+            }
+            #endregion
+
+            #region delete bullet in border
+            foreach (Shoot shoot in Globals.listShoots)
+            {
+                if (shoot.Destroy)
+                {
+                    Globals.listShoots.Remove(shoot);
                     break;
                 }
             }
@@ -278,6 +293,12 @@ namespace ForestSurvivor
             {
                 bigSlime.CollisionWithPlayer(this, gameTime);
             }
+
+            foreach (SlimeShooter slimeShooter in Globals.listShootSlime)
+            {
+                slimeShooter.CollisionWithPlayer(this, gameTime);
+            }
+
             foreach (BigSlime bigSlime in Globals.listBigSlime)
             {
                 bool hasBigSlimeDied = false;

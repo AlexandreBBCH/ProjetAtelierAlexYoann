@@ -48,6 +48,14 @@ namespace ForestSurvivor.AllEnnemies
 
         public Ennemies(int width, int height, int life, int speed, int damage, float damageSpeed)
         {
+            Width = width;
+            Height = height;
+            Life = life;
+            Speed = speed;
+            Damage = damage;
+            DamageSpeed = damageSpeed;
+            Color = Color.White;
+            IsDead = false;
             // Random spawn
             rnd = new Random();
             int border = rnd.Next(0, 4 + 1);
@@ -64,33 +72,26 @@ namespace ForestSurvivor.AllEnnemies
                     Y = 0;
                     break;
                 case 3:
-                    X = Globals.ScreenWidth;
+                    X = Globals.ScreenWidth - Width;
                     Y = rnd.Next(0, Globals.ScreenHeight / 2);
                     Y *= 2;
                     break;
                 case 4:
                     X = rnd.Next(0, Globals.ScreenWidth / 2);
                     X *= 2;
-                    Y = Globals.ScreenHeight;
+                    Y = Globals.ScreenHeight - Height;
                     break;
             }
-            Width = width;
-            Height = height;
-            Life = life;
-            Speed = speed;
-            Damage = damage;
-            DamageSpeed = damageSpeed;
-            Color = Color.White;
-            IsDead = false;
         }
 
-        public void Update(Player player)
+        public void Update(Player player, GameTime gameTime)
         {
             bool moreXcollided = false;
             bool lessXcollided = false;
             bool moreYcollided = false;
             bool lessYcollided = false;
 
+            // Collision with others ennemies
             foreach (Ennemies ennemies in Globals.listLittleSlime)
             {
                 // If it's not us
@@ -118,36 +119,47 @@ namespace ForestSurvivor.AllEnnemies
                 }
             }
 
-            if (X + Width <= player.X && !lessXcollided)
+            // Slime shooter don't follow player
+            if (GetType() != typeof(SlimeShooter))
             {
-                X += Speed;
+                // Follow player
+                if (X + Width <= player.X && !lessXcollided)
+                {
+                    X += Speed;
 
+                }
+                else if (X >= player.X + player.Width && !moreXcollided)
+                {
+                    X -= Speed;
+                }
+
+                if (Y >= player.Y + player.Height && !moreYcollided)
+                {
+                    Y -= Speed;
+                }
+                else if (Y + Height <= player.Y && !lessYcollided)
+                {
+                    Y += Speed;
+                }
             }
-            else if (X >= player.X + player.Width && !moreXcollided)
+
+
+            // Color Ennemies
+            if (hasShootTouchEnnemi)
             {
-                X -= Speed;
+                timerEnnemiHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (timerEnnemiHurt <= Player.TIME_COLOR_RED)
+                {
+                    Color = Color.Red;
+                }
+                else if (timerEnnemiHurt >= Player.TIME_COLOR_RED)
+                {
+                    Color = Color.White;
+                    hasShootTouchEnnemi = false;
+                    timerEnnemiHurt = 0f;
+                }
             }
-
-            if (Y >= player.Y + player.Height && !moreYcollided)
-            {
-                Y -= Speed;
-            }
-            else if (Y + Height <= player.Y && !lessYcollided)
-            {
-                Y += Speed;
-            }            
         }
-
-        public Rectangle GetEnnemieRectangle()
-        {
-            return new Rectangle(X, Y, Width, Height);
-        }
-
-        public void Draw()
-        {
-            Globals.SpriteBatch.Draw(Texture, GetEnnemieRectangle(), Color);
-        }
-
 
         /// <summary>
         /// Collision with player : the player take damage and his color change to red for a few seconds
@@ -199,9 +211,9 @@ namespace ForestSurvivor.AllEnnemies
             }
         }
 
-        public bool CollisionWithBullet(GameTime gameTime, Shoot shoot)
+        public bool CollisionWithBullet(Shoot shoot)
         {
-            
+
             if (shoot.GetShootRectangle().Intersects(GetEnnemieRectangle()))
             {
                 Globals.listShoots.Remove(shoot);
@@ -213,27 +225,24 @@ namespace ForestSurvivor.AllEnnemies
                     if (GetType() == typeof(Ennemies))
                     {
                         Globals.listLittleSlime.Remove(this);
+                    }else if (GetType() == typeof(SlimeShooter))
+                    {
+                        Globals.listShootSlime.Remove((SlimeShooter)this);
                     }
                 }
-            }    
-            
-            // Change la couleur de l'ennemi après avoir été touché
-            if (hasShootTouchEnnemi)
-            {
-                timerEnnemiHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (timerEnnemiHurt <= Player.TIME_COLOR_RED)
-                {
-                    Color = Color.Red;
-                }
-                else if (timerEnnemiHurt >= Player.TIME_COLOR_RED)
-                {
-                    Color = Color.White;
-                    hasShootTouchEnnemi = false;
-                    timerEnnemiHurt = 0f;
-                }
             }
-
             return hasShootTouchEnnemi;
         }
+
+        public Rectangle GetEnnemieRectangle()
+        {
+            return new Rectangle(X, Y, Width, Height);
+        }
+
+        public void Draw()
+        {
+            Globals.SpriteBatch.Draw(Texture, GetEnnemieRectangle(), Color);
+        }
+
     }
 }
