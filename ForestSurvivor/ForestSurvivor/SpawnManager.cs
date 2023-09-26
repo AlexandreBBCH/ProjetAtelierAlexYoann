@@ -43,7 +43,7 @@ namespace ForestSurvivor
             nbBigSlime = 0;
         }
 
-        public void Update(GameTime gameTime, Game game)
+        public void Update(GameTime gameTime)
         {
             // Entre les niveaux, pause de 10sec
             if (betweenLevel)
@@ -64,19 +64,19 @@ namespace ForestSurvivor
                     // Spawn les ennemies
                     if (nbSlime > 0)
                     {
-                        Globals.listLittleSlime.Add(CreateSlime(game));
+                        Globals.listLittleSlime.Add(CreateSlime());
                         nbSlime--;
                     }
 
                     if (nbSlimeShoot > 0)
                     {
-                        Globals.listShootSlime.Add(CreateShooterSlime(game));
+                        Globals.listShootSlime.Add(CreateShooterSlime());
                         nbSlimeShoot--;
                     }
 
                     if (nbBigSlime > 0)
                     {
-                        Globals.listBigSlime.Add(CreateBigSlime(game));
+                        Globals.listBigSlime.Add(CreateBigSlime());
                         nbBigSlime--;
                     }
                     timerBetweenSpawn = 0f;
@@ -127,25 +127,25 @@ namespace ForestSurvivor
             }
         }
 
-        public static Ennemies CreateSlime(Game game)
+        public static Ennemies CreateSlime()
         {
             Ennemies ennemies = new Ennemies(Globals.WIDTH_LITTLE_SLIME, Globals.HEIGHT_LITTLE_SLIME, Globals.LIFE_LITTLE_SLIME ,Globals.SPEED_LITTLE_SLIME, Globals.DAMAGE_LITTLE_SLIME, Globals.DAMAGE_SPEED_LITTLE_SLIME);
-            ennemies.Texture =  ennemies.Texture = game.Content.Load<Texture2D>("Monster/Slime/Slime01");
+            ennemies.Texture = GlobalsTexture.Slime2D;
             return ennemies;
         }
 
-        public static BigSlime CreateBigSlime(Game game)
+        public static BigSlime CreateBigSlime()
         {
             BigSlime ennemies = new BigSlime(115, 78, 5, 3, 2, 3);
-            ennemies.Texture = game.Content.Load<Texture2D>("Monster/Slime/SlimeBig");
+            ennemies.Texture = GlobalsTexture.BigSlime2D;  
             return ennemies;
         }
 
-        public static SlimeShooter CreateShooterSlime(Game game)
+        public static SlimeShooter CreateShooterSlime()
         {
             SlimeShooter ennemies = new SlimeShooter(Globals.WIDTH_LITTLE_SLIME, Globals.HEIGHT_LITTLE_SLIME, Globals.LIFE_LITTLE_SLIME ,Globals.SPEED_LITTLE_SLIME, Globals.DAMAGE_LITTLE_SLIME, 2);
-            ennemies.Texture = game.Content.Load<Texture2D>("Monster/Slime/Slime01");
-            ennemies.ShootTexture = game.Content.Load<Texture2D>("Monster/Slime/Slime01");
+            ennemies.Texture = GlobalsTexture.SlimeShooter2D;
+            ennemies.ShootTexture = GlobalsTexture.SlimeShooterAmmo;
             return ennemies;
         }
     }
