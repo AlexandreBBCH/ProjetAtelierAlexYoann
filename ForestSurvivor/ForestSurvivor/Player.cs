@@ -13,13 +13,15 @@ namespace ForestSurvivor
         public const float TIME_COLOR_RED = 0.2f;
 
         private Texture2D _texture;
-        private int _width;
-        private int _height;
-        private int _x;
-        private int _y;
-        private int _speed;
+        private float _width;
+        private float _height;
+        private float _x;
+        private float _y;
+        private float _speed;
         private int _life;
         private int _score;
+        private int _pvMax; 
+        private float _speedMax;
         private int _highscore;
         private Color _color;
 
@@ -27,15 +29,17 @@ namespace ForestSurvivor
         private bool canShoot;
 
         public Texture2D Texture { get => _texture; set => _texture = value; }
-        public int Width { get => _width; set => _width = value; }
-        public int Height { get => _height; set => _height = value; }
-        public int X { get => _x; set => _x = value; }
-        public int Y { get => _y; set => _y = value; }
-        public int Speed { get => _speed; set => _speed = value; }
+        public float Width { get => _width; set => _width = value; }
+        public float Height { get => _height; set => _height = value; }
+        public float X { get => _x; set => _x = value; }
+        public float Y { get => _y; set => _y = value; }
+        public float Speed { get => _speed; set => _speed = value; }
         public int Life { get => _life; set => _life = value; }
         public int Score { get => _score; set => _score = value; }
         public int Highscore { get => _highscore; set => _highscore = value; }
         public Color PlayerColor { get => _color; set => _color = value; }
+        public int PvMax { get => _pvMax; set => _pvMax = value; }
+        public float SpeedMax { get => _speedMax; set => _speedMax = value; }
 
         public Player(int width, int height, int x, int y, int speed, int life, Color color)
         {
@@ -169,8 +173,8 @@ namespace ForestSurvivor
             #region add Shoot
             if (mouseState.LeftButton == ButtonState.Pressed && canShoot)
             {
-                int x = 0;
-                int y = 0;
+                float x = 0;
+                float y = 0;
                 if (mouvementDirection == 1)
                 {
                     x = X + Width / 2;
@@ -320,7 +324,7 @@ namespace ForestSurvivor
 
         public Rectangle GetPlayerRectangle()
         {
-            return new Rectangle(X, Y, Width, Height);
+            return new Rectangle((int)X, (int)Y, (int)Width, (int)Height);
         }
 
         /// <summary>
