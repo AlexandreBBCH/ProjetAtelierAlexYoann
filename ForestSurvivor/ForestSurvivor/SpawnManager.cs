@@ -45,7 +45,7 @@ namespace ForestSurvivor
 
         public void Update(GameTime gameTime)
         {
-            // Entre les niveaux, pause de 10sec
+            // Entre les niveaux, pause de 5sec
             if (betweenLevel)
             {
                 timerBetweenLevel += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -91,7 +91,8 @@ namespace ForestSurvivor
                     {
                         TimeBetweenMonsterSpawn -= 0.2f;
                     }
-                    DifficultyLevel += Level;
+
+                    DifficultyLevel += 3;
 
                     int tmpdifficulty = DifficultyLevel;
                     int tmpSlime = 0;
@@ -106,10 +107,10 @@ namespace ForestSurvivor
                             tmpdifficulty -= 1;
                         }
 
-                        if (tmpdifficulty >= 3)
+                        if (tmpdifficulty >= 4)
                         {
                             tmpSlimeShoot += 1;
-                            tmpdifficulty -= 3;
+                            tmpdifficulty -= 4;
                         }
 
                         if (tmpdifficulty >= 5)
@@ -119,10 +120,11 @@ namespace ForestSurvivor
                         }
                     }
                     // New monster number
-                    nbSlime += tmpSlime + 1;
+                    nbSlime += tmpSlime;
                     nbSlimeShoot = tmpSlimeShoot;
                     nbBigSlime = tmpBigSlime;
                     betweenLevel = true;
+                    timerBetweenLevel = 0;
                 }
             }
         }

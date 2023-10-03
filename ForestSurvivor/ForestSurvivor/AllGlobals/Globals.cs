@@ -55,7 +55,9 @@ namespace ForestSurvivor.AllGlobals
         public static float DAMAGE_SPEED_LITTLE_SLIME = 1;
         public static int LIFE_LITTLE_SLIME = 3;
 
-
+        public static int nbSlimeKilled = 0;
+        public static int nbBigSlimeKilled = 0;
+        public static int nbShooterSlimeKilled = 0;
 
         public static int ScreenWidth;
         public static int ScreenHeight;

@@ -48,6 +48,7 @@ namespace ForestSurvivor.AllEnnemies
                 }
                 MusicManager.PlaySoundEffect(GlobalsSounds.bigSlimeExplosion);
                 Globals.listBigSlime.Remove(this);
+                Globals.nbBigSlimeKilled++;
                 return true;
             }
             return false;

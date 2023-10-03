@@ -61,9 +61,9 @@ namespace ForestSurvivor.AllItems
             if (!isRunning)
             {
                 isRunning = true;
-                if (Player.Life + 3 <= Player.PvMax)
+                if (Player.Life + 10 <= Player.PvMax)
                 {
-                    Player.Life += 3;
+                    Player.Life += 10;
                     MusicManager.PlaySoundEffect(GlobalsSounds.appleEat);
                 }
                 else

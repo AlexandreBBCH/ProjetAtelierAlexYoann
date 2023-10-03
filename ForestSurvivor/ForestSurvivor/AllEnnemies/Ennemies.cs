@@ -218,11 +218,13 @@ namespace ForestSurvivor.AllEnnemies
                     if (GetType() == typeof(Ennemies))
                     {
                         Globals.listLittleSlime.Remove(this);
+                        Globals.nbSlimeKilled++;
                         MusicManager.PlaySoundEffect(GlobalsSounds.slimeDeath);
                     }
                     else if (GetType() == typeof(SlimeShooter))
                     {
                         Globals.listShootSlime.Remove((SlimeShooter)this);
+                        Globals.nbShooterSlimeKilled++;
                         MusicManager.PlaySoundEffect(GlobalsSounds.slimeDeath);
                     }
                 }

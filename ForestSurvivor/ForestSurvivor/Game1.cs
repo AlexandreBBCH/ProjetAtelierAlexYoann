@@ -96,13 +96,12 @@ namespace ForestSurvivor
             _optionPause = new OptionPause();
             _mainMenu = new MainMenu();
             _gameOver = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.5f, Globals.graphics.PreferredBackBufferHeight / 3f, 200, 80, "GAME OVER", "Start", "", "Font", GlobalsTexture.titleFont, null);
-            _restart = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3f, Globals.graphics.PreferredBackBufferHeight / 2f, 200, 80, "PRESS R TO RESTART", "Start","","Font" ,GlobalsTexture.titleFont,null);
+            _restart = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3f, Globals.graphics.PreferredBackBufferHeight / 2f + 500, 200, 80, "PRESS R TO RESTART", "Start", "", "Font", GlobalsTexture.titleFont, null);
 
             GlobalsTexture.back = Content.Load<Texture2D>("Player/back");
             GlobalsTexture.front = Content.Load<Texture2D>("Player/front");
 
-            _healthBarAnimated = new HealthBar(GlobalsTexture.back, GlobalsTexture.front, player.PvMax, new Vector2(10, 10));
-
+            _healthBarAnimated = new HealthBar(GlobalsTexture.back, GlobalsTexture.front, player.PvMax, new Vector2(Globals.ScreenWidth / 2.2f, 30));
 
             itemGenerator = new ItemsGenerator();
             environmentInitialisation = new EnvironmentInit(20);
@@ -214,7 +213,11 @@ namespace ForestSurvivor
             Globals.listItems.ForEach(item => item.DrawItems());
 
             if (player.IsDead() && Globals.LauchGame) {
-                _restart.DrawTextClickable(); 
+                _restart.DrawTextClickable();
+                Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "Number of slime killed :", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2), Color.White);
+                Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Blue slime : {Globals.nbSlimeKilled}", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2 + 100), Color.White);
+                Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Red slime : {Globals.nbShooterSlimeKilled}", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2 + 200), Color.White);
+                Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Black slime : {Globals.nbBigSlimeKilled}", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2 + 300), Color.White);
                 _gameOver.DrawTextClickable();
             }
   
@@ -236,6 +239,9 @@ namespace ForestSurvivor
                 Globals.listEffect.Clear();
                 Globals.listEnvironment.Clear();
                 Globals.listLittleSlime.Clear();
+                Globals.nbBigSlimeKilled = 0;
+                Globals.nbShooterSlimeKilled = 0;
+                Globals.nbSlimeKilled = 0;
                 spawnManager = new SpawnManager();
                 player = new Player(120, 120, Globals.ScreenWidth / 2, Globals.ScreenHeight / 2, 8f, 10, 1f, Color.White);
                 player.Texture = GlobalsTexture.listTexturesPlayer[0];
