@@ -22,6 +22,10 @@ namespace ForestSurvivor
         MusicManager musicManager;
         ItemsGenerator itemGenerator;
         EnvironmentInit environmentInitialisation;
+        OptionClickable _gameOver;
+        OptionClickable _restart;
+
+
         public Game1()
         {
             Globals.graphics = new GraphicsDeviceManager(this);
@@ -37,7 +41,7 @@ namespace ForestSurvivor
         }
         protected override void Initialize()
         {
-            player = new Player(120, 120, 500, 500, 8f, 10, 1f, Color.White);
+            player = new Player(120, 120, Globals.ScreenWidth / 2, Globals.ScreenHeight/2, 8f, 10, 1f, Color.White);
             spawnManager = new SpawnManager();
             base.Initialize();
         }
@@ -59,8 +63,6 @@ namespace ForestSurvivor
             GlobalsTexture.SlimeShooterAmmo = Content.Load<Texture2D>("Monster/Slime/SlimeShooterShot");
             GlobalsTexture.BigSlime2D = Content.Load<Texture2D>("Monster/Slime/SlimeBig");
 
-
-
             GlobalsTexture.Apple = Content.Load<Texture2D>("Items/apple");
             GlobalsTexture.Mushroom = Content.Load<Texture2D>("Items/mushroom");
             GlobalsTexture.BrownMushroom = Content.Load<Texture2D>("Items/BrownMushroom");
@@ -70,11 +72,6 @@ namespace ForestSurvivor
 
             GlobalsTexture.Bush = Content.Load<Texture2D>("Environment/bushV2");
             GlobalsTexture.Rock = Content.Load<Texture2D>("Environment/RockV2");
-
-
-
-
-
 
             Globals.SpriteBatch = _spriteBatch;
 
@@ -90,6 +87,7 @@ namespace ForestSurvivor
                 Content.Load<Texture2D>("Player/HunterTopRight"),
             };
             GlobalsTexture.shootTexture = Content.Load<Texture2D>("Player/HunterTopRight");
+            GlobalsTexture.bullet = Content.Load<Texture2D>("Player/bullet");
 
             musicManager = new MusicManager();
             musicManager.LoadMusic(Content);
@@ -98,6 +96,9 @@ namespace ForestSurvivor
             player.Texture = GlobalsTexture.listTexturesPlayer[0];
             _optionPause = new OptionPause();
             _mainMenu = new MainMenu();
+            _gameOver = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.5f, Globals.graphics.PreferredBackBufferHeight / 3f, 200, 80, "GAME OVER", "Start", "", "Font", GlobalsTexture.titleFont, null);
+            _restart = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3f, Globals.graphics.PreferredBackBufferHeight / 2f, 200, 80, "PRESS R TO RESTART", "Start","","Font" ,GlobalsTexture.titleFont,null);
+       
 
             itemGenerator = new ItemsGenerator();
             environmentInitialisation = new EnvironmentInit(20);
@@ -110,12 +111,13 @@ namespace ForestSurvivor
         {
             if (Globals.Exit) Exit();
             MouseState mouseState = Mouse.GetState();
-
             _mainMenu.UpdateMainMenu(gameTime, mouseState);
             _optionPause.OptionUpdate(gameTime, mouseState);
+     
             musicManager.Update();
+            ResetAll();
 
-            if (!_optionPause.IsResume && Globals.LauchGame)
+            if (!_optionPause.IsResume && Globals.LauchGame && !player.IsDead())
             {
                 spawnManager.Update(gameTime);
                 itemGenerator.GenerateItem(player, gameTime, 8f);
@@ -162,7 +164,7 @@ namespace ForestSurvivor
                 Globals.listEnvironment.ForEach(spawner => spawner.UpdateSpawner(player));
 
             }
-
+            
 
             base.Update(gameTime);
         }
@@ -207,13 +209,39 @@ namespace ForestSurvivor
             }
             Globals.listItems.ForEach(item => item.DrawItems());
 
+            if (player.IsDead() && Globals.LauchGame) {
+                _restart.DrawTextClickable(); 
+                _gameOver.DrawTextClickable();
+            }
+  
             _mainMenu.DrawMainMenu();
             _optionPause.DrawOption();
-
-
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public void ResetAll()
+        {
+            KeyboardState keyPress = Keyboard.GetState();
+            if ((player.IsDead() && keyPress.IsKeyDown(Keys.R)) || Globals.Restart)
+            {
+                Globals.listBigSlime.Clear();
+                Globals.listShootSlime.Clear();
+                Globals.listItems.Clear();
+                Globals.listEffect.Clear();
+                Globals.listEnvironment.Clear();
+                Globals.listLittleSlime.Clear();
+                spawnManager = new SpawnManager();
+                player = new Player(120, 120, Globals.ScreenWidth / 2, Globals.ScreenHeight / 2, 8f, 10, 1f, Color.White);
+                player.Texture = GlobalsTexture.listTexturesPlayer[0];
+                environmentInitialisation.GenerateEnvironment();
+                Globals.Restart = false;
+            }
+     
+
+
+
         }
     }
 }
