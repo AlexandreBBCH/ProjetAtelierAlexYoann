@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ForestSurvivor
 {
@@ -243,7 +244,7 @@ namespace ForestSurvivor
                 }
 
                 Globals.listShoots.Add(new Shoot(x, y, this));
-                GlobalsSounds.shootEffect.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
+                MusicManager.PlaySoundEffect(GlobalsSounds.shootEffect);
                 canShoot = false;
             }
 
@@ -258,8 +259,8 @@ namespace ForestSurvivor
             {
                 if (!canMakeSoundHurt)
                 {
-                    int rndSound = rnd.Next(0, GlobalsSounds.listPlayerHurt.Count);
-                    GlobalsSounds.listPlayerHurt[rndSound].Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
+                    int rndSound = rnd.Next(0, GlobalsSounds.listPlayerHurt.Count + 1);
+                    MusicManager.PlaySoundEffect(GlobalsSounds.listPlayerHurt[rndSound]);
                     canMakeSoundHurt = true;
                 }
                 timerPlayerHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;

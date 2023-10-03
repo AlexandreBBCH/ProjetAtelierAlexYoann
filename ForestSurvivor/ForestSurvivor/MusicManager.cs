@@ -15,6 +15,7 @@ namespace ForestSurvivor
         private List<Song> _allMusic;
         private int _idMusic;
         private const int NB_MUSIC = 5;
+        private const int NB_DEATH_SOUND = 7;
 
         public List<Song> AllMusic { get => _allMusic; set => _allMusic = value; }
         public int IdMusic { get => _idMusic; set => _idMusic = value; }
@@ -43,7 +44,8 @@ namespace ForestSurvivor
             GlobalsSounds.slimeMove = contentManager.Load<SoundEffect>("Music/slimeMove");
             GlobalsSounds.slimeDeath = contentManager.Load<SoundEffect>("Music/slimeDeath");
             GlobalsSounds.appleEat = contentManager.Load<SoundEffect>("Music/apple");
-            for (int i = 1; i < 7; i++)
+            GlobalsSounds.bigSlimeExplosion = contentManager.Load<SoundEffect>("Music/bigSlimeExplosion");
+            for (int i = 1; i <= NB_DEATH_SOUND; i++)
             {
                 SoundEffect sound;
                 sound = contentManager.Load<SoundEffect>($"Music/soundHurt{i}");
@@ -51,11 +53,16 @@ namespace ForestSurvivor
             }
         }
 
+        public static void PlaySoundEffect(SoundEffect soundEffect)
+        {
+            soundEffect.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
+        }
+
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
             if (MediaPlayer.State == MediaState.Stopped)
             {
-                if (AllMusic[IdMusic + 1] != null)
+                if (AllMusic.ElementAt(IdMusic + 1) != null)
                 {
                     IdMusic++;
                 }

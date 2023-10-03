@@ -86,42 +86,42 @@ namespace ForestSurvivor.AllEnnemies
 
         public void Update(Player player, GameTime gameTime)
         {
-            bool moreXcollided = false;
-            bool lessXcollided = false;
-            bool moreYcollided = false;
-            bool lessYcollided = false;
-
-            // Collision with others ennemies
-            foreach (Ennemies ennemies in Globals.listLittleSlime)
-            {
-                // If it's not us
-                if (GetEnnemieRectangle() != ennemies.GetEnnemieRectangle())
-                {
-                    if (GetEnnemieRectangle().Intersects(ennemies.GetEnnemieRectangle()))
-                    {
-                        if (X >= ennemies.X)
-                        {
-                            moreXcollided = true;
-                        }
-                        if (X <= ennemies.X)
-                        {
-                            lessXcollided = true;
-                        }
-                        if (Y >= ennemies.Y)
-                        {
-                            moreYcollided = true;
-                        }
-                        if (Y <= ennemies.Y)
-                        {
-                            lessYcollided = true;
-                        }
-                    }
-                }
-            }
-
             // Slime shooter don't follow player
             if (GetType() != typeof(SlimeShooter))
             {
+                bool moreXcollided = false;
+                bool lessXcollided = false;
+                bool moreYcollided = false;
+                bool lessYcollided = false;
+
+                // Collision with others ennemies
+                foreach (Ennemies ennemies in Globals.listLittleSlime)
+                {
+                    // If it's not us
+                    if (GetEnnemieRectangle() != ennemies.GetEnnemieRectangle())
+                    {
+                        if (GetEnnemieRectangle().Intersects(ennemies.GetEnnemieRectangle()))
+                        {
+                            if (X >= ennemies.X)
+                            {
+                                moreXcollided = true;
+                            }
+                            if (X <= ennemies.X)
+                            {
+                                lessXcollided = true;
+                            }
+                            if (Y >= ennemies.Y)
+                            {
+                                moreYcollided = true;
+                            }
+                            if (Y <= ennemies.Y)
+                            {
+                                lessYcollided = true;
+                            }
+                        }
+                    }
+                }
+
                 // Follow player
                 if (X + Width <= player.X && !lessXcollided)
                 {
@@ -147,12 +147,12 @@ namespace ForestSurvivor.AllEnnemies
             timerSound += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (timerSound >= 2)
             {
-                GlobalsSounds.slimeMove.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
+                MusicManager.PlaySoundEffect(GlobalsSounds.slimeMove);
                 timerSound = 0;
             }
 
 
-            // Color Ennemies
+            // Color Ennemies when shoot
             if (hasShootTouchEnnemi)
             {
                 timerEnnemiHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -218,12 +218,12 @@ namespace ForestSurvivor.AllEnnemies
                     if (GetType() == typeof(Ennemies))
                     {
                         Globals.listLittleSlime.Remove(this);
-                        GlobalsSounds.slimeDeath.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
+                        MusicManager.PlaySoundEffect(GlobalsSounds.slimeDeath);
                     }
                     else if (GetType() == typeof(SlimeShooter))
                     {
                         Globals.listShootSlime.Remove((SlimeShooter)this);
-                        GlobalsSounds.slimeDeath.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
+                        MusicManager.PlaySoundEffect(GlobalsSounds.slimeDeath);
                     }
                 }
             }
