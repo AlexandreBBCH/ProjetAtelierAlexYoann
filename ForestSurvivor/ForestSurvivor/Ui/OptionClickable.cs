@@ -80,6 +80,7 @@ namespace ForestSurvivor.Ui
             {
 
                 case "Start":
+                    if (Globals.GameOver) Globals.Restart = true; Globals.GameOver = false;
                     Globals.LauchGame = true;
                     break;
                 case "Option":
@@ -129,5 +130,7 @@ namespace ForestSurvivor.Ui
             }
             return false;
         }
+
+ 
     }
 }

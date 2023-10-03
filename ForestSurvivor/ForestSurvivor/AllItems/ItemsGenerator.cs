@@ -24,10 +24,6 @@ namespace ForestSurvivor.AllItems
         public void GenerateItem(Player player,GameTime gameTime,float spawnTime)
         {
             timeSpawn += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            Debug.Print(player.Life.ToString());
-            Debug.Print(player.PvMax.ToString());
-
-
             if (timeSpawn >= spawnTime)
             {
                 List<string> itemsNameList = new List<string>

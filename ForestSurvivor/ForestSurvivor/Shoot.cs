@@ -39,12 +39,12 @@ namespace ForestSurvivor
         {
             _x = x;
             _y = y;
-            _width = 40;
-            _height = 10;
+            _width = 20;
+            _height = 20s;
             _speed = 20;
             _damage = player.ActualDamage;
             _destroy = false;
-            Texture = GlobalsTexture.shootTexture;
+            Texture = GlobalsTexture.bullet;
           
             mouseState = Mouse.GetState();
             directionTir = new Vector2(mouseState.X - X, mouseState.Y - Y);

@@ -32,6 +32,8 @@ namespace ForestSurvivor.AllGlobals
         public static bool ButtonEnabledMain = true;
         public static List<OptionClickable> optionClickables = new List<OptionClickable>();
         public static List<Slider> allSliders = new List<Slider>();
+        public static bool GameOver = false;
+        public static bool Restart = false;
 
 
 

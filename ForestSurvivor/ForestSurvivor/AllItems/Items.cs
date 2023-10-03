@@ -102,8 +102,8 @@ namespace ForestSurvivor.AllItems
                     texture2D = GlobalsTexture.Apple;
                     Width = 35;
                     Height = 35;
-                    GlobalHeal = 2;
-                    Heal = 2;
+                    GlobalHeal = 5;
+                    Heal = 5;
                     break;
                 case "Heal":
                     texture2D = GlobalsTexture.GreenApple;
