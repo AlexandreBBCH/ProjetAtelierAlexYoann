@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/Music/mushroomSound.mp3</SourceFile>
+  <SourceTime>2023-10-03T10:22:51.0268715+02:00</SourceTime>
+  <DestFile>C:/Users/alexandrebbch/Documents/02Mardi/ProjetAlexYoann/ProjetMonogame/ProjetAtelierAlexYoann/ForestSurvivor/ForestSurvivor/Content/bin/DesktopGL/Music/mushroomSound.xnb</DestFile>
+  <DestTime>2023-10-03T10:30:32.2074239+02:00</DestTime>
+  <Importer>Mp3Importer</Importer>
+  <ImporterTime>2022-07-26T13:44:56+02:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2022-07-26T13:44:56+02:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

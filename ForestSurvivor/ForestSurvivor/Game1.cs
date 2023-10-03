@@ -31,8 +31,8 @@ namespace ForestSurvivor
             Globals.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Globals.graphics.PreferredBackBufferWidth = 1920; // Largeur
-            Globals.graphics.PreferredBackBufferHeight = 1080; // Hauteur
+            Globals.graphics.PreferredBackBufferWidth = 2560; // Largeur
+            Globals.graphics.PreferredBackBufferHeight = 1440; // Hauteur
 
             Globals.ScreenHeight = Globals.graphics.PreferredBackBufferHeight;
             Globals.ScreenWidth = Globals.graphics.PreferredBackBufferWidth;
@@ -86,7 +86,6 @@ namespace ForestSurvivor
                 Content.Load<Texture2D>("Player/HunterTopLeft"),
                 Content.Load<Texture2D>("Player/HunterTopRight"),
             };
-            GlobalsTexture.shootTexture = Content.Load<Texture2D>("Player/HunterTopRight");
             GlobalsTexture.bullet = Content.Load<Texture2D>("Player/bullet");
 
             musicManager = new MusicManager();

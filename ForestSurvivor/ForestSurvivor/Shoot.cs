@@ -40,7 +40,7 @@ namespace ForestSurvivor
             _x = x;
             _y = y;
             _width = 20;
-            _height = 20s;
+            _height = 20;
             _speed = 20;
             _damage = player.ActualDamage;
             _destroy = false;

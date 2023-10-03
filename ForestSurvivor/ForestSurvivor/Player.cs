@@ -362,6 +362,15 @@ namespace ForestSurvivor
                 ActualDamage += damage;
             IsDamageItemAcivated = true;
         }
+        public bool IsDead()
+        {
+            if (Life <= 0)
+            {
+                Globals.GameOver = true;
+                return true;
+            }
+            return false;
+        }
 
     }
 }
