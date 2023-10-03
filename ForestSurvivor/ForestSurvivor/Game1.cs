@@ -27,8 +27,8 @@ namespace ForestSurvivor
             Globals.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Globals.graphics.PreferredBackBufferWidth = 1500; // Largeur
-            Globals.graphics.PreferredBackBufferHeight = 800; // Hauteur
+            Globals.graphics.PreferredBackBufferWidth = 1920; // Largeur
+            Globals.graphics.PreferredBackBufferHeight = 1080; // Hauteur
 
             Globals.ScreenHeight = Globals.graphics.PreferredBackBufferHeight;
             Globals.ScreenWidth = Globals.graphics.PreferredBackBufferWidth;
@@ -150,6 +150,15 @@ namespace ForestSurvivor
                 }
 
                 Globals.listItems.ForEach(item => item.UpdateItems(player));
+                Globals.listEffect.ForEach(effect => effect.UpdateEffect(gameTime));
+                foreach (var effect in Globals.listEffect)
+                {
+                    if (effect.IsEffectEnd)
+                    {
+                        Globals.listEffect.Remove(effect);
+                        break;
+                    }
+                }
                 Globals.listEnvironment.ForEach(spawner => spawner.UpdateSpawner(player));
 
             }
@@ -167,9 +176,7 @@ namespace ForestSurvivor
 
             if (Globals.LauchGame)
             {
-                player.Draw();
-                player.DrawInfos();
-                spawnManager.DrawLevel();
+
 
                 foreach (Ennemies ennemies in Globals.listLittleSlime)
                 {
@@ -188,10 +195,17 @@ namespace ForestSurvivor
                 {
                     shoot.Draw();
                 }
+                Globals.listEnvironment.ForEach(Spawner => Spawner.DrawEnvironment());
+
+                player.DrawInfos();
+                player.Draw();
+               
+                spawnManager.DrawLevel();
+
+               
 
             }
             Globals.listItems.ForEach(item => item.DrawItems());
-            Globals.listEnvironment.ForEach(Spawner => Spawner.DrawEnvironment());
 
             _mainMenu.DrawMainMenu();
             _optionPause.DrawOption();

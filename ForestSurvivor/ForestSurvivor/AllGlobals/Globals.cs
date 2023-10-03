@@ -40,6 +40,8 @@ namespace ForestSurvivor.AllGlobals
         public static List<SlimeShooter> listShootSlime = new List<SlimeShooter>();
         public static List<BigSlime> listBigSlime = new List<BigSlime>();
         public static List<Items> listItems = new List<Items>();
+        public static List<EffectItems> listEffect = new List<EffectItems>();
+
         public static List<Spawner> listEnvironment = new List<Spawner>();
 
 

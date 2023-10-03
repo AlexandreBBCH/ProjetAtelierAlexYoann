@@ -25,6 +25,7 @@ namespace ForestSurvivor.AllItems
         private int _heal;
         private float _damage;
         private float _globalDamage;
+        private EffectItems _effectBonus;
 
         public bool IsCollected { get => _isCollected; set => _isCollected = value; }
         public int X { get => _x; set => _x = value; }
@@ -41,16 +42,17 @@ namespace ForestSurvivor.AllItems
         public int Heal { get => _heal; set => _heal = value; }
         public float Damage { get => _damage; set => _damage = value; }
         public float GlobalDamage { get => _globalDamage; set => _globalDamage = value; }
+        //public Effect EffectBonus { get => _effectBonus; set => _effectBonus = value; }
 
         public Items(int x,int y, string itemName,Player player)
         {
             _x = x;
             _y = y;
 
-     
+
             _itemName = itemName;
             SetItem(_itemName, player);
-
+            
             Globals.listItems.Add(this);
         }
 
@@ -74,9 +76,11 @@ namespace ForestSurvivor.AllItems
             {
             player.PvMax += GlobalHeal;
             player.SpeedMax += GlobalSpeed;
-            player.AddItemDamage(Damage);
-            player.AddItemSpeed(Speed);
-            player.DamageMax += GlobalDamage; 
+            player.DamageMax += GlobalDamage;
+
+            if (Speed > 0) new EffectItems(player, ItemName);
+            if (Heal > 0) new EffectItems(player, ItemName);
+            if (Damage > 0) new EffectItems(player, ItemName);
             if (player.Life + Heal >= player.PvMax) player.Life = player.PvMax;
             return _isCollected = true;
             }
@@ -111,7 +115,7 @@ namespace ForestSurvivor.AllItems
                     texture2D = GlobalsTexture.Mushroom;
                     Width = 45;
                     Height = 45;
-                    GlobalSpeed = 0.2f;
+                    GlobalSpeed = 0.5f;
                     Speed = 0.2f;
                     break;
                 case "Speed":
@@ -130,8 +134,8 @@ namespace ForestSurvivor.AllItems
                     texture2D = GlobalsTexture.Steak;
                     Width = 45;
                     Height = 45;
-                    GlobalDamage = 0.5f;
-                    Damage = 0.5f;
+                    GlobalDamage = 1f;
+                    Damage =1f;
                     break;
             }
 

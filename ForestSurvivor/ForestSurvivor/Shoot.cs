@@ -42,7 +42,7 @@ namespace ForestSurvivor
             _width = 40;
             _height = 10;
             _speed = 20;
-            _damage = player.DamageMax;
+            _damage = player.ActualDamage;
             _destroy = false;
             Texture = GlobalsTexture.shootTexture;
           
