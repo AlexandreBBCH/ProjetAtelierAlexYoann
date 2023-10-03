@@ -54,7 +54,7 @@ namespace ForestSurvivor
 
             GlobalsTexture.MainMenu2D = Content.Load<Texture2D>("Ui/MainMenu/MainMenu");
             GlobalsTexture.PauseBackground2D = Content.Load<Texture2D>("Ui/MainMenu/BackgroundPause");
-            GlobalsTexture.Background2D = Content.Load<Texture2D>("Environment/grassV3");
+            GlobalsTexture.Background2D = Content.Load<Texture2D>("Environment/grassV4");
             GlobalsTexture.Minus = Content.Load<Texture2D>("Ui/Button/minus");
             GlobalsTexture.Plus = Content.Load<Texture2D>("Ui/Button/plus");
 
