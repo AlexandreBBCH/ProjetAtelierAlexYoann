@@ -259,8 +259,7 @@ namespace ForestSurvivor
             {
                 if (!canMakeSoundHurt)
                 {
-                    int rndSound = rnd.Next(0, GlobalsSounds.listPlayerHurt.Count + 1);
-                    MusicManager.PlaySoundEffect(GlobalsSounds.listPlayerHurt[rndSound]);
+                    MusicManager.PlayRandomHurtEffect();
                     canMakeSoundHurt = true;
                 }
                 timerPlayerHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -324,18 +323,6 @@ namespace ForestSurvivor
         public void Draw()
         {
             Globals.SpriteBatch.Draw(Texture, GetPlayerRectangle(), PlayerColor);
-        }
-
-        /// <summary>
-        /// Draw the life of the player
-        /// </summary>
-        public void DrawInfos()
-        {
-            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Life : {Math.Round((decimal)Life)}" + " / " + Math.Round((decimal)PvMax), new Vector2(0, 0), Color.White);
-            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Speed : {Math.Round((decimal)Speed)}" + " / " + Math.Round((decimal)SpeedMax), new Vector2(0, 50), Color.White);
-            Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Damage : {Math.Round((decimal)ActualDamage)}" + " / " + Math.Round((decimal)DamageMax), new Vector2(0, 100), Color.White);
-
-
         }
 
         public void ResetSpeed(GameTime gameTime)

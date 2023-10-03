@@ -18,6 +18,10 @@ namespace ForestSurvivor.AllGlobals
         public static SoundEffect slimeDeath;
         public static SoundEffect bigSlimeExplosion;
         public static SoundEffect appleEat;
+        public static SoundEffect mushroomEat;
+        public static SoundEffect steakEat;
+        public static SoundEffect carotEat;
+
         public static List<SoundEffect> listPlayerHurt = new List<SoundEffect>();
 
     }

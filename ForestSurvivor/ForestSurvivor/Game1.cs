@@ -24,7 +24,7 @@ namespace ForestSurvivor
         EnvironmentInit environmentInitialisation;
         OptionClickable _gameOver;
         OptionClickable _restart;
-
+        HealthBar _healthBarAnimated;
 
         public Game1()
         {
@@ -98,7 +98,12 @@ namespace ForestSurvivor
             _mainMenu = new MainMenu();
             _gameOver = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.5f, Globals.graphics.PreferredBackBufferHeight / 3f, 200, 80, "GAME OVER", "Start", "", "Font", GlobalsTexture.titleFont, null);
             _restart = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3f, Globals.graphics.PreferredBackBufferHeight / 2f, 200, 80, "PRESS R TO RESTART", "Start","","Font" ,GlobalsTexture.titleFont,null);
-       
+
+            GlobalsTexture.back = Content.Load<Texture2D>("Player/back");
+            GlobalsTexture.front = Content.Load<Texture2D>("Player/front");
+
+            _healthBarAnimated = new HealthBar(GlobalsTexture.back, GlobalsTexture.front, player.PvMax, new Vector2(10, 10));
+
 
             itemGenerator = new ItemsGenerator();
             environmentInitialisation = new EnvironmentInit(20);
@@ -141,6 +146,7 @@ namespace ForestSurvivor
                     shooterSLime.Shoot(gameTime, player);
                 }
                 player.Update(gameTime);
+                _healthBarAnimated.Update(player.Life, gameTime);
 
                 foreach (var item in Globals.listItems)
                 {
@@ -199,9 +205,8 @@ namespace ForestSurvivor
                 }
                 Globals.listEnvironment.ForEach(Spawner => Spawner.DrawEnvironment());
 
-                player.DrawInfos();
                 player.Draw();
-               
+                _healthBarAnimated.Draw();
                 spawnManager.DrawLevel();
 
                

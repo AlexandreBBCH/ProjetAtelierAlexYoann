@@ -48,5 +48,7 @@ namespace ForestSurvivor.AllGlobals
         /// </summary>
         public static List<Texture2D> listTexturesPlayer;
         public static Texture2D shootTexture;
+        public static Texture2D back;
+        public static Texture2D front;
     }
 }

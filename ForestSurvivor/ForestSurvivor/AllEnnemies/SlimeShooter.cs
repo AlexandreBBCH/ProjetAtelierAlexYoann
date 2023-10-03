@@ -68,6 +68,7 @@ namespace ForestSurvivor.AllEnnemies
                 projectilePosition.Y = Y;
                 direction = new Vector2(0, 0);
                 canShoot = false;
+                MusicManager.PlayRandomHurtEffect();
                 if (player.Life - Damage < 0)
                 {
                     player.Life = 0;

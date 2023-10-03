@@ -64,11 +64,13 @@ namespace ForestSurvivor.AllItems
                 if (Player.Life + 3 <= Player.PvMax)
                 {
                     Player.Life += 3;
-
+                    MusicManager.PlaySoundEffect(GlobalsSounds.appleEat);
                 }
                 else
                 {
                     Player.Life = Player.PvMax;
+                    MusicManager.PlaySoundEffect(GlobalsSounds.appleEat);
+
                 }
             }
             //Globals.listEffect.Remove(this);
@@ -82,6 +84,7 @@ namespace ForestSurvivor.AllItems
             {
                 isRunning = true;
                 Player.Speed += 3;
+                MusicManager.PlaySoundEffect(GlobalsSounds.mushroomEat);
             }
             if (EffectTimer >= 3)
             {
@@ -107,6 +110,8 @@ namespace ForestSurvivor.AllItems
             {
                 isRunning = true;
                 Player.ActualDamage += 2;
+                MusicManager.PlaySoundEffect(GlobalsSounds.steakEat);
+
             }
             if (EffectTimer >= 3)
             {

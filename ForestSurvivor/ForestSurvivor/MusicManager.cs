@@ -45,6 +45,10 @@ namespace ForestSurvivor
             GlobalsSounds.slimeDeath = contentManager.Load<SoundEffect>("Music/slimeDeath");
             GlobalsSounds.appleEat = contentManager.Load<SoundEffect>("Music/apple");
             GlobalsSounds.bigSlimeExplosion = contentManager.Load<SoundEffect>("Music/bigSlimeExplosion");
+            GlobalsSounds.mushroomEat = contentManager.Load<SoundEffect>("Music/mushroomSound");
+            GlobalsSounds.carotEat = contentManager.Load<SoundEffect>("Music/carotSound");
+            GlobalsSounds.steakEat = contentManager.Load<SoundEffect>("Music/steakSound");
+
             for (int i = 1; i <= NB_DEATH_SOUND; i++)
             {
                 SoundEffect sound;
@@ -58,11 +62,18 @@ namespace ForestSurvivor
             soundEffect.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
         }
 
+        public static void PlayRandomHurtEffect()
+        {
+            Random rnd = new Random();
+            int rndSound = rnd.Next(0, GlobalsSounds.listPlayerHurt.Count);
+            PlaySoundEffect(GlobalsSounds.listPlayerHurt[rndSound]);
+        }
+
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
             if (MediaPlayer.State == MediaState.Stopped)
             {
-                if (AllMusic.ElementAt(IdMusic + 1) != null)
+                if (AllMusic.ElementAtOrDefault(IdMusic + 1) != null)
                 {
                     IdMusic++;
                 }
