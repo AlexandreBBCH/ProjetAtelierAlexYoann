@@ -54,12 +54,15 @@ namespace ForestSurvivor
             GlobalsTexture.titleFont = Content.Load<SpriteFont>("Font/title");
             GlobalsTexture.textGamefont = Content.Load<SpriteFont>("Font/gameText");
             GlobalsTexture.textMenufont = Content.Load<SpriteFont>("Font/textMenu");
+            GlobalsTexture.lvlInfoFont = Content.Load<SpriteFont>("Font/lvlInfosFont");
 
             GlobalsTexture.MainMenu2D = Content.Load<Texture2D>("Ui/MainMenu/MainMenu");
             GlobalsTexture.PauseBackground2D = Content.Load<Texture2D>("Ui/MainMenu/BackgroundPause");
             GlobalsTexture.Background2D = Content.Load<Texture2D>("Environment/grassV4");
             GlobalsTexture.Minus = Content.Load<Texture2D>("Ui/Button/minus");
             GlobalsTexture.Plus = Content.Load<Texture2D>("Ui/Button/plus");
+            GlobalsTexture.cardInfos = Content.Load<Texture2D>("Ui/UpgradePlayerMenu/cardInfo");
+            GlobalsTexture.cardView = Content.Load<Texture2D>("Ui/UpgradePlayerMenu/cardVisuel");
 
             GlobalsTexture.Slime2D = Content.Load<Texture2D>("Monster/Slime/Slime01");
             GlobalsTexture.SlimeShooter2D = Content.Load<Texture2D>("Monster/Slime/SlimeShooter");
@@ -75,6 +78,8 @@ namespace ForestSurvivor
 
             GlobalsTexture.Bush = Content.Load<Texture2D>("Environment/bushV2");
             GlobalsTexture.Rock = Content.Load<Texture2D>("Environment/RockV2");
+            GlobalsTexture.BushSpriteSheet = Content.Load<Texture2D>("Environment/BushSpriteSheet");
+            GlobalsTexture.BushBerriesSpriteSheet = Content.Load<Texture2D>("Environment/BushBerriesSpriteSheet");
 
             Globals.SpriteBatch = _spriteBatch;
 
@@ -127,6 +132,20 @@ namespace ForestSurvivor
             {
                 spawnManager.Update(gameTime);
                 itemGenerator.GenerateItem(player, gameTime, 8f);
+                if (spawnManager.Level % 2 == 0 && !Globals.LevelTime)
+                {
+                    Globals.LevelTime = true;
+                    Globals.levelUpCard = new LevelUpCard();
+                }
+                else if (spawnManager.Level % 2 == 1)
+                {
+                    Globals.LevelTime = false;
+                }
+                itemGenerator.GenerateItem(player, gameTime, 8f);
+                if (Globals.levelUpCard != null)
+                {
+                    Globals.levelUpCard.UpdateCard(player);
+                }
                 foreach (Shoot shoot in Globals.listShoots)
                 {
                     shoot.Update(player);
@@ -169,7 +188,7 @@ namespace ForestSurvivor
                         break;
                     }
                 }
-                Globals.listEnvironment.ForEach(spawner => spawner.UpdateSpawner(player));
+                Globals.listEnvironment.ForEach(spawner => spawner.UpdateSpawner(gameTime, player));
             }
             
 
@@ -209,6 +228,8 @@ namespace ForestSurvivor
                 _healthBarAnimated.Draw();
                 spawnManager.DrawLevel();
                 Globals.listItems.ForEach(item => item.DrawItems());
+                if (Globals.levelUpCard != null) Globals.levelUpCard.DrawCards();
+
 
             }
 

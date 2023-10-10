@@ -32,7 +32,7 @@ namespace ForestSurvivor.AllGlobals
         public static List<Slider> allSliders = new List<Slider>();
         public static bool GameOver = false;
         public static bool Restart = false;
-
+        public static bool LevelTime = false;
 
 
         public static List<Shoot> listShoots = new List<Shoot>();
@@ -43,7 +43,10 @@ namespace ForestSurvivor.AllGlobals
         public static List<EffectItems> listEffect = new List<EffectItems>();
 
         public static List<Spawner> listEnvironment = new List<Spawner>();
+        public static List<Card> listCard = new List<Card>();
+        public static List<Card> actualCards = new List<Card>();
 
+        public static LevelUpCard levelUpCard;
 
 
         public static int WIDTH_LITTLE_SLIME = 69;
