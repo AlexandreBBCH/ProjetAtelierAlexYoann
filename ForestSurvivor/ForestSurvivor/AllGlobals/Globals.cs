@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -21,9 +22,6 @@ namespace ForestSurvivor.AllGlobals
         public static SpriteBatch SpriteBatch { get; set; }
         public static GraphicsDeviceManager graphics;
 
-        public static StreamReader reader;
-        public static StreamWriter writer;
-        public static XmlSerializer serializer;
         public static bool LauchGame = false;
         public static bool IsResume = false;
         public static bool Back = false;
@@ -58,9 +56,45 @@ namespace ForestSurvivor.AllGlobals
         public static int nbSlimeKilled = 0;
         public static int nbBigSlimeKilled = 0;
         public static int nbShooterSlimeKilled = 0;
+        public static int nbShoot = 0;
+        public static int nbShootHasTouch = 0;
+
 
         public static int ScreenWidth;
         public static int ScreenHeight;
 
+        /// <summary>
+        /// Serialize n'importe quel type de donnée
+        /// </summary>
+        /// <typeparam name="T">Type des données</typeparam>
+        /// <param name="nameFile">nom du fichier où stocker les données</param>
+        /// <param name="data">données à sauvegarder</param>
+        public static void Serializer<T>(string nameFile, T data)
+        {
+            XmlSerializer serializer = new XmlSerializer(data.GetType());
+            StreamWriter writer = new StreamWriter(nameFile);
+            serializer.Serialize(writer, data);
+            writer.Close();
+        }
+
+        /// <summary>
+        /// Récupère des données avec le type spécifiée
+        /// </summary>
+        /// <typeparam name="T">Type de donnée à récupérée</typeparam>
+        /// <param name="nameFile">nom du fichier où sont stocké les données</param>
+        /// <returns>Les données récupérés</returns>
+        public static T Deserializer<T>(string nameFile)
+        {
+            if (File.Exists(nameFile))
+            {
+                StreamReader reader = new StreamReader(nameFile);
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                T data = (T)serializer.Deserialize(reader);
+                return data;
+            }
+
+            // Si le fichier n'existe pas, retournez la valeur par défaut du type T
+            return default;
+        }
     }
 }

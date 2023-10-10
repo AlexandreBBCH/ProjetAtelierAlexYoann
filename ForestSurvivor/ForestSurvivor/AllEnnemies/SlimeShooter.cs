@@ -34,48 +34,79 @@ namespace ForestSurvivor.AllEnnemies
             shootSpeed = 15;
             XBullet = X;
             YBullet = Y;
-            // Position initiale du tir
-            projectilePosition = new Vector2(XBullet, YBullet);
         }
 
-        public void Shoot(GameTime gameTime, Player player)
+        public void Shoot(GameTime gameTime, Player player, Dog dog)
         {
-            timerShoot += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (timerShoot >= DamageSpeed)
+            if (!canShoot)
             {
-                canShoot = true;
-                XBullet = X;
-                YBullet = Y;
-                xPlayer = player.X + player.Width / 2;
-                yPlayer = player.Y + player.Height / 2;
-                timerShoot = 0;
+                timerShoot += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (timerShoot >= DamageSpeed)
+                {
+                    canShoot = true;
+                    XBullet = X;
+                    YBullet = Y;
 
-                // Position initiale du tir
-                projectilePosition = new Vector2(XBullet, YBullet);
-                // Direction du tir
-                direction = new Vector2(xPlayer - XBullet, yPlayer - YBullet);
-                direction.Normalize();
+                    if (!isEnnemiHurtByDog)
+                    {
+                        xPlayer = player.X + player.Width / 2;
+                        yPlayer = player.Y + player.Height / 2;
+                    }
+                    else
+                    {
+                        xPlayer = dog.X + dog.Width / 2;
+                        yPlayer = dog.Y + dog.Height / 2;
+                    }
+
+                    timerShoot = 0;
+
+                    // Position initiale du tir
+                    projectilePosition = new Vector2(XBullet, YBullet);
+                    // Direction du tir
+                    direction = new Vector2(xPlayer - XBullet, yPlayer - YBullet);
+                    direction.Normalize();
+                }
             }
-
-            if (canShoot)
+            else
             {
                 projectilePosition += direction * shootSpeed;
-            }
-
-            if (GetRectangleShoot().Intersects(player.GetPlayerRectangle()) && canShoot)
-            {
-                projectilePosition.X = X;
-                projectilePosition.Y = Y;
-                direction = new Vector2(0, 0);
-                canShoot = false;
-                MusicManager.PlayRandomHurtEffect();
-                if (player.Life - Damage < 0)
+                if (!isEnnemiHurtByDog)
                 {
-                    player.Life = 0;
+                    if (GetRectangleShoot().Intersects(player.GetPlayerRectangle()))
+                    {
+                        canShoot = false;
+                        MusicManager.PlayRandomHurtEffect();
+                        if (player.Life - Damage < 0)
+                        {
+                            player.Life = 0;
+                        }
+                        else
+                        {
+                            player.Life -= Damage;
+                        }
+                    }
                 }
                 else
                 {
-                    player.Life -= Damage;
+                    if (GetRectangleShoot().Intersects(dog.GetRectangle()))
+                    {
+                        canShoot = false;
+                        // Music Dog hurt
+                        if (player.Life - Damage < 0)
+                        {
+                            player.Life = 0;
+                        }
+                        else
+                        {
+                            player.Life -= Damage;
+                        }
+                    }
+                }
+
+                // Out of screen
+                if (projectilePosition.X < 0 || projectilePosition.Y < 0 || projectilePosition.X > Globals.ScreenWidth || projectilePosition.Y > Globals.ScreenHeight)
+                {
+                    canShoot = false;
                 }
             }
         }
@@ -87,9 +118,11 @@ namespace ForestSurvivor.AllEnnemies
 
         public void DrawBullet()
         {
-            Globals.SpriteBatch.Draw(ShootTexture, GetRectangleShoot(), Color);
+            if (canShoot)
+            {
+                Globals.SpriteBatch.Draw(ShootTexture, GetRectangleShoot(), Color);
+            }
         }
-
         
     }
 }

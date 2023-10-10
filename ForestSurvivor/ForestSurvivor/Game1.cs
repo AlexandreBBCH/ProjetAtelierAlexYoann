@@ -8,12 +8,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ForestSurvivor
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         public OptionPause _optionPause;
         public MainMenu _mainMenu;
@@ -25,14 +25,16 @@ namespace ForestSurvivor
         OptionClickable _gameOver;
         OptionClickable _restart;
         HealthBar _healthBarAnimated;
+        Dog dog;
+
 
         public Game1()
         {
             Globals.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Globals.graphics.PreferredBackBufferWidth = 2560; // Largeur
-            Globals.graphics.PreferredBackBufferHeight = 1440; // Hauteur
+            Globals.graphics.PreferredBackBufferWidth = 1920; // Largeur
+            Globals.graphics.PreferredBackBufferHeight = 1080; // Hauteur
 
             Globals.ScreenHeight = Globals.graphics.PreferredBackBufferHeight;
             Globals.ScreenWidth = Globals.graphics.PreferredBackBufferWidth;
@@ -51,6 +53,7 @@ namespace ForestSurvivor
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             GlobalsTexture.titleFont = Content.Load<SpriteFont>("Font/title");
             GlobalsTexture.textGamefont = Content.Load<SpriteFont>("Font/gameText");
+            GlobalsTexture.textMenufont = Content.Load<SpriteFont>("Font/textMenu");
 
             GlobalsTexture.MainMenu2D = Content.Load<Texture2D>("Ui/MainMenu/MainMenu");
             GlobalsTexture.PauseBackground2D = Content.Load<Texture2D>("Ui/MainMenu/BackgroundPause");
@@ -95,8 +98,8 @@ namespace ForestSurvivor
             player.Texture = GlobalsTexture.listTexturesPlayer[0];
             _optionPause = new OptionPause();
             _mainMenu = new MainMenu();
-            _gameOver = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.5f, Globals.graphics.PreferredBackBufferHeight / 3f, 200, 80, "GAME OVER", "Start", "", "Font", GlobalsTexture.titleFont, null);
-            _restart = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3f, Globals.graphics.PreferredBackBufferHeight / 2f + 500, 200, 80, "PRESS R TO RESTART", "Start", "", "Font", GlobalsTexture.titleFont, null);
+            _gameOver = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.5f, Globals.graphics.PreferredBackBufferHeight / 5f, 200, 80, "GAME OVER", "Start", "", "Font", GlobalsTexture.titleFont, null);
+            _restart = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3f, Globals.graphics.PreferredBackBufferHeight / 2f + 400, 200, 80, "PRESS R TO RESTART", "Start", "", "Font", GlobalsTexture.titleFont, null);
 
             GlobalsTexture.back = Content.Load<Texture2D>("Player/back");
             GlobalsTexture.front = Content.Load<Texture2D>("Player/front");
@@ -106,7 +109,7 @@ namespace ForestSurvivor
             itemGenerator = new ItemsGenerator();
             environmentInitialisation = new EnvironmentInit(20);
             environmentInitialisation.GenerateEnvironment();
-
+            dog = new Dog(100, 50, player.X - 100, player.Y - 100, 5, 55, 1, 0.5f);
         }
 
 
@@ -132,18 +135,19 @@ namespace ForestSurvivor
                 Shoot.CollsionBulletWithEnnemies();
                 foreach (Ennemies ennemies in Globals.listLittleSlime)
                 {
-                    ennemies.Update(player, gameTime);
+                    ennemies.Update(player,dog ,gameTime);
                 }
                 foreach (BigSlime bigSLime in Globals.listBigSlime)
                 {
-                    bigSLime.Update(player, gameTime);
+                    bigSLime.Update(player, dog, gameTime);
                 }
                 foreach (SlimeShooter shooterSLime in Globals.listShootSlime)
                 {
-                    shooterSLime.Update(player, gameTime);
-                    shooterSLime.Shoot(gameTime, player);
+                    shooterSLime.Update(player, dog, gameTime);
+                    shooterSLime.Shoot(gameTime, player, dog);
                 }
                 player.Update(gameTime);
+                dog.Update(player, gameTime);
                 _healthBarAnimated.Update(player.Life, gameTime);
 
                 foreach (var item in Globals.listItems)
@@ -166,7 +170,6 @@ namespace ForestSurvivor
                     }
                 }
                 Globals.listEnvironment.ForEach(spawner => spawner.UpdateSpawner(player));
-
             }
             
 
@@ -182,8 +185,6 @@ namespace ForestSurvivor
 
             if (Globals.LauchGame)
             {
-
-
                 foreach (Ennemies ennemies in Globals.listLittleSlime)
                 {
                     ennemies.Draw();
@@ -204,25 +205,48 @@ namespace ForestSurvivor
                 Globals.listEnvironment.ForEach(Spawner => Spawner.DrawEnvironment());
 
                 player.Draw();
+                dog.Draw();
                 _healthBarAnimated.Draw();
                 spawnManager.DrawLevel();
-
-               
+                Globals.listItems.ForEach(item => item.DrawItems());
 
             }
-            Globals.listItems.ForEach(item => item.DrawItems());
 
             if (player.IsDead() && Globals.LauchGame) {
+                int pourcentageShootSucessfull;
+                if (Globals.nbShoot != 0) 
+                {
+                    pourcentageShootSucessfull = (int)Math.Round((double)Globals.nbShootHasTouch / Globals.nbShoot * 100, 0);
+                }
+                else
+                {
+                    pourcentageShootSucessfull = 100;
+                }
+                if (_mainMenu.DataBestGame[0] < spawnManager.Level || _mainMenu.DataBestGame[1] < Globals.nbSlimeKilled || _mainMenu.DataBestGame[2] < Globals.nbBigSlimeKilled || _mainMenu.DataBestGame[3] < Globals.nbShooterSlimeKilled)
+                {
+                    List<int> newData = new List<int>
+                    {
+                        spawnManager.Level,
+                        Globals.nbSlimeKilled,
+                        Globals.nbBigSlimeKilled,
+                        Globals.nbShooterSlimeKilled,
+                        pourcentageShootSucessfull
+                    };
+                    Globals.Serializer("bestscore.txt", newData);
+                }
+
                 _restart.DrawTextClickable();
-                Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "Number of slime killed :", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2), Color.White);
-                Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Blue slime : {Globals.nbSlimeKilled}", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2 + 100), Color.White);
-                Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Red slime : {Globals.nbShooterSlimeKilled}", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2 + 200), Color.White);
-                Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Black slime : {Globals.nbBigSlimeKilled}", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2 + 300), Color.White);
+                Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "Number of slime killed :", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2.5f - 100), Color.White);
+                Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Blue slime : {Globals.nbSlimeKilled}", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2.5f), Color.White);
+                Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Red slime : {Globals.nbShooterSlimeKilled}", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2.5f + 100), Color.White);
+                Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Black slime : {Globals.nbBigSlimeKilled}", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2.5f + 200), Color.White);
+                Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Shoot successfull : {pourcentageShootSucessfull}%", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2.5f + 300), Color.White);
                 _gameOver.DrawTextClickable();
             }
-  
+            
             _mainMenu.DrawMainMenu();
             _optionPause.DrawOption();
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -235,23 +259,22 @@ namespace ForestSurvivor
             {
                 Globals.listBigSlime.Clear();
                 Globals.listShootSlime.Clear();
+                Globals.listLittleSlime.Clear();
+                Globals.listShoots.Clear();
                 Globals.listItems.Clear();
                 Globals.listEffect.Clear();
                 Globals.listEnvironment.Clear();
-                Globals.listLittleSlime.Clear();
                 Globals.nbBigSlimeKilled = 0;
                 Globals.nbShooterSlimeKilled = 0;
                 Globals.nbSlimeKilled = 0;
+                Globals.nbShoot = 0;
+                Globals.nbShootHasTouch = 0;
                 spawnManager = new SpawnManager();
                 player = new Player(120, 120, Globals.ScreenWidth / 2, Globals.ScreenHeight / 2, 8f, 10, 1f, Color.White);
                 player.Texture = GlobalsTexture.listTexturesPlayer[0];
                 environmentInitialisation.GenerateEnvironment();
                 Globals.Restart = false;
             }
-     
-
-
-
         }
     }
 }

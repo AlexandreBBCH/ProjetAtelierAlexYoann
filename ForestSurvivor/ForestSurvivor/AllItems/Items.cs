@@ -78,14 +78,20 @@ namespace ForestSurvivor.AllItems
             player.SpeedMax += GlobalSpeed;
             player.DamageMax += GlobalDamage;
 
-            if (Speed > 0) new EffectItems(player, ItemName);
-            if (Heal > 0) new EffectItems(player, ItemName);
-            if (Damage > 0) new EffectItems(player, ItemName);
-            if (player.Life + Heal >= player.PvMax) player.Life = player.PvMax;
+            AddEffect(player);
             return _isCollected = true;
             }
             return false;
         }
+
+        public void AddEffect(Player player)
+        {
+            if (Speed > 0) new EffectItems(player, ItemName);
+            if (Heal > 0) new EffectItems(player, ItemName);
+            if (Damage > 0) new EffectItems(player, ItemName);
+            if (player.Life + Heal >= player.PvMax) player.Life = player.PvMax;
+        }
+
 
         public Rectangle GetItemRectangle()
         {

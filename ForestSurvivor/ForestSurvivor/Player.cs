@@ -243,6 +243,7 @@ namespace ForestSurvivor
                     y = Y + Height / 4;
                 }
 
+                Globals.nbShoot++;
                 Globals.listShoots.Add(new Shoot(x, y, this));
                 MusicManager.PlaySoundEffect(GlobalsSounds.shootEffect);
                 canShoot = false;

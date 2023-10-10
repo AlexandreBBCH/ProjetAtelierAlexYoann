@@ -26,6 +26,12 @@ namespace ForestSurvivor.AllEnnemies
         bool isHurt = false;
         float timerHurt = 0;
 
+
+        // Dog touch ennemi
+        public bool isEnnemiHurtByDog = false;
+        private bool canMakeDamage = true;
+        private float timerDamage = 0;
+
         // Shoot touch ennemi
         private float timerEnnemiHurt;
         bool hasShootTouchEnnemi = false;
@@ -56,6 +62,7 @@ namespace ForestSurvivor.AllEnnemies
             Color = Color.White;
             timerSound = 0;
             IsDead = false;
+
             // Random spawn
             rnd = new Random();
             int border = rnd.Next(0, 4 + 1);
@@ -84,62 +91,91 @@ namespace ForestSurvivor.AllEnnemies
             }
         }
 
-        public void Update(Player player, GameTime gameTime)
+        public void Update(Player player, Dog dog, GameTime gameTime)
         {
             // Slime shooter don't follow player
             if (GetType() != typeof(SlimeShooter))
             {
-                bool moreXcollided = false;
-                bool lessXcollided = false;
-                bool moreYcollided = false;
-                bool lessYcollided = false;
-
-                // Collision with others ennemies
-                foreach (Ennemies ennemies in Globals.listLittleSlime)
+                if (!isEnnemiHurtByDog)
                 {
-                    // If it's not us
-                    if (GetEnnemieRectangle() != ennemies.GetEnnemieRectangle())
+                    bool moreXcollided = false;
+                    bool lessXcollided = false;
+                    bool moreYcollided = false;
+                    bool lessYcollided = false;
+
+                    // Collision with others ennemies
+                    foreach (Ennemies ennemies in Globals.listLittleSlime)
                     {
-                        if (GetEnnemieRectangle().Intersects(ennemies.GetEnnemieRectangle()))
+                        // If it's not us
+                        if (GetEnnemieRectangle() != ennemies.GetEnnemieRectangle())
                         {
-                            if (X >= ennemies.X)
+                            if (GetEnnemieRectangle().Intersects(ennemies.GetEnnemieRectangle()))
                             {
-                                moreXcollided = true;
-                            }
-                            if (X <= ennemies.X)
-                            {
-                                lessXcollided = true;
-                            }
-                            if (Y >= ennemies.Y)
-                            {
-                                moreYcollided = true;
-                            }
-                            if (Y <= ennemies.Y)
-                            {
-                                lessYcollided = true;
+                                if (X >= ennemies.X)
+                                {
+                                    moreXcollided = true;
+                                }
+                                if (X <= ennemies.X)
+                                {
+                                    lessXcollided = true;
+                                }
+                                if (Y >= ennemies.Y)
+                                {
+                                    moreYcollided = true;
+                                }
+                                if (Y <= ennemies.Y)
+                                {
+                                    lessYcollided = true;
+                                }
                             }
                         }
                     }
-                }
 
-                // Follow player
-                if (X + Width <= player.X && !lessXcollided)
-                {
-                    X += Speed;
+                    // Follow player
+                    if (X + Width <= player.X && !lessXcollided)
+                    {
+                        X += Speed;
 
-                }
-                else if (X >= player.X + player.Width && !moreXcollided)
-                {
-                    X -= Speed;
-                }
+                    }
+                    else if (X >= player.X + player.Width && !moreXcollided)
+                    {
+                        X -= Speed;
+                    }
 
-                if (Y >= player.Y + player.Height && !moreYcollided)
-                {
-                    Y -= Speed;
+                    if (Y >= player.Y + player.Height && !moreYcollided)
+                    {
+                        Y -= Speed;
+                    }
+                    else if (Y + Height <= player.Y && !lessYcollided)
+                    {
+                        Y += Speed;
+                    }
                 }
-                else if (Y + Height <= player.Y && !lessYcollided)
+                else
                 {
-                    Y += Speed;
+                    if (!canMakeDamage)
+                    {
+                        timerDamage += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        if (timerDamage >= DamageSpeed)
+                        {
+                            canMakeDamage = true;
+                            timerDamage = 0;
+                        }
+                    }
+                    else
+                    {
+                        if (dog.GetRectangle().Intersects(GetEnnemieRectangle()))
+                        {
+                            canMakeDamage = false;
+                            dog.Life -= Damage;
+                            if (dog.Life <= 0)
+                            {
+                                dog.isDead = true;
+                                dog.Color = Color.Red;
+                                isEnnemiHurtByDog = false;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -152,7 +188,7 @@ namespace ForestSurvivor.AllEnnemies
             }
 
 
-            // Color Ennemies when shoot
+            // Color Ennemies when is hurt
             if (hasShootTouchEnnemi)
             {
                 timerEnnemiHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -204,11 +240,13 @@ namespace ForestSurvivor.AllEnnemies
             }
         }
 
+
         public bool CollisionWithBullet(Shoot shoot)
         {
 
             if (shoot.GetShootRectangle().Intersects(GetEnnemieRectangle()))
             {
+                Globals.nbShootHasTouch++;
                 Globals.listShoots.Remove(shoot);
                 Life -= shoot.Damage;
                 hasShootTouchEnnemi = true;
@@ -230,6 +268,30 @@ namespace ForestSurvivor.AllEnnemies
                 }
             }
             return hasShootTouchEnnemi;
+        }
+
+        public bool TakeDamageFromDog(Dog dog)
+        {
+            Life -= dog.Damage;
+            hasShootTouchEnnemi = true;
+            if (Life <= 0)
+            {
+                IsDead = true;
+                if (GetType() == typeof(Ennemies))
+                {
+                    Globals.listLittleSlime.Remove(this);
+                    Globals.nbSlimeKilled++;
+                    MusicManager.PlaySoundEffect(GlobalsSounds.slimeDeath);
+                }
+                else if (GetType() == typeof(SlimeShooter))
+                {
+                    Globals.listShootSlime.Remove((SlimeShooter)this);
+                    Globals.nbShooterSlimeKilled++;
+                    MusicManager.PlaySoundEffect(GlobalsSounds.slimeDeath);
+                }
+                return true;
+            }
+            return false;
         }
 
         public Rectangle GetEnnemieRectangle()
