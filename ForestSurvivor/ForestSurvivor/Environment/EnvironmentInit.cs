@@ -41,7 +41,8 @@ namespace ForestSurvivor.Environment
             List<string> spawners = new List<string>
          {
         "Bush",
-        "Rock"
+        "Rock",
+        "BushBerrie"
         //"Tree"
          };
 
