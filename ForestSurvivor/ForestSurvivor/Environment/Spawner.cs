@@ -68,7 +68,7 @@ namespace ForestSurvivor.Environment
             {
                 AnimationSheet.PositionX = X;
                 AnimationSheet.PositionY = Y;
-                AnimationSheet.DrawAnimation();
+                AnimationSheet.DrawAnimation(GetSpawnerRectangle());
 
             }
             else

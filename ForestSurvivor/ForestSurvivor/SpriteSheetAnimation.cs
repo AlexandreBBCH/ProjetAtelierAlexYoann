@@ -70,12 +70,12 @@ namespace TutoYoutube
         }
 
 
-        public void DrawAnimation()
+        public void DrawAnimation(Rectangle rectangle)
         {
             if (CurrentFrame >= 0 && CurrentFrame < Frames.Count)
             {
-                Rectangle destinationRect = new Rectangle((int)PositionX, (int)PositionY, (int)(Frames[CurrentFrame].Width * ScaleMultiplayer), (int)(Frames[CurrentFrame].Height * ScaleMultiplayer));
-                Globals.SpriteBatch.Draw(SpriteSheet, destinationRect, Frames[CurrentFrame], Tint);
+                //Rectangle destinationRect = new Rectangle((int)PositionX, (int)PositionY, (int)(Frames[CurrentFrame].Width * ScaleMultiplayer), (int)(Frames[CurrentFrame].Height * ScaleMultiplayer));
+                Globals.SpriteBatch.Draw(SpriteSheet, rectangle, Frames[CurrentFrame], Tint);
             }
         }
 
