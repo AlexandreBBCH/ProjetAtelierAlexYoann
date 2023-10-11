@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using TutoYoutube;
 
 namespace ForestSurvivor
 {
@@ -40,7 +41,9 @@ namespace ForestSurvivor
         private SlimeShooter shooterTarget;
         private BigSlime bigSlimeTarget;
         private Items itemTarget;
-
+        private SpriteSheetAnimation DogAnimation;
+        private int _firstFrame;
+        private int _lasteFrame;
         public Texture2D Texture { get => _texture; set => _texture = value; }
         public float Width { get => _width; set => _width = value; }
         public float Height { get => _height; set => _height = value; }
@@ -53,6 +56,9 @@ namespace ForestSurvivor
         public Color Color { get => _color; set => _color = value; }
         public float Damage { get => _damage; set => _damage = value; }
         public float DamageSpeed { get => _damageSpeed; set => _damageSpeed = value; }
+        public int FirstFrame { get => _firstFrame; set => _firstFrame = value; }
+        public int LasteFrame { get => _lasteFrame; set => _lasteFrame = value; }
+
 
         public Dog(float width, float height, float x, float y, float speed, int life, float damage, float damageSpeed)
         {
@@ -79,10 +85,17 @@ namespace ForestSurvivor
             isDead = false;
             timerBetweenTarget = 0;
             timerDamageEnnemi = 0;
+            DogAnimation = new SpriteSheetAnimation(GlobalsTexture.DogSheets, 9, 4, 0.2f);
+            FirstFrame = 16;
+            LasteFrame = 19;
         }
 
         public void Update(Player player, GameTime gameTime)
         {
+            DogAnimation.PositionX = _x;
+            DogAnimation.PositionY = _y;
+            DogAnimation.AnimateSpriteSheetChoosen(gameTime, FirstFrame, LasteFrame);//l'état d'animation
+            //DogAnimation.UpdateAnimation(gameTime);
             if (!isDead)
             {
                 if (ennemiesTarget == null && bigSlimeTarget == null && shooterTarget == null && itemTarget == null && !hasTarget)
@@ -299,30 +312,87 @@ namespace ForestSurvivor
         /// Change la texture en fonction de la direction
         /// </summary>
         /// <param name="direction">direction ou se déplace le chien</param>
+        /// 
+
+        enum DogAnimationDir
+        {
+            DogLeft, DogRight,DogTop,DogBottom,
+        }
+        DogAnimationDir state;
         public void SetTextureWithDirection(Vector2 direction)
         {
             // Left
             if (direction.X < -0.2f && direction.Y <= 1 && direction.Y >= 0)
             {
-                
+                state = DogAnimationDir.DogLeft;
             }
             // Right
             else if (direction.X > 0.2f && direction.Y >= 0 && direction.Y <= 1)
             {
-                
+                state = DogAnimationDir.DogRight;
             }
             // Top
             else if (direction.X >= -0.2f && direction.X <= 0.2f && direction.Y > 0 && direction.Y <= 1)
             {
-                
+                state = DogAnimationDir.DogTop;
             }
             // Bottom
             else if (direction.X >= -0.2f && direction.X <= 0.2f && direction.Y < 0 && direction.Y >= -1)
             {
-                
+                state = DogAnimationDir.DogBottom;
             }
+            Debug.Print(Laststate.ToString());
+
+            SetAnimation();
         }
 
+        DogAnimationDir Laststate;
+        public void SetAnimation( )
+        {
+            switch (state)
+            {
+                case DogAnimationDir.DogLeft:
+                    if (Laststate != DogAnimationDir.DogLeft)
+                    {
+                        FirstFrame = 12;
+                        LasteFrame = 15;
+                        Laststate = DogAnimationDir.DogLeft;
+                    }
+ 
+
+                    break;
+                case DogAnimationDir.DogRight:
+                    if (Laststate != DogAnimationDir.DogRight)
+                    {
+                        FirstFrame = 4;
+                        LasteFrame = 7;
+                        Laststate = DogAnimationDir.DogRight;
+                    }
+
+                    break;
+                case DogAnimationDir.DogTop:
+                    if (Laststate != DogAnimationDir.DogTop)
+                    {
+                        FirstFrame = 8;
+                        LasteFrame = 11;
+                        Laststate = DogAnimationDir.DogTop;
+                    }
+
+                    break;   
+                case DogAnimationDir.DogBottom:
+                    if (Laststate != DogAnimationDir.DogBottom)
+                    {
+                        FirstFrame = 0;
+                        LasteFrame = 3;
+                        Laststate = DogAnimationDir.DogBottom;
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+
+        }
 
         public float GetDistanceBetween(int Xtarget, int Ytarget)
         {
@@ -347,7 +417,9 @@ namespace ForestSurvivor
 
         public void Draw()
         {
-            Globals.SpriteBatch.Draw(Texture, GetRectangle(), Color);
+            DogAnimation.PositionX = _x;
+            DogAnimation.PositionY = _y;
+            DogAnimation.DrawAnimation(GetRectangle());
         }
     }
 }

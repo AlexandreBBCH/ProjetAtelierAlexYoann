@@ -42,7 +42,8 @@ namespace TutoYoutube
         public float PositionX { get => _positionX; set => _positionX = value; }
         public float PositionY { get => _positionY; set => _positionY = value; }
         public float RdmFrequence { get => _rdmFrequence; set => _rdmFrequence = value; }
-
+        private int FirstFrame { get; set; }
+        private int LastFrame { get; set; }
         public SpriteSheetAnimation(Texture2D spriteSheet, int row, int column, float frameDuration, bool loop = true, float scaleMultiplayer = 1, float rdmFrequence = 1)
         {
             SpriteSheet = spriteSheet;
@@ -56,6 +57,8 @@ namespace TutoYoutube
             Loop = loop;
             ScaleMultiplayer = scaleMultiplayer;
             RdmFrequence = rdmFrequence;
+            FirstFrame = 0;  
+            LastFrame = Frames.Count - 1;
             CutSpriteSheet();
         }
 
@@ -118,6 +121,35 @@ namespace TutoYoutube
                 }
             }
         }
+
+        public void AnimateSpriteSheetChoosen(GameTime gameTime, int firstFrame, int lastFrame)
+        {
+            // Vérifiez si les paramètres firstFrame et lastFrame ont été spécifiés
+            if (firstFrame >= 0 && lastFrame < Frames.Count)
+            {
+                // Utilisez les frames spécifiées par les paramètres
+                FirstFrame = firstFrame;
+                LastFrame = lastFrame;
+            }
+
+            if (IsPlaying)
+            {
+                FrameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (FrameTimer >= FrameDuration)
+                {
+                    CurrentFrame++;
+                    if (CurrentFrame > LastFrame)
+                    {
+                        CurrentFrame = FirstFrame; // Revenez à la première frame spécifiée
+                    }
+
+                    FrameTimer = 0f;
+                }
+            }
+        }
+
+
 
     }
 }
