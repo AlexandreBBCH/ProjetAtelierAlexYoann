@@ -135,6 +135,7 @@ namespace ForestSurvivor
                         direction = new Vector2(ennemiesTarget.X - position.X, ennemiesTarget.Y - position.Y);
                         direction.Normalize();
                         position += direction * Speed;
+                        SetTextureWithDirection(direction);
                     }
 
                     if (GetRectangle().Intersects(ennemiesTarget.GetEnnemieRectangle()))
@@ -169,6 +170,7 @@ namespace ForestSurvivor
                         direction = new Vector2(bigSlimeTarget.X - position.X, bigSlimeTarget.Y - position.Y);
                         direction.Normalize();
                         position += direction * Speed;
+                        SetTextureWithDirection(direction);
                     }
 
                     if (GetRectangle().Intersects(bigSlimeTarget.GetEnnemieRectangle()))
@@ -203,6 +205,7 @@ namespace ForestSurvivor
                         direction = new Vector2(shooterTarget.X - position.X, shooterTarget.Y - position.Y);
                         direction.Normalize();
                         position += direction * Speed;
+                        SetTextureWithDirection(direction);
                     }
 
                     if (GetRectangle().Intersects(shooterTarget.GetEnnemieRectangle()))
@@ -244,6 +247,7 @@ namespace ForestSurvivor
                         direction = new Vector2(itemTarget.X - position.X, itemTarget.Y - position.Y);
                         direction.Normalize();
                         position += direction * Speed;
+                        SetTextureWithDirection(direction);
                     }
                     else
                     {
@@ -252,6 +256,7 @@ namespace ForestSurvivor
                             direction = new Vector2(player.X - position.X, player.Y - position.Y);
                             direction.Normalize();
                             position += direction * Speed;
+                            SetTextureWithDirection(direction);
                         }
 
                         if (GetRectangle().Intersects(player.GetPlayerRectangle()))
@@ -289,6 +294,35 @@ namespace ForestSurvivor
                 }
             }
         }
+
+        /// <summary>
+        /// Change la texture en fonction de la direction
+        /// </summary>
+        /// <param name="direction">direction ou se déplace le chien</param>
+        public void SetTextureWithDirection(Vector2 direction)
+        {
+            // Left
+            if (direction.X < -0.2f && direction.Y <= 1 && direction.Y >= 0)
+            {
+                
+            }
+            // Right
+            else if (direction.X > 0.2f && direction.Y >= 0 && direction.Y <= 1)
+            {
+                
+            }
+            // Top
+            else if (direction.X >= -0.2f && direction.X <= 0.2f && direction.Y > 0 && direction.Y <= 1)
+            {
+                
+            }
+            // Bottom
+            else if (direction.X >= -0.2f && direction.X <= 0.2f && direction.Y < 0 && direction.Y >= -1)
+            {
+                
+            }
+        }
+
 
         public float GetDistanceBetween(int Xtarget, int Ytarget)
         {
