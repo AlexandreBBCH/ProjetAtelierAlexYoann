@@ -94,6 +94,7 @@ namespace ForestSurvivor
         {
             DogAnimation.PositionX = _x;
             DogAnimation.PositionY = _y;
+            
             DogAnimation.AnimateSpriteSheetChoosen(gameTime, FirstFrame, LasteFrame);//l'état d'animation
             //DogAnimation.UpdateAnimation(gameTime);
             if (!isDead)
@@ -316,7 +317,7 @@ namespace ForestSurvivor
 
         enum DogAnimationDir
         {
-            DogLeft, DogRight,DogTop,DogBottom,
+            DogLeft, DogRight,DogTop,DogBottom,DogDead
         }
         DogAnimationDir state;
         public void SetTextureWithDirection(Vector2 direction)
@@ -385,6 +386,15 @@ namespace ForestSurvivor
                         FirstFrame = 0;
                         LasteFrame = 3;
                         Laststate = DogAnimationDir.DogBottom;
+                    }
+
+                    break;
+                case DogAnimationDir.DogDead:
+                    if (Laststate != DogAnimationDir.DogDead)
+                    {
+                        FirstFrame = 31;
+                        LasteFrame = 34;
+                        Laststate = DogAnimationDir.DogDead;
                     }
 
                     break;

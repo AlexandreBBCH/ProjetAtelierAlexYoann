@@ -114,7 +114,7 @@ namespace ForestSurvivor
             itemGenerator = new ItemsGenerator();
             environmentInitialisation = new EnvironmentInit(20);
             environmentInitialisation.GenerateEnvironment();
-            dog = new Dog(96, 96, player.X - 100, player.Y - 100, 5, 55, 1, 0.5f);
+            dog = new Dog(96, 96, player.X - 100, player.Y - 100, 5, 130, 1, 0.5f);
         }
 
 
