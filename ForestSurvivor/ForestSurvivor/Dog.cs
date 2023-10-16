@@ -44,6 +44,8 @@ namespace ForestSurvivor
         private SpriteSheetAnimation DogAnimation;
         private int _firstFrame;
         private int _lasteFrame;
+        DogAnimationDir state;
+
         public Texture2D Texture { get => _texture; set => _texture = value; }
         public float Width { get => _width; set => _width = value; }
         public float Height { get => _height; set => _height = value; }
@@ -88,6 +90,7 @@ namespace ForestSurvivor
             DogAnimation = new SpriteSheetAnimation(GlobalsTexture.DogSheets, 9, 4, 0.2f);
             FirstFrame = 16;
             LasteFrame = 19;
+            Globals.listDogs.Add(this);
         }
 
         public void Update(Player player, GameTime gameTime)
@@ -307,6 +310,12 @@ namespace ForestSurvivor
                     }
                 }
             }
+            else
+            {
+                state = DogAnimationDir.DogDead;
+                SetAnimation();
+
+            }
         }
 
         /// <summary>
@@ -319,7 +328,6 @@ namespace ForestSurvivor
         {
             DogLeft, DogRight,DogTop,DogBottom,DogDead
         }
-        DogAnimationDir state;
         public void SetTextureWithDirection(Vector2 direction)
         {
             float thresholdX = 0.2f; // Ajustez ce seuil en fonction de la largeur du chien
@@ -397,8 +405,8 @@ namespace ForestSurvivor
                 case DogAnimationDir.DogDead:
                     if (Laststate != DogAnimationDir.DogDead)
                     {
-                        FirstFrame = 31;
-                        LasteFrame = 34;
+                        FirstFrame = 28;
+                        LasteFrame = 29;
                         Laststate = DogAnimationDir.DogDead;
                     }
 

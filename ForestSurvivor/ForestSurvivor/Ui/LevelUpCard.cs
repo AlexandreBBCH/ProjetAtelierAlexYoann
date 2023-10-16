@@ -120,6 +120,7 @@ namespace ForestSurvivor.Ui
                 {
                     wasLeftButtonPressedLastFrame = true;
                     CardEffectEnabled = true;
+                    Globals.LevelUpPause = false;
                     return true;
                 }
             }

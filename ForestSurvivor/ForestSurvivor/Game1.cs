@@ -114,7 +114,7 @@ namespace ForestSurvivor
             itemGenerator = new ItemsGenerator();
             environmentInitialisation = new EnvironmentInit(20);
             environmentInitialisation.GenerateEnvironment();
-            dog = new Dog(96, 96, player.X - 100, player.Y - 100, 5, 130, 1, 0.5f);
+            dog = new Dog(96, 96, player.X - 100, player.Y - 100, 5, 10, 1, 0.5f);
         }
 
 
@@ -127,25 +127,26 @@ namespace ForestSurvivor
      
             musicManager.Update();
             ResetAll();
-
-            if (!_optionPause.IsResume && Globals.LauchGame && !player.IsDead())
+            if (spawnManager.Level % 2 == 0 && !Globals.LevelTime)
+            {
+                Globals.LevelTime = true;
+                Globals.levelUpCard = new LevelUpCard();
+                Globals.LevelUpPause = true;
+            }
+            else if (spawnManager.Level % 2 == 1)
+            {
+                Globals.LevelTime = false;
+            }
+            itemGenerator.GenerateItem(player, gameTime, 8f);
+            if (Globals.levelUpCard != null)
+            {
+                Globals.levelUpCard.UpdateCard(player);
+            }
+            if (!_optionPause.IsResume && Globals.LauchGame && !player.IsDead() && !Globals.LevelUpPause)
             {
                 spawnManager.Update(gameTime);
                 itemGenerator.GenerateItem(player, gameTime, 8f);
-                if (spawnManager.Level % 2 == 0 && !Globals.LevelTime)
-                {
-                    Globals.LevelTime = true;
-                    Globals.levelUpCard = new LevelUpCard();
-                }
-                else if (spawnManager.Level % 2 == 1)
-                {
-                    Globals.LevelTime = false;
-                }
-                itemGenerator.GenerateItem(player, gameTime, 8f);
-                if (Globals.levelUpCard != null)
-                {
-                    Globals.levelUpCard.UpdateCard(player);
-                }
+        
                 foreach (Shoot shoot in Globals.listShoots)
                 {
                     shoot.Update(player);
@@ -295,6 +296,11 @@ namespace ForestSurvivor
                 player.Texture = GlobalsTexture.listTexturesPlayer[0];
                 environmentInitialisation.GenerateEnvironment();
                 Globals.Restart = false;
+                foreach (var dog in Globals.listDogs)
+                {
+                    dog.Life = 10;
+                    dog.isDead = false;
+                }
             }
         }
     }
