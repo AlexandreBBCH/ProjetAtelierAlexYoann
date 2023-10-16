@@ -322,30 +322,35 @@ namespace ForestSurvivor
         DogAnimationDir state;
         public void SetTextureWithDirection(Vector2 direction)
         {
-            // Left
-            if (direction.X < -0.2f && direction.Y <= 1 && direction.Y >= 0)
+            float thresholdX = 0.2f; // Ajustez ce seuil en fonction de la largeur du chien
+            float thresholdY = 0.2f; // Ajustez ce seuil en fonction de la hauteur du chien
+
+            if (direction.X <= -thresholdX && direction.Y >= -thresholdY)
             {
+                // Chien vers la gauche
                 state = DogAnimationDir.DogLeft;
             }
-            // Right
-            else if (direction.X > 0.2f && direction.Y >= 0 && direction.Y <= 1)
+            else if (direction.Y >= thresholdY && Math.Abs(direction.X) < thresholdX)
             {
-                state = DogAnimationDir.DogRight;
-            }
-            // Top
-            else if (direction.X >= -0.2f && direction.X <= 0.2f && direction.Y > 0 && direction.Y <= 1)
-            {
-                state = DogAnimationDir.DogTop;
-            }
-            // Bottom
-            else if (direction.X >= -0.2f && direction.X <= 0.2f && direction.Y < 0 && direction.Y >= -1)
-            {
+                // Chien vers le bas
                 state = DogAnimationDir.DogBottom;
             }
-            Debug.Print(Laststate.ToString());
+            else if (direction.X >= thresholdX && direction.Y >= -thresholdY)
+            {
+                // Chien vers la droite
+                state = DogAnimationDir.DogRight;
+            }
+            else if (direction.Y <= -thresholdY && Math.Abs(direction.X) < thresholdX)
+            {
+                // Chien vers le haut
+                state = DogAnimationDir.DogTop;
+            }
+
+            Debug.Print(state.ToString());
 
             SetAnimation();
         }
+
 
         DogAnimationDir Laststate;
         public void SetAnimation( )
