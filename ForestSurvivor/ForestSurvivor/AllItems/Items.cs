@@ -105,14 +105,14 @@ namespace ForestSurvivor.AllItems
             switch (itemName)
             {
                 case "HealMax":
-                    texture2D = GlobalsTexture.Apple;
+                    texture2D = GlobalsTexture.GreenApple;
                     Width = 35;
                     Height = 35;
                     GlobalHeal = 5;
                     Heal = 5;
                     break;
                 case "Heal":
-                    texture2D = GlobalsTexture.GreenApple;
+                    texture2D = GlobalsTexture.Apple;
                     Width = 35;
                     Height = 35;
                     Heal = 5;

@@ -24,16 +24,13 @@ namespace ForestSurvivor.AllItems
         public void GenerateItem(Player player,GameTime gameTime,float spawnTime)
         {
             timeSpawn += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (timeSpawn >= spawnTime)
+            if (timeSpawn >= spawnTime && !Globals.LevelUpPause)
             {
                 List<string> itemsNameList = new List<string>
                 {
                     "Heal",
-                    "HealMax",
                     "Speed",
-                    "SpeedMax",
                     "Damage",
-                    "DamageMax"
                 };
                 int minY = 0; // Position Y minimale (haut de la fenêtre)
                 int maxY = Globals.graphics.PreferredBackBufferHeight - 150; // Position Y maximale (bas de la fenêtre) - ajustée à la hauteur de l'objet

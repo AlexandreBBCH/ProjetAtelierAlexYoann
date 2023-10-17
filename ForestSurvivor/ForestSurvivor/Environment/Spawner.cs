@@ -45,7 +45,7 @@ namespace ForestSurvivor.Environment
         {
             return new Rectangle(_x, _y, _width, _height);
         }
-        public void UpdateSpawner(GameTime gameTime,Player player)
+        public void UpdateSpawner(GameTime gameTime, Player player)
         {
             IsCollided(player);
             if (IsAnimated)
@@ -91,19 +91,19 @@ namespace ForestSurvivor.Environment
                     texture2D = GlobalsTexture.BushSpriteSheet;
                     Width = 100;
                     Height = 50;
-                    AnimationSheet = new SpriteSheetAnimation(texture2D, 1, 3, 0.5f, true, 0.1f,21);
+                    AnimationSheet = new SpriteSheetAnimation(texture2D, 1, 3, 0.5f, true, 21f);
                     break;
                 case "Rock":
                     texture2D = GlobalsTexture.Rock;
-                    Width = 384/5;
-                    Height = 240/5;
+                    Width = 384 / 5;
+                    Height = 240 / 5;
                     break;
                 case "BushBerrie":
                     IsAnimated = true;
                     texture2D = GlobalsTexture.BushBerriesSpriteSheet;
                     Width = 120;
                     Height = 50;
-                    AnimationSheet = new SpriteSheetAnimation(texture2D, 1, 3, 0.5f, true, 0.1f, 21);
+                    AnimationSheet = new SpriteSheetAnimation(texture2D, 1, 3, 0.5f, true, 14);
                     break;
                 case "Tree":
                     texture2D = GlobalsTexture.Bush;

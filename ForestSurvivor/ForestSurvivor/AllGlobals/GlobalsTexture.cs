@@ -57,5 +57,10 @@ namespace ForestSurvivor.AllGlobals
         /// </summary>
         public static Texture2D cardInfos;
         public static Texture2D cardView;
+        /// <summary>
+        /// Dog
+        /// </summary>
+        public static Texture2D DogSheets;
+
     }
 }

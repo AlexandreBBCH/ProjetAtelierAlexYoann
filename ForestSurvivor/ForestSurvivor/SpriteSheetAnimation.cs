@@ -23,7 +23,6 @@ namespace TutoYoutube
         private int _frameHeight;
         private float _positionX = 0;
         private float _positionY = 0;
-        private float _rdmFrequence;
         public Vector2 Position { get; set; }
         public Vector2 Scale { get; set; } = Vector2.One;
         public Color Tint { get; set; } = Color.White;
@@ -41,10 +40,8 @@ namespace TutoYoutube
         public float FrameTimer { get => _frameTimer; set => _frameTimer = value; }
         public float PositionX { get => _positionX; set => _positionX = value; }
         public float PositionY { get => _positionY; set => _positionY = value; }
-        public float RdmFrequence { get => _rdmFrequence; set => _rdmFrequence = value; }
-        private int FirstFrame { get; set; }
-        private int LastFrame { get; set; }
-        public SpriteSheetAnimation(Texture2D spriteSheet, int row, int column, float frameDuration, bool loop = true, float scaleMultiplayer = 1, float rdmFrequence = 1)
+
+        public SpriteSheetAnimation(Texture2D spriteSheet, int row, int column, float frameDuration, bool loop = true, float scaleMultiplayer = 1)
         {
             SpriteSheet = spriteSheet;
             FrameDuration = frameDuration;
@@ -56,14 +53,8 @@ namespace TutoYoutube
             FrameHeight = spriteSheet.Height / row;
             Loop = loop;
             ScaleMultiplayer = scaleMultiplayer;
-            RdmFrequence = rdmFrequence;
-            FirstFrame = 0;  
-            LastFrame = Frames.Count - 1;
             CutSpriteSheet();
         }
-
-
-
 
 
 
@@ -77,8 +68,10 @@ namespace TutoYoutube
         {
             if (CurrentFrame >= 0 && CurrentFrame < Frames.Count)
             {
-                //Rectangle destinationRect = new Rectangle((int)PositionX, (int)PositionY, (int)(Frames[CurrentFrame].Width * ScaleMultiplayer), (int)(Frames[CurrentFrame].Height * ScaleMultiplayer));
-                Globals.SpriteBatch.Draw(SpriteSheet, rectangle, Frames[CurrentFrame], Tint);
+
+                Rectangle destinationRect = new Rectangle((int)PositionX, (int)PositionY, (int)(Frames[CurrentFrame].Width * ScaleMultiplayer), (int)(Frames[CurrentFrame].Height * ScaleMultiplayer));
+                destinationRect = rectangle;
+                Globals.SpriteBatch.Draw(SpriteSheet, destinationRect, Frames[CurrentFrame], Tint);
             }
         }
 
@@ -96,15 +89,34 @@ namespace TutoYoutube
             }
         }
 
+        int firstFrame = 0;
+        int lastFrame = 3;
+        float frameDuration = 0.3f;
+        /// <summary>
+        /// Sert a definir l'animation de depart, de fin et la durée d'animation
+        /// </summary>
+        /// <param name="animationStartFrameNew"></param>
+        /// <param name="animationLastFrameNew"></param>
+        /// <param name="animationDurationNew"></param>
+        public void setAnimation(int animationStartFrameNew, int animationLastFrameNew, float animationDurationNew)
+        {
+            firstFrame = animationStartFrameNew;
+            lastFrame = animationLastFrameNew;
+            frameDuration = animationDurationNew;
+        }
+
+
+        /// <summary>
+        /// Joue l'entiereté de l'animation en boucle
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void AnimateSpriteSheetStatic(GameTime gameTime)
         {
-            Random rdmFrequence = new Random();
-            int frameFrequence = rdmFrequence.Next(1, (int)RdmFrequence);
             if (IsPlaying)
             {
                 FrameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                if (FrameTimer >= FrameDuration * frameFrequence)
+                if (FrameTimer >= FrameDuration)
                 {
 
                     CurrentFrame++;
@@ -122,34 +134,34 @@ namespace TutoYoutube
             }
         }
 
-        public void AnimateSpriteSheetChoosen(GameTime gameTime, int firstFrame, int lastFrame)
+        public void AnimateLooped(GameTime gameTime)
         {
-            // Vérifiez si les paramètres firstFrame et lastFrame ont été spécifiés
-            if (firstFrame >= 0 && lastFrame < Frames.Count)
-            {
-                // Utilisez les frames spécifiées par les paramètres
-                FirstFrame = firstFrame;
-                LastFrame = lastFrame;
-            }
-
             if (IsPlaying)
             {
                 FrameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                if (FrameTimer >= FrameDuration)
+                while (FrameTimer >= frameDuration)
                 {
-                    CurrentFrame++;
-                    if (CurrentFrame > LastFrame)
+                    if (CurrentFrame < firstFrame || CurrentFrame > lastFrame)
                     {
-                        CurrentFrame = FirstFrame; // Revenez à la première frame spécifiée
+                        CurrentFrame = firstFrame;
+                    }
+                    else
+                    {
+                        CurrentFrame++;
+                        if (CurrentFrame > lastFrame)
+                        {
+                            CurrentFrame = firstFrame;
+                        }
                     }
 
-                    FrameTimer = 0f;
+                    FrameTimer -= frameDuration;
                 }
             }
+            else
+            {
+                CurrentFrame = firstFrame;
+            }
         }
-
-
-
     }
 }

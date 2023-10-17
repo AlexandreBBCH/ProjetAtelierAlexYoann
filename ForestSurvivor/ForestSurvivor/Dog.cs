@@ -72,7 +72,6 @@ namespace ForestSurvivor
             _life = life;
             _damage = damage;
             _damageSpeed = damageSpeed;
-
             Color = Color.Green;
             Texture = GlobalsTexture.Slime2D;
             position = new Vector2(_x, _y);
@@ -93,12 +92,16 @@ namespace ForestSurvivor
             Globals.listDogs.Add(this);
         }
 
+        public void Animation(GameTime gameTime)
+        {
+            DogAnimation.AnimateLooped(gameTime);
+        }
         public void Update(Player player, GameTime gameTime)
         {
             DogAnimation.PositionX = _x;
             DogAnimation.PositionY = _y;
-            
-            DogAnimation.AnimateSpriteSheetChoosen(gameTime, FirstFrame, LasteFrame);//l'état d'animation
+            Animation(gameTime);
+
             //DogAnimation.UpdateAnimation(gameTime);
             if (!isDead)
             {
@@ -314,7 +317,6 @@ namespace ForestSurvivor
             {
                 state = DogAnimationDir.DogDead;
                 SetAnimation();
-
             }
         }
 
@@ -326,7 +328,7 @@ namespace ForestSurvivor
 
         enum DogAnimationDir
         {
-            DogLeft, DogRight,DogTop,DogBottom,DogDead
+            DogLeft, DogRight, DogTop, DogBottom, DogDead
         }
         public void SetTextureWithDirection(Vector2 direction)
         {
@@ -353,63 +355,34 @@ namespace ForestSurvivor
                 // Chien vers le haut
                 state = DogAnimationDir.DogTop;
             }
-
-            Debug.Print(state.ToString());
-
             SetAnimation();
         }
 
 
         DogAnimationDir Laststate;
-        public void SetAnimation( )
+        public void SetAnimation()
         {
             switch (state)
             {
                 case DogAnimationDir.DogLeft:
-                    if (Laststate != DogAnimationDir.DogLeft)
-                    {
-                        FirstFrame = 12;
-                        LasteFrame = 15;
-                        Laststate = DogAnimationDir.DogLeft;
-                    }
- 
-
+                    DogAnimation.setAnimation(12, 15, 0.3f);
+                    Laststate = DogAnimationDir.DogLeft;
                     break;
                 case DogAnimationDir.DogRight:
-                    if (Laststate != DogAnimationDir.DogRight)
-                    {
-                        FirstFrame = 4;
-                        LasteFrame = 7;
-                        Laststate = DogAnimationDir.DogRight;
-                    }
-
+                    DogAnimation.setAnimation(4, 7, 0.3f);
+                    Laststate = DogAnimationDir.DogRight;
                     break;
                 case DogAnimationDir.DogTop:
-                    if (Laststate != DogAnimationDir.DogTop)
-                    {
-                        FirstFrame = 8;
-                        LasteFrame = 11;
-                        Laststate = DogAnimationDir.DogTop;
-                    }
-
-                    break;   
+                    DogAnimation.setAnimation(8, 11, 0.3f);
+                    Laststate = DogAnimationDir.DogTop;
+                    break;
                 case DogAnimationDir.DogBottom:
-                    if (Laststate != DogAnimationDir.DogBottom)
-                    {
-                        FirstFrame = 0;
-                        LasteFrame = 3;
-                        Laststate = DogAnimationDir.DogBottom;
-                    }
-
+                    DogAnimation.setAnimation(0, 3, 0.3f);
+                    Laststate = DogAnimationDir.DogBottom;
                     break;
                 case DogAnimationDir.DogDead:
-                    if (Laststate != DogAnimationDir.DogDead)
-                    {
-                        FirstFrame = 28;
-                        LasteFrame = 29;
-                        Laststate = DogAnimationDir.DogDead;
-                    }
-
+                    DogAnimation.setAnimation(28, 29, 0.3f);
+                    Laststate = DogAnimationDir.DogDead;
                     break;
                 default:
                     break;
