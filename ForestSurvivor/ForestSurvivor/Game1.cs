@@ -26,7 +26,7 @@ namespace ForestSurvivor
         OptionClickable _restart;
         HealthBar _healthBarAnimated;
         Dog dog;
-
+        CardCreation cardManager;
 
         public Game1()
         {
@@ -45,6 +45,7 @@ namespace ForestSurvivor
         {
             player = new Player(120, 120, Globals.ScreenWidth / 2, Globals.ScreenHeight/2, 8f, 10, 1f, Color.White);
             spawnManager = new SpawnManager();
+            cardManager = new CardCreation();
             base.Initialize();
         }
 
@@ -105,6 +106,7 @@ namespace ForestSurvivor
             _mainMenu = new MainMenu();
             _gameOver = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.5f, Globals.graphics.PreferredBackBufferHeight / 5f, 200, 80, "GAME OVER", "Start", "", "Font", GlobalsTexture.titleFont, null);
             _restart = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3f, Globals.graphics.PreferredBackBufferHeight / 2f + 400, 200, 80, "PRESS R TO RESTART", "Start", "", "Font", GlobalsTexture.titleFont, null);
+            cardManager.CreateCard();
 
             GlobalsTexture.back = Content.Load<Texture2D>("Player/back");
             GlobalsTexture.front = Content.Load<Texture2D>("Player/front");
@@ -223,9 +225,9 @@ namespace ForestSurvivor
                     shoot.Draw();
                 }
                 Globals.listEnvironment.ForEach(Spawner => Spawner.DrawEnvironment());
-
-                player.Draw();
                 dog.Draw();
+                player.Draw();
+                
                 _healthBarAnimated.Draw();
                 spawnManager.DrawLevel();
                 Globals.listItems.ForEach(item => item.DrawItems());

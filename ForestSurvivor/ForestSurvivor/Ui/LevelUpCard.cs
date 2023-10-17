@@ -20,7 +20,6 @@ namespace ForestSurvivor.Ui
         public LevelUpCard()
         {
             Globals.actualCards = new List<Card>();
-            CardGenerator.CreateCard();
             Globals.actualCards = GetLvlCard(3);
         }
 
@@ -29,7 +28,7 @@ namespace ForestSurvivor.Ui
             List<Card> lvlCards = new List<Card>();
             Random rdm = new Random();
 
-            List<Card> takenCards = new List<Card>();
+            HashSet<Card> takenCards = new HashSet<Card>();
 
             for (int i = 0; i < nbCard; i++)
             {
@@ -48,6 +47,7 @@ namespace ForestSurvivor.Ui
 
             return lvlCards;
         }
+
 
         public void DrawCards()
         {
