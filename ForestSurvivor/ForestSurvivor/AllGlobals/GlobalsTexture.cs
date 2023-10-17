@@ -1,4 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : GlobalsTexture.cs
+//Utilité : Stockage de global de texture  
+///Projet : ForestSurvivor V1 (2023)
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

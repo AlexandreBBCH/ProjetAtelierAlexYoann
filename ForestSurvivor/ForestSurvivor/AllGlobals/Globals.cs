@@ -1,18 +1,21 @@
-﻿using ForestSurvivor.AllEnnemies;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : Globals.cs
+//Utilité : Stockage de global de logique  
+///Projet : ForestSurvivor V1 (2023)
+
+using ForestSurvivor.AllEnnemies;
 using ForestSurvivor.AllItems;
 using ForestSurvivor.Environment;
+using ForestSurvivor.CardManager;
 using ForestSurvivor.Ui;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
+using ForestSurvivor.Animals;
 
 namespace ForestSurvivor.AllGlobals
 {

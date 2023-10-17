@@ -1,4 +1,10 @@
-﻿using ForestSurvivor.AllGlobals;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : EffectItems.cs
+//Utilité : Gestion des effets des objets  
+///Projet : ForestSurvivor V1 (2023)
+using ForestSurvivor.AllGlobals;
+using ForestSurvivor.SongManager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

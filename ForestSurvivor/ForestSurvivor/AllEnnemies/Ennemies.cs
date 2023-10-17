@@ -1,5 +1,12 @@
-﻿using ForestSurvivor.AllEnnemies;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : Ennemies.cs
+//Utilité : Gestionnaire du petit slime bleu  
+///Projet : ForestSurvivor V1 (2023)
+using ForestSurvivor.AllEnnemies;
 using ForestSurvivor.AllGlobals;
+using ForestSurvivor.Animals;
+using ForestSurvivor.SongManager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

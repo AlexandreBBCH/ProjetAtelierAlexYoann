@@ -1,4 +1,9 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : GlobalsSound.cs
+//Utilité : Stockage de global de audio  
+///Projet : ForestSurvivor V1 (2023)
+using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
 using System.Linq;

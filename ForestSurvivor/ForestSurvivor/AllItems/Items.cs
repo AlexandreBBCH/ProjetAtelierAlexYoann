@@ -1,4 +1,9 @@
-﻿using ForestSurvivor.AllEnnemies;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : Items.cs
+//Utilité : Le moule au Items
+///Projet : ForestSurvivor V1 (2023)
+using ForestSurvivor.AllEnnemies;
 using ForestSurvivor.AllGlobals;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

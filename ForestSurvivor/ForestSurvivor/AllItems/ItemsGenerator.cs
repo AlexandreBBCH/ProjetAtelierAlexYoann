@@ -1,4 +1,10 @@
-﻿using ForestSurvivor.AllGlobals;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : ItemGenerator.cs
+//Utilité : Le spawner à Item  
+///Projet : ForestSurvivor V1 (2023)
+using ForestSurvivor.AllEnnemies;
+using ForestSurvivor.AllGlobals;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -28,7 +34,7 @@ namespace ForestSurvivor.AllItems
             {
                 List<string> itemsNameList = new List<string>
                 {
-                    "Heal",
+                    //"Heal",
                     "Speed",
                     "Damage",
                 };
@@ -45,7 +51,21 @@ namespace ForestSurvivor.AllItems
 
 
         }
+        public void GenerateItemDeath(BigSlime bigSlime,Player player)
+        {
 
+                List<string> itemsNameList = new List<string>
+                {
+                    "Heal",
+                };
+                int randomItem = random.Next(0, itemsNameList.Count());
+                new Items(bigSlime.X, bigSlime.Y, itemsNameList[randomItem], player);
+       
+
+            
+
+
+        }
     }
 
 
