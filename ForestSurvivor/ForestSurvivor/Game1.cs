@@ -81,6 +81,14 @@ namespace ForestSurvivor
             GlobalsTexture.BushSpriteSheet = Content.Load<Texture2D>("Environment/BushSpriteSheet");
             GlobalsTexture.BushBerriesSpriteSheet = Content.Load<Texture2D>("Environment/BushBerriesSpriteSheet");
 
+            GlobalsTexture.back = Content.Load<Texture2D>("Player/back");
+            GlobalsTexture.front = Content.Load<Texture2D>("Player/front");
+            GlobalsTexture.backHealDog = Content.Load<Texture2D>("Dog/HealthDog");
+            GlobalsTexture.frontHealDog = Content.Load<Texture2D>("Dog/frontHealthDog");
+
+            GlobalsTexture.effectHeal = Content.Load<Texture2D>("Items/EffectItems/healEffect");
+            GlobalsTexture.effectDamage = Content.Load<Texture2D>("Items/EffectItems/DamageEffects");
+            GlobalsTexture.effectSpeed = Content.Load<Texture2D>("Items/EffectItems/SpeedEffects");
             Globals.SpriteBatch = _spriteBatch;
 
             GlobalsTexture.listTexturesPlayer = new List<Texture2D>
@@ -209,6 +217,8 @@ namespace ForestSurvivor
 
             if (Globals.LauchGame)
             {
+                Globals.listEffect.ForEach(effect => effect.DisplayEffectItem());
+
                 Globals.listItems.ForEach(item => item.DrawItems());
 
                 foreach (Ennemies ennemies in Globals.listLittleSlime)
