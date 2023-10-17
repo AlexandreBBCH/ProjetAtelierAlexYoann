@@ -60,7 +60,9 @@ namespace ForestSurvivor.AllGlobals
         /// <summary>
         /// Dog
         /// </summary>
-        public static Texture2D DogSheets;
+        public static Texture2D DogSheets; 
+        public static Texture2D backHealDog;
+        public static Texture2D frontHealDog;
 
     }
 }
