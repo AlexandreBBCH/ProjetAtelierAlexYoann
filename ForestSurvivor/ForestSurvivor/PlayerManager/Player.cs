@@ -90,6 +90,7 @@ namespace ForestSurvivor
         {
             KeyboardState keyPress = Keyboard.GetState();
             MouseState mouseState = Mouse.GetState();
+   
 
             #region Top Left Mouvement
             if (keyPress.IsKeyDown(Keys.W) && keyPress.IsKeyDown(Keys.A))
