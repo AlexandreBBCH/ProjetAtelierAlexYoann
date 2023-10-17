@@ -207,6 +207,8 @@ namespace ForestSurvivor
 
             if (Globals.LauchGame)
             {
+                Globals.listItems.ForEach(item => item.DrawItems());
+
                 foreach (Ennemies ennemies in Globals.listLittleSlime)
                 {
                     ennemies.Draw();
@@ -230,7 +232,6 @@ namespace ForestSurvivor
                 
                 _healthBarAnimated.Draw();
                 spawnManager.DrawLevel();
-                Globals.listItems.ForEach(item => item.DrawItems());
                 if (Globals.levelUpCard != null) Globals.levelUpCard.DrawCards();
 
 
