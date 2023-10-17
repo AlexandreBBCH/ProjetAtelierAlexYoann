@@ -133,7 +133,6 @@ namespace ForestSurvivor.Ui
         public void ApplyCardEffect(Player player)
         {
             CardEffectEnabled = false;
-            Debug.Print(player.PvMax.ToString());
             switch (BuffName)
             {
                 case "MaxPv":
@@ -152,23 +151,58 @@ namespace ForestSurvivor.Ui
                     Globals.levelUpCard = null;
                     break;
                 case "DogMaxSpeed":
-                    player.DamageMax += 1f;
-                    player.ActualDamage += 1f;
+                    foreach (Dog dog in Globals.listDogs)
+                    {
+                        dog.Speed += 0.5f;
+                    }
                     Globals.levelUpCard = null;
                     break;
                 case "DogMaxDamage":
-                    player.DamageMax += 1f;
-                    player.ActualDamage += 1f;
+                    foreach (Dog dog in Globals.listDogs)
+                    {
+                        dog.Damage += 1f;
+                    }
+                    Globals.levelUpCard = null;
+                    break;
+                case "DogPv":
+                    foreach (Dog dog in Globals.listDogs)
+                    {
+                        if (!dog.isDead)
+                        {
+                            dog.Life = 10;
+                        }
+                    }
+                    Globals.levelUpCard = null;
+                    break;
+                case "DogRespawn":
+                    foreach (Dog dog in Globals.listDogs)
+                    {
+                        if (dog.isDead)
+                        {
+                            dog.isDead = false;
+                            dog.IsHurt = false;
+                            dog.Life = 10;
+                            dog.ennemiesTarget = null;
+                            dog.bigSlimeTarget = null;
+                            dog.shooterTarget = null;
+                            dog.itemTarget = null;
+                            dog.hasTarget = false;
+                        }
+                    }
                     Globals.levelUpCard = null;
                     break;
                 case "DogMaxNumber":
-                    player.DamageMax += 1f;
-                    player.ActualDamage += 1f;
+                    SpawnManager.CreateDog(player);
                     Globals.levelUpCard = null;
                     break;
                 case "DogShootingRate":
-                    player.DamageMax += 1f;
-                    player.ActualDamage += 1f;
+                    foreach (Dog dog in Globals.listDogs)
+                    {
+                        if (dog.DamageSpeed > 0.2f)
+                        {
+                            dog.DamageSpeed -= 0.1f;
+                        }
+                    }
                     Globals.levelUpCard = null;
                     break;
             }
@@ -185,10 +219,11 @@ namespace ForestSurvivor.Ui
             Card PvMaxCard = new Card("+PV MAX", "MaxPv");
             Card SpeedMaxCard = new Card("+SPEED MAX", "MaxSpeed");
             Card DamageMaxCard = new Card("+DAMAGE MAX", "MaxDamage");
-            Card PvMaxDogCard = new Card("+DOG PV MAX", "DogMaxPv");
+            Card PvMaxDogCard = new Card("+DOG HEAL", "DogPv");
             Card SpeedMaxDogCard = new Card("+DOG SPEED MAX", "DogMaxSpeed");
             Card DamageMaxDogCard = new Card("+DOG DAMAGE MAX", "DogMaxDamage");
             Card NumberMaxDogCard = new Card("+1 DOG", "DogMaxNumber");
+            Card RespawnDogCard = new Card("RESPAWN ALL DOG", "DogRespawn");
             Card ShootSpeedDogCard = new Card("+Dog Shoot speed", "DogShootingRate");
 
         }
