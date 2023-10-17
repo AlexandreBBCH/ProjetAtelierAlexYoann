@@ -41,20 +41,24 @@ namespace ForestSurvivor
         public void LoadAllSoundEffect(ContentManager contentManager)
         {
             GlobalsSounds.shootEffect = contentManager.Load<SoundEffect>("Music/shoot");
+
             GlobalsSounds.slimeMove = contentManager.Load<SoundEffect>("Music/slimeMove");
             GlobalsSounds.slimeDeath = contentManager.Load<SoundEffect>("Music/slimeDeath");
-            GlobalsSounds.appleEat = contentManager.Load<SoundEffect>("Music/apple");
             GlobalsSounds.bigSlimeExplosion = contentManager.Load<SoundEffect>("Music/bigSlimeExplosion");
+
+            GlobalsSounds.appleEat = contentManager.Load<SoundEffect>("Music/apple");
             GlobalsSounds.mushroomEat = contentManager.Load<SoundEffect>("Music/mushroomSound");
             GlobalsSounds.carotEat = contentManager.Load<SoundEffect>("Music/carotSound");
             GlobalsSounds.steakEat = contentManager.Load<SoundEffect>("Music/steakSound");
 
             for (int i = 1; i <= NB_DEATH_SOUND; i++)
             {
-                SoundEffect sound;
-                sound = contentManager.Load<SoundEffect>($"Music/soundHurt{i}");
-                GlobalsSounds.listPlayerHurt.Add(sound);
+                SoundEffect soundDeath = contentManager.Load<SoundEffect>($"Music/soundHurt{i}");
+                GlobalsSounds.listPlayerHurt.Add(soundDeath);
             }
+
+            GlobalsSounds.dogHurt = contentManager.Load<SoundEffect>("Music/dogHurt");
+            GlobalsSounds.dogDied = contentManager.Load<SoundEffect>("Music/dogDied");
         }
 
         public static void PlaySoundEffect(SoundEffect soundEffect)

@@ -13,16 +13,30 @@ namespace ForestSurvivor.AllGlobals
 
         public static float Sound = 50f;
 
-        public static SoundEffect shootEffect;
+
+        // Slime
+
         public static SoundEffect slimeMove;
         public static SoundEffect slimeDeath;
         public static SoundEffect bigSlimeExplosion;
+
+        // Items
+
         public static SoundEffect appleEat;
         public static SoundEffect mushroomEat;
         public static SoundEffect steakEat;
         public static SoundEffect carotEat;
 
+        // Dog
+
+        public static SoundEffect dogHurt;
+        public static SoundEffect dogDied;
+
+
+        // Player
+
         public static List<SoundEffect> listPlayerHurt = new List<SoundEffect>();
+        public static SoundEffect shootEffect;
 
     }
 }

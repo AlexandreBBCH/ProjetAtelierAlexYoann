@@ -114,12 +114,15 @@ namespace ForestSurvivor
             HealthBarDog.SetPosition(position.X, position.Y + 100);
             HealthBarDog.Update(Life, gameTime);
 
+
+            // Dog take damage
             if (IsHurt)
             {
                 Color = Color.Red;
                 timerTakeDamage += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (timerTakeDamage >= TIME_COLOR_RED_WHEN_HURT)
                 {
+                    MusicManager.PlaySoundEffect(GlobalsSounds.dogHurt);
                     Color = Color.White;
                     IsHurt = false;
                     timerTakeDamage = 0;

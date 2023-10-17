@@ -172,6 +172,7 @@ namespace ForestSurvivor.AllEnnemies
                             if (dog.Life <= 0)
                             {
                                 dog.isDead = true;
+                                MusicManager.PlaySoundEffect(GlobalsSounds.dogDied);
                                 isEnnemiHurtByDog = false;
                             }
                         }
