@@ -114,9 +114,8 @@ namespace ForestSurvivor
 
             itemGenerator = new ItemsGenerator();
             environmentInitialisation = new EnvironmentInit(20);
-            environmentInitialisation.GenerateEnvironment();
-            Dog dog = new Dog(96, 96, player.X - 100, player.Y - 100, 5, 10, 1, 0.5f);
-            Globals.listDogs.Add(dog);
+            environmentInitialisation.GenerateEnvironment(); 
+            Globals.listDogs.Add(new Dog(96, 96, player.X - 100, player.Y - 100, 5, 10, 1, 0.5f));
         }
 
 
@@ -142,7 +141,7 @@ namespace ForestSurvivor
             itemGenerator.GenerateItem(player, gameTime, 8f);
             if (Globals.levelUpCard != null)
             {
-                Globals.levelUpCard.UpdateCard(player);
+                Globals.levelUpCard.UpdateCard(player, gameTime);
             }
             if (!_optionPause.IsResume && Globals.LauchGame && !player.IsDead() && !Globals.LevelUpPause)
             {
@@ -288,28 +287,28 @@ namespace ForestSurvivor
             KeyboardState keyPress = Keyboard.GetState();
             if ((player.IsDead() && keyPress.IsKeyDown(Keys.R)) || Globals.Restart)
             {
-                Globals.listBigSlime.Clear();
-                Globals.listShootSlime.Clear();
-                Globals.listLittleSlime.Clear();
-                Globals.listShoots.Clear();
-                Globals.listItems.Clear();
-                Globals.listEffect.Clear();
-                Globals.listEnvironment.Clear();
-                Globals.nbBigSlimeKilled = 0;
-                Globals.nbShooterSlimeKilled = 0;
-                Globals.nbSlimeKilled = 0;
-                Globals.nbShoot = 0;
-                Globals.nbShootHasTouch = 0;
+                Globals.ResetGlobals();
+
                 spawnManager = new SpawnManager();
                 player = new Player(120, 120, Globals.ScreenWidth / 2, Globals.ScreenHeight / 2, 8f, 10, 1f, Color.White);
                 player.Texture = GlobalsTexture.listTexturesPlayer[0];
+
+                musicManager = new MusicManager();
+                musicManager.LoadMusic(Content);
+                musicManager.LoadAllSoundEffect(Content); itemGenerator = new ItemsGenerator();
+
+                environmentInitialisation = new EnvironmentInit(20);
                 environmentInitialisation.GenerateEnvironment();
-                Globals.Restart = false;
-                foreach (var dog in Globals.listDogs)
-                {
-                    dog.Life = 10;
-                    dog.isDead = false;
-                }
+
+                _healthBarAnimated = new HealthBar(GlobalsTexture.back, GlobalsTexture.front, player.PvMax, new Vector2(Globals.ScreenWidth / 2.2f, 30));
+
+                _mainMenu = new MainMenu();
+                _optionPause = new OptionPause();
+
+                cardManager = new CardCreation();
+                cardManager.CreateCard();
+
+                Globals.listDogs.Add(new Dog(96, 96, player.X - 100, player.Y - 100, 5, 10, 1, 0.5f));
             }
         }
     }

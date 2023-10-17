@@ -71,6 +71,44 @@ namespace ForestSurvivor.AllGlobals
         public static int ScreenWidth;
         public static int ScreenHeight;
 
+
+        public static void ResetGlobals()
+        {
+            LauchGame = true;
+            IsResume = false;
+            Back = false;
+            Exit = false;
+            ButtonEnabled = true;
+            ButtonEnabledMain = true;
+            optionClickables = new List<OptionClickable>();
+            allSliders = new List<Slider>();
+            GameOver = false;
+            Restart = false;
+            LevelTime = false;
+            Pause = false;
+            LevelUpPause = false;
+
+            nbSlimeKilled = 0;
+            nbBigSlimeKilled = 0;
+            nbShooterSlimeKilled = 0;
+            nbShoot = 0;
+            nbShootHasTouch = 0;
+
+            listShoots = new List<Shoot>();
+            listLittleSlime = new List<Ennemies>();
+            listShootSlime = new List<SlimeShooter>();
+            listBigSlime = new List<BigSlime>();
+            listItems = new List<Items>();
+            listEffect = new List<EffectItems>();
+            listDogs = new List<Dog>();
+
+
+            listEnvironment = new List<Spawner>();
+            listCard = new List<Card>();
+            actualCards = new List<Card>();
+        }
+
+
         /// <summary>
         /// Serialize n'importe quel type de donnée
         /// </summary>

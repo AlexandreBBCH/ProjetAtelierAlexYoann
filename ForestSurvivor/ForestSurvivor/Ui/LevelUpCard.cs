@@ -15,12 +15,14 @@ namespace ForestSurvivor.Ui
     internal class LevelUpCard
     {
         CardCreation CardGenerator = new CardCreation();
-       
+        private float timerClick;
+        private const float TIME_BEFORE_CHOOSE_CARD = 2;
 
         public LevelUpCard()
         {
             Globals.actualCards = new List<Card>();
             Globals.actualCards = GetLvlCard(3);
+            timerClick = 0;
         }
 
         public List<Card> GetLvlCard(int nbCard)
@@ -56,18 +58,29 @@ namespace ForestSurvivor.Ui
                 Globals.actualCards[i-1].X = (Globals.ScreenWidth / 4.8f) * i;
                 Globals.actualCards[i-1].TextX = ((Globals.ScreenWidth / 4.8f) * i);
                 Globals.SpriteBatch.Draw(GlobalsTexture.cardInfos, new Rectangle((int)Globals.actualCards[i - 1].X, (int)Globals.actualCards[i - 1].Y, GlobalsTexture.cardView.Width * 2, GlobalsTexture.cardView.Height), Color.White);
-                //Globals.SpriteBatch.Draw(GlobalsTexture.cardView, Globals.actualCards[i - 1].GetRectangle((int)Globals.actualCards[i - 1].X, (int)(Globals.actualCards[i - 1].Y + Globals.ScreenHeight / 9.5f),(int) GlobalsTexture.cardView.Width * 2, (int)GlobalsTexture.cardView.Height * 2), Color.White);
-                Globals.SpriteBatch.DrawString(GlobalsTexture.lvlInfoFont, Globals.actualCards[i - 1].TextInfos, new Vector2(Globals.actualCards[i - 1].TextX, Globals.actualCards[i - 1].Y + Globals.actualCards[i - 1].Y / 3), Color.White);
+                Globals.SpriteBatch.DrawString(GlobalsTexture.lvlInfoFont, Globals.actualCards[i - 1].TextInfos, new Vector2(Globals.actualCards[i - 1].TextX, Globals.actualCards[i - 1].Y + 80), Color.White);
             }
         }
 
-        public void UpdateCard(Player player)
+        public void UpdateCard(Player player, GameTime gameTime)
         {
-            MouseState mouse = Mouse.GetState();
-            foreach (var card in Globals.actualCards)
+            timerClick += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (timerClick >= TIME_BEFORE_CHOOSE_CARD)
             {
-                card.UpdateCard(mouse,(int)card.X, (int)card.Y, GlobalsTexture.cardView.Width * 2, GlobalsTexture.cardView.Height * 2,player);    
+                MouseState mouse = Mouse.GetState();
+                foreach (var card in Globals.actualCards)
+                {
+                    card.UpdateCard(mouse, (int)card.X, (int)card.Y, GlobalsTexture.cardView.Width * 2, GlobalsTexture.cardView.Height * 2, player);
+                }
             }
+            else
+            {
+                for (int i = 0; i < Globals.actualCards.Count; i++)
+                {
+                    Globals.actualCards[i].Y += 4;
+                }
+            }
+            
         }
     }
 
@@ -92,8 +105,8 @@ namespace ForestSurvivor.Ui
         public Card(string textInfos, string buffName)
         {
             X = Globals.ScreenWidth / 5;
-            TextX = Globals.ScreenWidth / 5;
-            Y = Globals.ScreenHeight / 4.5f;
+            TextX = Globals.ScreenWidth / 5 + 20;
+            Y = -100;
             TextInfos = textInfos;
             BuffName = buffName;
             Globals.listCard.Add(this);
@@ -121,6 +134,13 @@ namespace ForestSurvivor.Ui
                     wasLeftButtonPressedLastFrame = true;
                     CardEffectEnabled = true;
                     Globals.LevelUpPause = false;
+
+                    // Reset le Y de toutes les cartes
+                    foreach (Card card in Globals.listCard)
+                    {
+                        card.Y = -100;
+                    }
+
                     return true;
                 }
             }
