@@ -167,11 +167,11 @@ namespace ForestSurvivor.AllEnnemies
                         if (dog.GetRectangle().Intersects(GetEnnemieRectangle()))
                         {
                             canMakeDamage = false;
+                            dog.IsHurt = true;
                             dog.Life -= Damage;
                             if (dog.Life <= 0)
                             {
                                 dog.isDead = true;
-                                dog.Color = Color.Red;
                                 isEnnemiHurtByDog = false;
                             }
                         }
