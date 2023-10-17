@@ -1,12 +1,17 @@
-﻿using ForestSurvivor.AllEnnemies;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : Spawner.cs
+//Utilité : Le moule des props environnement
+///Projet : ForestSurvivor V1 (2023)
+using ForestSurvivor.AllEnnemies;
 using ForestSurvivor.AllGlobals;
+using ForestSurvivor.AnimationManager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using TutoYoutube;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ForestSurvivor.Environment

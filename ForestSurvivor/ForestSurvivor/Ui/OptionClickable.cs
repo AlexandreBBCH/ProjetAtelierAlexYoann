@@ -1,4 +1,9 @@
-﻿using ForestSurvivor.AllGlobals;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : OptionClickable.cs
+//Utilité : Le moule de texte clickable
+///Projet : ForestSurvivor V1 (2023)
+using ForestSurvivor.AllGlobals;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

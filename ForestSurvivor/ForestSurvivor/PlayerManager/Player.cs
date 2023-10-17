@@ -1,5 +1,11 @@
-﻿using ForestSurvivor.AllEnnemies;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : Player.cs
+//Utilité : Le moule du joueurs et intéligence 
+///Projet : ForestSurvivor V1 (2023)
+using ForestSurvivor.AllEnnemies;
 using ForestSurvivor.AllGlobals;
+using ForestSurvivor.SongManager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -21,7 +27,7 @@ namespace ForestSurvivor
         private float _speed;
         private int _life;
         private int _score;
-        private int _pvMax; 
+        private int _pvMax;
         private float _speedMax;
         private int _highscore;
         private Color _color;
@@ -338,12 +344,7 @@ namespace ForestSurvivor
 
         }
 
-        public void AddItemSpeed(float speed)
-        {
-            if (!IsSpeedItemAcivated && speed > 0)
-                Speed += speed;
-            IsSpeedItemAcivated = true;
-        }
+
 
         public void ResetDamage(GameTime gameTime)
         {
@@ -357,12 +358,7 @@ namespace ForestSurvivor
 
         }
 
-        public void AddItemDamage(float damage)
-        {
-            if (!IsDamageItemAcivated && damage > 0)
-                ActualDamage += damage;
-            IsDamageItemAcivated = true;
-        }
+
         public bool IsDead()
         {
             if (Life <= 0)

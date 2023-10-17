@@ -1,4 +1,9 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : MainMenu.cs
+//Utilité : L'intéligence du main menu
+///Projet : ForestSurvivor V1 (2023)
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

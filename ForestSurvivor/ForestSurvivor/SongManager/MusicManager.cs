@@ -1,4 +1,9 @@
-﻿using ForestSurvivor.AllGlobals;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : MusicManager.cs
+//Utilité : Le manager de musique
+///Projet : ForestSurvivor V1 (2023)
+using ForestSurvivor.AllGlobals;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
@@ -8,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ForestSurvivor
+namespace ForestSurvivor.SongManager
 {
     internal class MusicManager
     {

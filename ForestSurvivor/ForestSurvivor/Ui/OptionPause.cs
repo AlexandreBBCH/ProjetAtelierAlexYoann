@@ -1,4 +1,9 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : OptionPause.cs
+//Utilité : Le visuel du menu pause
+///Projet : ForestSurvivor V1 (2023)
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -83,6 +88,7 @@ namespace ForestSurvivor.Ui
             {
                 _resumeState = 4;
                 _isResume = true;
+              
             }
             if (compteur == 2 )
             {
@@ -125,7 +131,8 @@ namespace ForestSurvivor.Ui
 
 
             }
-      
+        
+
             foreach (var button in Globals.optionClickables)
             {
                 if (button.IsClicked(mouseState) && Globals.ButtonEnabled)
@@ -135,9 +142,6 @@ namespace ForestSurvivor.Ui
                  
                 }
             }
-
-       
-
         }
 
         public void DrawOption()

@@ -1,4 +1,10 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : Slider.cs
+//Utilité : Le moule et l'intéligence d'un slider
+///Projet : ForestSurvivor V1 (2023)
+////////Pas utilisé, update nécéssaire\\\\\\\\\
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

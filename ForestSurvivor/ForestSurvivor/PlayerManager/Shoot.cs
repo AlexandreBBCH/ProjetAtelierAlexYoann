@@ -1,4 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : Shoot.cs
+//Utilité : Moule du shoot et intélligence
+///Projet : ForestSurvivor V1 (2023)
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -45,7 +50,7 @@ namespace ForestSurvivor
             _damage = player.ActualDamage;
             _destroy = false;
             Texture = GlobalsTexture.bullet;
-          
+
             mouseState = Mouse.GetState();
             directionTir = new Vector2(mouseState.X - X, mouseState.Y - Y);
             directionTir.Normalize();
@@ -171,12 +176,12 @@ namespace ForestSurvivor
 
         public Rectangle GetShootRectangle()
         {
-            return new Rectangle((int)positionTir.X,(int)positionTir.Y, Width, Height);
+            return new Rectangle((int)positionTir.X, (int)positionTir.Y, Width, Height);
         }
 
         public void Draw()
         {
-            Globals.SpriteBatch.Draw(Texture, new Rectangle((int)positionTir.X,(int)positionTir.Y, Width, Height), Color.White);
+            Globals.SpriteBatch.Draw(Texture, new Rectangle((int)positionTir.X, (int)positionTir.Y, Width, Height), Color.White);
         }
     }
 }

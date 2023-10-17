@@ -1,4 +1,9 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : LevelMenu.cs
+//Utilité : Le visuel du Menu principal
+///Projet : ForestSurvivor V1 (2023)
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -17,13 +22,6 @@ namespace ForestSurvivor.Ui
         OptionClickable _CardView = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.3f, Globals.graphics.PreferredBackBufferHeight / 3f, 200, 80, "Play", "Start", "Level", "Font", GlobalsTexture.titleFont, null);
         OptionClickable _textOption = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.3f, Globals.graphics.PreferredBackBufferHeight / 2.4f, 300, 80, "Option", "Option", "Level", "Font", GlobalsTexture.titleFont, null);
         OptionClickable _textQuitGame = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.3f, Globals.graphics.PreferredBackBufferHeight / 2f, 200, 80, "Quit", "Exit", "Level", "Font", GlobalsTexture.titleFont, null);
-
-
-
-        public LevelMenu()
-        {
-
-        }
         public void DrawMainMenu()
         {
 

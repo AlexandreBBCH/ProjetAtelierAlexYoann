@@ -1,4 +1,9 @@
-﻿using ForestSurvivor.AllGlobals;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : EnvironmentInit.cs
+//Utilité : Sert à préparer la map 
+///Projet : ForestSurvivor V1 (2023)
+using ForestSurvivor.AllGlobals;
 using ForestSurvivor.AllItems;
 using Microsoft.Xna.Framework;
 using System;

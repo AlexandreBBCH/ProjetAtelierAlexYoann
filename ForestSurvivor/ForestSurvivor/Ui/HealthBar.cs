@@ -1,4 +1,9 @@
-﻿using ForestSurvivor.AllGlobals;
+﻿///Auteur : Alexandre Babich , Yoann Meier
+//Date : 17.10.2023
+//Page : HealthBar.cs
+//Utilité : Le moule et l'intéligence de la bar de vie
+///Projet : ForestSurvivor V1 (2023)
+using ForestSurvivor.AllGlobals;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -7,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ForestSurvivor
+namespace ForestSurvivor.Ui
 {
     internal class HealthBar
     {
@@ -18,7 +23,7 @@ namespace ForestSurvivor
         protected readonly float maxValue;
         protected float currentValue;
         protected Rectangle part;
-        private float timer; 
+        private float timer;
 
         private float _targetValue;
         private readonly float _animationSpeed = 20;
@@ -76,7 +81,7 @@ namespace ForestSurvivor
 
         public void SetPosition(float x, float y)
         {
-            position = new Vector2 (x, y);
+            position = new Vector2(x, y);
             _animationPosition = position;
         }
 
