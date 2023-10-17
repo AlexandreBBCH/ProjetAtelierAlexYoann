@@ -14,7 +14,7 @@ namespace ForestSurvivor
 
         protected readonly Texture2D background;
         protected readonly Texture2D foreground;
-        protected readonly Vector2 position;
+        protected Vector2 position;
         protected readonly float maxValue;
         protected float currentValue;
         protected Rectangle part;
@@ -72,6 +72,11 @@ namespace ForestSurvivor
             _animationPart.X = x;
             _animationPart.Width = (int)(Math.Abs(currentValue - _targetValue) / maxValue * foreground.Width);
             _animationPosition.X = position.X + x;
+        }
+
+        public void SetPosition(float x, float y)
+        {
+            position = new Vector2 (x, y);
         }
 
         public void Draw()

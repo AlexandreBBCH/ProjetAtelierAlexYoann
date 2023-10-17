@@ -27,11 +27,14 @@ namespace ForestSurvivor
         private Color _color;
         private Vector2 direction;
         private Vector2 position;
+        private bool _isHurt;
 
         private const int TIME_STOP_WHEN_COME_TO_PLAYER = 1;
+        private const float TIME_COLOR_RED_WHEN_HURT = 0.2f;
 
         public bool isDead;
         private float timerDamageEnnemi;
+        private float timerTakeDamage;
         private float timerBetweenTarget;
         private bool hasTarget;
         private bool isItemCollected;
@@ -44,6 +47,7 @@ namespace ForestSurvivor
         private SpriteSheetAnimation DogAnimation;
         private int _firstFrame;
         private int _lasteFrame;
+        HealthBar _healthBarDog;
         DogAnimationDir state;
 
         public Texture2D Texture { get => _texture; set => _texture = value; }
@@ -60,7 +64,8 @@ namespace ForestSurvivor
         public float DamageSpeed { get => _damageSpeed; set => _damageSpeed = value; }
         public int FirstFrame { get => _firstFrame; set => _firstFrame = value; }
         public int LasteFrame { get => _lasteFrame; set => _lasteFrame = value; }
-
+        internal HealthBar HealthBarDog { get => _healthBarDog; set => _healthBarDog = value; }
+        public bool IsHurt { get => _isHurt; set => _isHurt = value; }
 
         public Dog(float width, float height, float x, float y, float speed, int life, float damage, float damageSpeed)
         {
@@ -70,11 +75,13 @@ namespace ForestSurvivor
             _y = y;
             _speed = speed;
             _life = life;
+            PvMax = life;
             _damage = damage;
             _damageSpeed = damageSpeed;
-            Color = Color.Green;
+            Color = Color.White;
             Texture = GlobalsTexture.Slime2D;
             position = new Vector2(_x, _y);
+            IsHurt = false;
             direction = new Vector2(0, 0);
             distanceBetweenTarget = Globals.ScreenWidth;
             ennemiesTarget = null;
@@ -85,11 +92,13 @@ namespace ForestSurvivor
             isPlayerTouch = false;
             isDead = false;
             timerBetweenTarget = 0;
+            timerTakeDamage = 0;
             timerDamageEnnemi = 0;
             DogAnimation = new SpriteSheetAnimation(GlobalsTexture.DogSheets, 9, 4, 0.2f);
             FirstFrame = 16;
             LasteFrame = 19;
             Globals.listDogs.Add(this);
+            HealthBarDog = new HealthBar(GlobalsTexture.back, GlobalsTexture.front, PvMax, new Vector2(X, Y + 100));
         }
 
         public void Animation(GameTime gameTime)
@@ -102,7 +111,21 @@ namespace ForestSurvivor
             DogAnimation.PositionY = _y;
             Animation(gameTime);
 
-            //DogAnimation.UpdateAnimation(gameTime);
+            HealthBarDog.SetPosition(position.X, position.Y + 100);
+            HealthBarDog.Update(Life, gameTime);
+
+            if (IsHurt)
+            {
+                Color = Color.Red;
+                timerTakeDamage += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (timerTakeDamage >= TIME_COLOR_RED_WHEN_HURT)
+                {
+                    Color = Color.White;
+                    IsHurt = false;
+                    timerTakeDamage = 0;
+                }
+            }
+
             if (!isDead)
             {
                 if (ennemiesTarget == null && bigSlimeTarget == null && shooterTarget == null && itemTarget == null && !hasTarget)
@@ -390,21 +413,19 @@ namespace ForestSurvivor
 
         }
 
+        /// <summary>
+        /// Récupère la distance entre 2 points avec la distance euclidienne
+        /// </summary>
+        /// <param name="Xtarget"></param>
+        /// <param name="Ytarget"></param>
+        /// <returns></returns>
         public float GetDistanceBetween(int Xtarget, int Ytarget)
         {
-            float xbetween = (X - Xtarget);
-            if (xbetween < 0)
-            {
-                xbetween = -xbetween;
-            }
-
-            float ybetween = (Y - Ytarget);
-            if (ybetween < 0)
-            {
-                ybetween = -ybetween;
-            }
-            return xbetween + ybetween;
+            float xDistance = X - Xtarget;
+            float yDistance = Y - Ytarget;
+            return (float)Math.Sqrt(xDistance * xDistance + yDistance * yDistance);
         }
+
 
         public Rectangle GetRectangle()
         {
@@ -415,7 +436,8 @@ namespace ForestSurvivor
         {
             DogAnimation.PositionX = _x;
             DogAnimation.PositionY = _y;
-            DogAnimation.DrawAnimation(GetRectangle());
+            DogAnimation.DrawAnimation(GetRectangle(), Color);
+            HealthBarDog.Draw();
         }
     }
 }

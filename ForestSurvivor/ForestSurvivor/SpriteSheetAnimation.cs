@@ -23,9 +23,9 @@ namespace TutoYoutube
         private int _frameHeight;
         private float _positionX = 0;
         private float _positionY = 0;
+
         public Vector2 Position { get; set; }
         public Vector2 Scale { get; set; } = Vector2.One;
-        public Color Tint { get; set; } = Color.White;
         public bool Loop { get => _loop; set => _loop = value; }
         public bool IsPlaying { get => _isPlaying; set => _isPlaying = value; }
         public float ScaleMultiplayer { get => _scaleMultiplayer; set => _scaleMultiplayer = value; }
@@ -64,14 +64,14 @@ namespace TutoYoutube
         }
 
 
-        public void DrawAnimation(Rectangle rectangle)
+        public void DrawAnimation(Rectangle rectangle, Color color)
         {
             if (CurrentFrame >= 0 && CurrentFrame < Frames.Count)
             {
 
                 Rectangle destinationRect = new Rectangle((int)PositionX, (int)PositionY, (int)(Frames[CurrentFrame].Width * ScaleMultiplayer), (int)(Frames[CurrentFrame].Height * ScaleMultiplayer));
                 destinationRect = rectangle;
-                Globals.SpriteBatch.Draw(SpriteSheet, destinationRect, Frames[CurrentFrame], Tint);
+                Globals.SpriteBatch.Draw(SpriteSheet, destinationRect, Frames[CurrentFrame], color);
             }
         }
 
