@@ -1,5 +1,6 @@
 ﻿using ForestSurvivor.AllGlobals;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,38 +16,47 @@ namespace ForestSurvivor.AllItems
         float _effectTimer;
         bool isRunning = false;
         bool isEffectEnd = false;
+        Texture2D effectDisplay;
         public string EffectName { get => _effectName; set => _effectName = value; }
         internal Player Player { get => _player; set => _player = value; }
         public float EffectTimer { get => _effectTimer; set => _effectTimer = value; }
         public bool IsEffectEnd { get => isEffectEnd; set => isEffectEnd = value; }
+        public Texture2D EffectDisplay { get => effectDisplay; set => effectDisplay = value; }
 
         public EffectItems(Player player, string effectName)
         {
 
             Player = player;
             _effectName = effectName;
+
             Globals.listEffect.Add(this);
 
         }
+
+
+        
         public void UpdateEffect(GameTime gameTime)
         {
 
             switch (EffectName)
             {
                 case "Heal":
-                    PvEffect();
+                    PvEffect(gameTime);
+                    effectDisplay = GlobalsTexture.effectHeal;
                     break;
                 case "HealMax":
-                    PvEffect();
+                    PvEffect(gameTime);
                     break;
                 case "Speed":
                     SpeedEffect(gameTime);
+                    effectDisplay = GlobalsTexture.effectSpeed;
                     break;
                 case "SpeedMax":
                     SpeedEffect(gameTime);
                     break;
                 case "Damage":
                     DamageEffect(gameTime);
+                    effectDisplay = GlobalsTexture.effectDamage;
                     break;
                 case "DamageMax":
                     DamageEffect(gameTime);
@@ -55,8 +65,13 @@ namespace ForestSurvivor.AllItems
         }
 
 
-        public void PvEffect()
+        public void DisplayEffectItem()
         {
+          Globals.SpriteBatch.Draw(EffectDisplay, new Rectangle((int)Player.X + 100, (int)Player.Y - 20, 44, 44), Color.White);
+        }
+        public void PvEffect(GameTime gameTime)
+        {
+            EffectTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (!isRunning)
             {
@@ -72,6 +87,11 @@ namespace ForestSurvivor.AllItems
                     MusicManager.PlaySoundEffect(GlobalsSounds.appleEat);
 
                 }
+            }
+            if (EffectTimer >= 3)
+            {
+                IsEffectEnd = true;
+
             }
             //Globals.listEffect.Remove(this);
 
@@ -129,6 +149,7 @@ namespace ForestSurvivor.AllItems
                 //Globals.listEffect.Remove(this);
             }
         }
+
 
 
     }
