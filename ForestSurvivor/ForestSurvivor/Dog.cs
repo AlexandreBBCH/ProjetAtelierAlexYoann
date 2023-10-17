@@ -95,7 +95,7 @@ namespace ForestSurvivor
             DogAnimation = new SpriteSheetAnimation(GlobalsTexture.DogSheets, 9, 4, 0.2f);
             FirstFrame = 16;
             LasteFrame = 19;
-            HealthBarDog = new HealthBar(GlobalsTexture.back, GlobalsTexture.front, PvMax, new Vector2(X, Y + 100));
+            HealthBarDog = new HealthBar(GlobalsTexture.backHealDog, GlobalsTexture.frontHealDog, PvMax, new Vector2(X, Y + 100));
         }
 
         public void Animation(GameTime gameTime)
