@@ -166,6 +166,11 @@ namespace ForestSurvivor.Ui
                     player.ActualDamage += 1f;
                     Globals.levelUpCard = null;
                     break;
+                case "DogShootingRate":
+                    player.DamageMax += 1f;
+                    player.ActualDamage += 1f;
+                    Globals.levelUpCard = null;
+                    break;
             }
 
 
@@ -184,6 +189,8 @@ namespace ForestSurvivor.Ui
             Card SpeedMaxDogCard = new Card("+DOG SPEED MAX", "DogMaxSpeed");
             Card DamageMaxDogCard = new Card("+DOG DAMAGE MAX", "DogMaxDamage");
             Card NumberMaxDogCard = new Card("+1 DOG", "DogMaxNumber");
+            Card ShootSpeedDogCard = new Card("+Dog Shoot speed", "DogShootingRate");
+
         }
     }
 }
