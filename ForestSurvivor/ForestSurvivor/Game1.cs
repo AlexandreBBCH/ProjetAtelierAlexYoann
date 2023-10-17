@@ -25,7 +25,6 @@ namespace ForestSurvivor
         OptionClickable _gameOver;
         OptionClickable _restart;
         HealthBar _healthBarAnimated;
-        Dog dog;
         CardCreation cardManager;
 
         public Game1()
@@ -116,7 +115,8 @@ namespace ForestSurvivor
             itemGenerator = new ItemsGenerator();
             environmentInitialisation = new EnvironmentInit(20);
             environmentInitialisation.GenerateEnvironment();
-            dog = new Dog(96, 96, player.X - 100, player.Y - 100, 5, 10, 1, 0.5f);
+            Dog dog = new Dog(96, 96, player.X - 100, player.Y - 100, 5, 10, 1, 0.5f);
+            Globals.listDogs.Add(dog);
         }
 
 
@@ -157,19 +157,22 @@ namespace ForestSurvivor
                 Shoot.CollsionBulletWithEnnemies();
                 foreach (Ennemies ennemies in Globals.listLittleSlime)
                 {
-                    ennemies.Update(player,dog ,gameTime);
+                    ennemies.Update(player ,gameTime);
                 }
                 foreach (BigSlime bigSLime in Globals.listBigSlime)
                 {
-                    bigSLime.Update(player, dog, gameTime);
+                    bigSLime.Update(player, gameTime);
                 }
                 foreach (SlimeShooter shooterSLime in Globals.listShootSlime)
                 {
-                    shooterSLime.Update(player, dog, gameTime);
-                    shooterSLime.Shoot(gameTime, player, dog);
+                    shooterSLime.Update(player, gameTime);
+                    shooterSLime.Shoot(gameTime, player);
                 }
                 player.Update(gameTime);
-                dog.Update(player, gameTime);
+                foreach (Dog dog in Globals.listDogs)
+                {
+                    dog.Update(player, gameTime);
+                }
                 _healthBarAnimated.Update(player.Life, gameTime);
 
                 foreach (var item in Globals.listItems)
@@ -227,7 +230,10 @@ namespace ForestSurvivor
                     shoot.Draw();
                 }
                 Globals.listEnvironment.ForEach(Spawner => Spawner.DrawEnvironment());
-                dog.Draw();
+                foreach (Dog dog in Globals.listDogs)
+                {
+                    dog.Draw();
+                }
                 player.Draw();
                 
                 _healthBarAnimated.Draw();

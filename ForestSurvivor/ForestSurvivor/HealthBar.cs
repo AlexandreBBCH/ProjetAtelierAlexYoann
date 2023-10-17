@@ -77,6 +77,7 @@ namespace ForestSurvivor
         public void SetPosition(float x, float y)
         {
             position = new Vector2 (x, y);
+            _animationPosition = position;
         }
 
         public void Draw()

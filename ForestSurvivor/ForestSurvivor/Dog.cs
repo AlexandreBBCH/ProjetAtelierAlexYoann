@@ -21,7 +21,6 @@ namespace ForestSurvivor
         private float _speed;
         private int _life;
         private int _pvMax;
-        private float _speedMax;
         private float _damage;
         private float _damageSpeed;
         private Color _color;
@@ -36,14 +35,14 @@ namespace ForestSurvivor
         private float timerDamageEnnemi;
         private float timerTakeDamage;
         private float timerBetweenTarget;
-        private bool hasTarget;
+        public bool hasTarget;
         private bool isItemCollected;
         private bool isPlayerTouch;
         private float distanceBetweenTarget;
-        private Ennemies ennemiesTarget;
-        private SlimeShooter shooterTarget;
-        private BigSlime bigSlimeTarget;
-        private Items itemTarget;
+        public Ennemies ennemiesTarget;
+        public SlimeShooter shooterTarget;
+        public BigSlime bigSlimeTarget;
+        public Items itemTarget;
         private SpriteSheetAnimation DogAnimation;
         private int _firstFrame;
         private int _lasteFrame;
@@ -58,7 +57,6 @@ namespace ForestSurvivor
         public float Speed { get => _speed; set => _speed = value; }
         public int Life { get => _life; set => _life = value; }
         public int PvMax { get => _pvMax; set => _pvMax = value; }
-        public float SpeedMax { get => _speedMax; set => _speedMax = value; }
         public Color Color { get => _color; set => _color = value; }
         public float Damage { get => _damage; set => _damage = value; }
         public float DamageSpeed { get => _damageSpeed; set => _damageSpeed = value; }
@@ -97,7 +95,6 @@ namespace ForestSurvivor
             DogAnimation = new SpriteSheetAnimation(GlobalsTexture.DogSheets, 9, 4, 0.2f);
             FirstFrame = 16;
             LasteFrame = 19;
-            Globals.listDogs.Add(this);
             HealthBarDog = new HealthBar(GlobalsTexture.back, GlobalsTexture.front, PvMax, new Vector2(X, Y + 100));
         }
 
@@ -138,9 +135,20 @@ namespace ForestSurvivor
                         float tmpDistanceBetweenTarget = GetDistanceBetween(ennemies.X, ennemies.Y);
                         if (tmpDistanceBetweenTarget < distanceBetweenTarget)
                         {
-                            distanceBetweenTarget = tmpDistanceBetweenTarget;
-                            ennemiesTarget = ennemies;
-                            hasTarget = true;
+                            bool isAlreadyTarget = false;
+                            foreach (Dog dog in Globals.listDogs)
+                            {
+                                if (dog.ennemiesTarget != null && dog.ennemiesTarget == ennemies && dog != this) // Si un autre chien possède déja comme objectif cette ennemi
+                                {
+                                    isAlreadyTarget = true;
+                                }
+                            }
+                            if (!isAlreadyTarget)
+                            {
+                                distanceBetweenTarget = tmpDistanceBetweenTarget;
+                                ennemiesTarget = ennemies;
+                                hasTarget = true;
+                            }
                         }
                     }
                     foreach (BigSlime bigSlime in Globals.listBigSlime)
@@ -148,9 +156,20 @@ namespace ForestSurvivor
                         float tmpDistanceBetweenTarget = GetDistanceBetween(bigSlime.X, bigSlime.Y);
                         if (tmpDistanceBetweenTarget < distanceBetweenTarget)
                         {
-                            distanceBetweenTarget = tmpDistanceBetweenTarget;
-                            bigSlimeTarget = bigSlime;
-                            hasTarget = true;
+                            bool isAlreadyTarget = false;
+                            foreach (Dog dog in Globals.listDogs)
+                            {
+                                if (dog.bigSlimeTarget != null && dog.bigSlimeTarget == bigSlime && dog != this) // Si un autre chien possède déja comme objectif cette ennemi
+                                {
+                                    isAlreadyTarget = true;
+                                }
+                            }
+                            if (!isAlreadyTarget)
+                            {
+                                distanceBetweenTarget = tmpDistanceBetweenTarget;
+                                bigSlimeTarget = bigSlime;
+                                hasTarget = true;
+                            }
                         }
                     }
                     foreach (SlimeShooter slimeShooter in Globals.listShootSlime)
@@ -158,9 +177,20 @@ namespace ForestSurvivor
                         float tmpDistanceBetweenTarget = GetDistanceBetween(slimeShooter.X, slimeShooter.Y);
                         if (tmpDistanceBetweenTarget < distanceBetweenTarget)
                         {
-                            distanceBetweenTarget = tmpDistanceBetweenTarget;
-                            shooterTarget = slimeShooter;
-                            hasTarget = true;
+                            bool isAlreadyTarget = false;
+                            foreach (Dog dog in Globals.listDogs)
+                            {
+                                if (dog.shooterTarget != null && dog.shooterTarget == slimeShooter && dog != this) // Si un autre chien possède déja comme objectif cette ennemi
+                                {
+                                    isAlreadyTarget = true;
+                                }
+                            }
+                            if (!isAlreadyTarget)
+                            {
+                                distanceBetweenTarget = tmpDistanceBetweenTarget;
+                                shooterTarget = slimeShooter;
+                                hasTarget = true;
+                            }
                         }
                     }
                     foreach (Items item in Globals.listItems)
@@ -168,9 +198,20 @@ namespace ForestSurvivor
                         float tmpDistanceBetweenTarget = GetDistanceBetween(item.X, item.Y);
                         if (tmpDistanceBetweenTarget < distanceBetweenTarget)
                         {
-                            distanceBetweenTarget = tmpDistanceBetweenTarget;
-                            itemTarget = item;
-                            hasTarget = true;
+                            bool isAlreadyTarget = false;
+                            foreach (Dog dog in Globals.listDogs)
+                            {
+                                if (dog.itemTarget != null && dog.itemTarget == item && dog != this) // Si un autre chien possède déja comme objectif cette ennemi
+                                {
+                                    isAlreadyTarget = true;
+                                }
+                            }
+                            if (!isAlreadyTarget)
+                            {
+                                distanceBetweenTarget = tmpDistanceBetweenTarget;
+                                itemTarget = item;
+                                hasTarget = true;
+                            }
                         }
                     }
                 }
@@ -256,7 +297,9 @@ namespace ForestSurvivor
 
                     if (GetRectangle().Intersects(shooterTarget.GetEnnemieRectangle()))
                     {
+                        shooterTarget.dogShoot = this;
                         shooterTarget.isEnnemiHurtByDog = true;
+
                         timerDamageEnnemi += (float)gameTime.ElapsedGameTime.TotalSeconds;
                         if (timerDamageEnnemi >= DamageSpeed)
                         {

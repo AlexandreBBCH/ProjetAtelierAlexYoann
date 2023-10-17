@@ -22,6 +22,8 @@ namespace ForestSurvivor.AllEnnemies
         private int _yBullet;
         private Vector2 projectilePosition;
         private Vector2 direction;
+        public Dog dogShoot;
+
 
         public Texture2D ShootTexture { get => _shootTexture; set => _shootTexture = value; }
         public int XBullet { get => _xBullet; set => _xBullet = value; }
@@ -36,7 +38,7 @@ namespace ForestSurvivor.AllEnnemies
             YBullet = Y;
         }
 
-        public void Shoot(GameTime gameTime, Player player, Dog dog)
+        public void Shoot(GameTime gameTime, Player player)
         {
             if (!canShoot)
             {
@@ -54,8 +56,8 @@ namespace ForestSurvivor.AllEnnemies
                     }
                     else
                     {
-                        xPlayer = dog.X + dog.Width / 2;
-                        yPlayer = dog.Y + dog.Height / 2;
+                        xPlayer = dogShoot.X + dogShoot.Width / 2;
+                        yPlayer = dogShoot.Y + dogShoot.Height / 2;
                     }
 
                     timerShoot = 0;
@@ -88,17 +90,17 @@ namespace ForestSurvivor.AllEnnemies
                 }
                 else
                 {
-                    if (GetRectangleShoot().Intersects(dog.GetRectangle()))
+                    if (GetRectangleShoot().Intersects(dogShoot.GetRectangle()))
                     {
                         canShoot = false;
                         // Music Dog hurt
-                        if (player.Life - Damage < 0)
+                        dogShoot.IsHurt = true;
+                        dogShoot.Life -= Damage;
+                        if (dogShoot.Life <= 0)
                         {
-                            player.Life = 0;
-                        }
-                        else
-                        {
-                            player.Life -= Damage;
+                            dogShoot.isDead = true;
+                            MusicManager.PlaySoundEffect(GlobalsSounds.dogDied);
+                            isEnnemiHurtByDog = false;
                         }
                     }
                 }

@@ -143,6 +143,13 @@ namespace ForestSurvivor
             return ennemies;
         }
 
+        public static void CreateDog(Player player)
+        {
+            Dog dog = new Dog(96, 96, player.X - 100, player.Y - 100, 5, 10, 1, 0.5f);
+            dog.Texture = GlobalsTexture.DogSheets;
+            Globals.listDogs.Add(dog);
+        }
+
         public static SlimeShooter CreateShooterSlime()
         {
             SlimeShooter ennemies = new SlimeShooter(Globals.WIDTH_LITTLE_SLIME, Globals.HEIGHT_LITTLE_SLIME, Globals.LIFE_LITTLE_SLIME ,Globals.SPEED_LITTLE_SLIME, Globals.DAMAGE_LITTLE_SLIME, 2);

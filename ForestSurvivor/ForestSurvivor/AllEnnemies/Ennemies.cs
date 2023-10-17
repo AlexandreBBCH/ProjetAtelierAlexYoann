@@ -91,7 +91,7 @@ namespace ForestSurvivor.AllEnnemies
             }
         }
 
-        public void Update(Player player, Dog dog, GameTime gameTime)
+        public void Update(Player player, GameTime gameTime)
         {
             // Slime shooter don't follow player
             if (GetType() != typeof(SlimeShooter))
@@ -164,16 +164,19 @@ namespace ForestSurvivor.AllEnnemies
                     }
                     else
                     {
-                        if (dog.GetRectangle().Intersects(GetEnnemieRectangle()))
+                        foreach (Dog dog in Globals.listDogs)
                         {
-                            canMakeDamage = false;
-                            dog.IsHurt = true;
-                            dog.Life -= Damage;
-                            if (dog.Life <= 0)
+                            if (dog.GetRectangle().Intersects(GetEnnemieRectangle()))
                             {
-                                dog.isDead = true;
-                                MusicManager.PlaySoundEffect(GlobalsSounds.dogDied);
-                                isEnnemiHurtByDog = false;
+                                canMakeDamage = false;
+                                dog.IsHurt = true;
+                                dog.Life -= Damage;
+                                if (dog.Life <= 0)
+                                {
+                                    dog.isDead = true;
+                                    MusicManager.PlaySoundEffect(GlobalsSounds.dogDied);
+                                    isEnnemiHurtByDog = false;
+                                }
                             }
                         }
                     }
