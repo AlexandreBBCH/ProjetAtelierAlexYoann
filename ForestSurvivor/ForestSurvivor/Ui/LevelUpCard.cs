@@ -56,7 +56,7 @@ namespace ForestSurvivor.Ui
                 Globals.actualCards[i-1].X = (Globals.ScreenWidth / 4.8f) * i;
                 Globals.actualCards[i-1].TextX = ((Globals.ScreenWidth / 4.8f) * i);
                 Globals.SpriteBatch.Draw(GlobalsTexture.cardInfos, new Rectangle((int)Globals.actualCards[i - 1].X, (int)Globals.actualCards[i - 1].Y, GlobalsTexture.cardView.Width * 2, GlobalsTexture.cardView.Height), Color.White);
-                Globals.SpriteBatch.Draw(GlobalsTexture.cardView, Globals.actualCards[i - 1].GetRectangle((int)Globals.actualCards[i - 1].X, (int)(Globals.actualCards[i - 1].Y + Globals.ScreenHeight / 9.5f),(int) GlobalsTexture.cardView.Width * 2, (int)GlobalsTexture.cardView.Height * 2), Color.White);
+                //Globals.SpriteBatch.Draw(GlobalsTexture.cardView, Globals.actualCards[i - 1].GetRectangle((int)Globals.actualCards[i - 1].X, (int)(Globals.actualCards[i - 1].Y + Globals.ScreenHeight / 9.5f),(int) GlobalsTexture.cardView.Width * 2, (int)GlobalsTexture.cardView.Height * 2), Color.White);
                 Globals.SpriteBatch.DrawString(GlobalsTexture.lvlInfoFont, Globals.actualCards[i - 1].TextInfos, new Vector2(Globals.actualCards[i - 1].TextX, Globals.actualCards[i - 1].Y + Globals.actualCards[i - 1].Y / 3), Color.White);
             }
         }
