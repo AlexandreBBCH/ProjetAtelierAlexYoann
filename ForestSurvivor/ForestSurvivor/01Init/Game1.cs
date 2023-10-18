@@ -40,12 +40,12 @@ namespace ForestSurvivor
             Globals.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Globals.graphics.PreferredBackBufferWidth = 1920;// Largeur
-            Globals.graphics.PreferredBackBufferHeight = 1080; // Hauteur
+            Globals.graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;// Largeur
+            Globals.graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height; // Hauteur
 
             Globals.ScreenHeight = Globals.graphics.PreferredBackBufferHeight;
             Globals.ScreenWidth = Globals.graphics.PreferredBackBufferWidth;
-            //Globals.graphics.IsFullScreen = true;
+            Globals.graphics.IsFullScreen = true;
             Globals.graphics.ApplyChanges();
         }
         protected override void Initialize()
