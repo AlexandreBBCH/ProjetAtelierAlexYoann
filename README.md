@@ -3,8 +3,8 @@
 ## Auteur
 Yoann Meier et Alexandre Babiche
 ## Période
-05/09/2023 au 10/10/2023
-Objectif
+05/09/2023 au 17/10/2023
+## Objectif
 L’objectif de ce projet est de développer une application Monogame en utilisant C# qui exploite des Sprites pour créer une expérience interactive. <br>
 L’application sera conçue pour créer un jeu 2D vue du dessus. Le but du jeu est d’affronter des vagues d'ennemis dans divers niveaux.
 ## Fonctionnalités Principales
@@ -31,31 +31,25 @@ Il y a un menu au lancement du jeu avec :
 - Jouer : Nous permet de lancer une nouvelle partie
 - Option : Permet de changer le volume de la musiques et des bruitages avec un sliders
 - Quitter : Quitte le jeu quand cliqué dessus
-
 ### Fonctionnalité 6
 Il y aura menu option qui sert à gérer le volume du son des musiques et des bruitages.
-
 ### Fonctionnalité 7
 Il y aura 3 ennemis qui auront des points de vie ou une vitesse différente
 - Slime : Ennemie de base qui traque le joueur et lui fait perdre de la vie au contact
 - Slime tireur : Un slime qui tire à distance sur le joueur
 - Slime Boss : Plus grand et se divise en slime de base à la mort
-
 ### Fonctionnalité 8
 Les ennemies se rapproche du joueur sans traverser les obstacles
-
 ### Fonctionnalité 9
 Il y aura plusieurs objets qui pourront aider le joueur : invincibilité, bonus de vitesse …<br>
 Certains seront même permanents.
 - Pomme : Restauration d’un nombre pv (à définir)
 - Champignon : Augmente la vitesse de manière permanente de 2% (se cumule)
 - De l’huile : Pour augmenter la cadence de tir définitivement de 2% (se cumule)
-
 ### Fonctionnalité 10
 Le score augmente lorsque le joueur tue des ennemis.<br>
 Le meilleur score est stocké dans un fichier texte. <br>
 Il sera visible pendant la partie dans un coin de l’écran et nous pourrons voir le meilleur score réalisé sur le jeu.
-
 ## Elements du jeu
 ### Sprite :
 - Personnage (8 directions)
@@ -107,8 +101,6 @@ Le développement du projet sera réalisé en suivant les étapes suivantes :
 - Réglage de bug, d’éventuel retard, documentation technique, dernier bruitages
 #### Jour 6 (10/10/2023) :
 - Création de la présentation PowerPoint
-
-
 ## Tests et débogage
 Les tests seront effectués à la fin de l’implémentation d’une tâche par l’autre personne qui la validera.
 
