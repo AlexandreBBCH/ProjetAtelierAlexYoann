@@ -130,20 +130,24 @@ namespace ForestSurvivor
 
             itemGenerator = new ItemsGenerator();
             environmentInitialisation = new EnvironmentInit(20);
-            environmentInitialisation.GenerateEnvironment(); 
-            Globals.listDogs.Add(new Dog(96, 96, player.X - 100, player.Y - 100, 5, 10, 1, 0.5f));
+            environmentInitialisation.GenerateEnvironment();
+            // Ajoute un premier chien
+            SpawnManager.CreateDog(player);
         }
 
 
         protected override void Update(GameTime gameTime)
         {
             if (Globals.Exit) Exit();
+
             MouseState mouseState = Mouse.GetState();
             _mainMenu.UpdateMainMenu(gameTime, mouseState);
             _optionPause.OptionUpdate(gameTime, mouseState);
      
             musicManager.Update();
             ResetAll();
+
+            // Affich les cartes tous les 2 niveaux
             if (spawnManager.Level % 2 == 0 && !Globals.LevelTime)
             {
                 Globals.LevelTime = true;
@@ -154,11 +158,14 @@ namespace ForestSurvivor
             {
                 Globals.LevelTime = false;
             }
-            itemGenerator.GenerateItem(player, gameTime, 8f);
             if (Globals.levelUpCard != null)
             {
                 Globals.levelUpCard.UpdateCard(player, gameTime);
             }
+
+            itemGenerator.GenerateItem(player, gameTime, 8f);
+
+            // Pendant le jeu
             if (!_optionPause.IsResume && Globals.LauchGame && !player.IsDead() && !Globals.LevelUpPause)
             {
                 spawnManager.Update(gameTime);
@@ -190,6 +197,7 @@ namespace ForestSurvivor
                 }
                 _healthBarAnimated.Update(player.Life, gameTime);
 
+                // Supprime les items déjà collecté
                 foreach (var item in Globals.listItems)
                 {
                     if (item.IsCollected)
@@ -201,6 +209,8 @@ namespace ForestSurvivor
 
                 Globals.listItems.ForEach(item => item.UpdateItems(player));
                 Globals.listEffect.ForEach(effect => effect.UpdateEffect(gameTime));
+
+                // Enlève les effets temporaire qui sont arrivée à la fin du temps
                 foreach (var effect in Globals.listEffect)
                 {
                     if (effect.IsEffectEnd)
@@ -211,16 +221,16 @@ namespace ForestSurvivor
                 }
                 Globals.listEnvironment.ForEach(spawner => spawner.UpdateSpawner(gameTime, player));
             }
-            
-
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             MouseState mouseState = Mouse.GetState();
+
             GraphicsDevice.Clear(Color.LightGreen);
             _spriteBatch.Begin(default, null, SamplerState.PointClamp);
+
             Globals.SpriteBatch.Draw(GlobalsTexture.Background2D, new Rectangle(0,0,Globals.ScreenWidth,Globals.ScreenHeight),Color.White);
 
             if (Globals.LauchGame)
@@ -255,12 +265,17 @@ namespace ForestSurvivor
                 
                 _healthBarAnimated.Draw();
                 spawnManager.DrawLevel();
-                if (Globals.levelUpCard != null) Globals.levelUpCard.DrawCards();
+                if (Globals.levelUpCard != null) 
+                {
+                    Globals.levelUpCard.DrawCards();
+                } 
 
 
             }
 
+            // Si la partie est finie
             if (player.IsDead() && Globals.LauchGame) {
+                // Calcul le pourcentage de tir réussi
                 int pourcentageShootSucessfull;
                 if (Globals.nbShoot != 0) 
                 {
@@ -270,6 +285,7 @@ namespace ForestSurvivor
                 {
                     pourcentageShootSucessfull = 100;
                 }
+                // Si c'est un nouveau meilleur score, remplace dans le fichier texte en Xml
                 if (_mainMenu.DataBestGame[0] < spawnManager.Level || _mainMenu.DataBestGame[1] < Globals.nbSlimeKilled || _mainMenu.DataBestGame[2] < Globals.nbBigSlimeKilled || _mainMenu.DataBestGame[3] < Globals.nbShooterSlimeKilled)
                 {
                     List<int> newData = new List<int>
@@ -283,6 +299,7 @@ namespace ForestSurvivor
                     Globals.Serializer("bestscore.txt", newData);
                 }
 
+                // Affiche le menu de fin de partie
                 _restart.DrawTextClickable();
                 Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "Number of slime killed :", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2.5f - 100), Color.White);
                 Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Blue slime : {Globals.nbSlimeKilled}", new Vector2(Globals.ScreenWidth / 4, Globals.ScreenHeight / 2.5f), Color.White);
@@ -300,6 +317,9 @@ namespace ForestSurvivor
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// Remet à 0 le jeu : remet à 0 les variables globals et instancie de nouveau les classes
+        /// </summary>
         public void ResetAll()
         {
             KeyboardState keyPress = Keyboard.GetState();
@@ -311,9 +331,7 @@ namespace ForestSurvivor
                 player = new Player(120, 120, Globals.ScreenWidth / 2, Globals.ScreenHeight / 2, 8f, 10, 1f, Color.White);
                 player.Texture = GlobalsTexture.listTexturesPlayer[0];
 
-                musicManager = new MusicManager();
-                musicManager.LoadMusic(Content);
-                musicManager.LoadAllSoundEffect(Content); itemGenerator = new ItemsGenerator();
+                itemGenerator = new ItemsGenerator();
 
                 environmentInitialisation = new EnvironmentInit(20);
                 environmentInitialisation.GenerateEnvironment();
@@ -326,7 +344,7 @@ namespace ForestSurvivor
                 cardManager = new CardCreationBase();
                 cardManager.CreateCard();
 
-                Globals.listDogs.Add(new Dog(96, 96, player.X - 100, player.Y - 100, 5, 10, 1, 0.5f));
+                SpawnManager.CreateDog(player);
             }
         }
     }

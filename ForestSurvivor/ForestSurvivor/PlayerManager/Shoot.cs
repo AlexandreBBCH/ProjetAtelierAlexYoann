@@ -61,6 +61,7 @@ namespace ForestSurvivor
             float thresholdX = 0.2f; // Ajustez ce seuil en fonction de la largeur du projectile
             float thresholdY = 0.3f; // Ajustez ce seuil en fonction de la hauteur du projectile
 
+            // Mouvement du tir
             positionTir += directionTir * Speed;
 
             if (positionTir.X < 0 || positionTir.Y < 0 || positionTir.X > Globals.ScreenWidth || positionTir.Y > Globals.ScreenHeight)
@@ -68,48 +69,51 @@ namespace ForestSurvivor
                 Destroy = true;
             }
 
+            // Tir en direction haut-gauche               
             if (directionTir.Y <= -thresholdY && directionTir.Y >= -1.0f && directionTir.X < -thresholdX && directionTir.X >= -1.0f)
             {
-                // Tir en direction haut-gauche               
                 player.Texture = GlobalsTexture.listTexturesPlayer[6];
             }
+            // Tir en direction bas-gauche
             else if (directionTir.X <= 0 && directionTir.Y >= thresholdY)
             {
-                // Tir en direction bas-gauche
                 player.Texture = GlobalsTexture.listTexturesPlayer[1];
             }
+            // Tir vers la gauche
             else if (directionTir.X <= -thresholdX && directionTir.Y >= -thresholdY)
             {
-                // Tir vers la gauche
                 player.Texture = GlobalsTexture.listTexturesPlayer[3];
             }
+            // Tir vers le bas
             else if (directionTir.Y >= thresholdY && Math.Abs(directionTir.X) < thresholdX)
             {
-                // Tir vers le bas
                 player.Texture = GlobalsTexture.listTexturesPlayer[0];
             }
+            // Tir en direction bas-droite
             else if (directionTir.Y >= thresholdY && directionTir.X >= thresholdX)
             {
-                // Tir en direction bas-droite
                 player.Texture = GlobalsTexture.listTexturesPlayer[2];
             }
+            // Tir vers la droite
             else if (directionTir.X >= thresholdX && directionTir.Y >= -thresholdY)
             {
-                // Tir vers la droite
                 player.Texture = GlobalsTexture.listTexturesPlayer[4];
             }
+            // Tir en direction haut-droite
             else if (directionTir.Y <= -thresholdY && directionTir.X >= thresholdX)
             {
-                // Tir en direction haut-droite
                 player.Texture = GlobalsTexture.listTexturesPlayer[7];
             }
+            // Tir vers le haut
             else if (directionTir.Y <= -thresholdY && Math.Abs(directionTir.X) < thresholdX)
             {
-                // Tir vers le haut
                 player.Texture = GlobalsTexture.listTexturesPlayer[5];
             }
         }
 
+        /// <summary>
+        /// Supprime les balles en dehors de l'écran
+        /// </summary>
         public static void DeleteShootInBorder()
         {
             foreach (Shoot shoot in Globals.listShoots)
@@ -122,6 +126,9 @@ namespace ForestSurvivor
             }
         }
 
+        /// <summary>
+        /// Collision avec tous les ennemies
+        /// </summary>
         public static void CollsionBulletWithEnnemies()
         {
             bool hasKilled = false;
@@ -174,11 +181,18 @@ namespace ForestSurvivor
             }
         }
 
+        /// <summary>
+        /// Retourne le rectangle de la balle
+        /// </summary>
+        /// <returns></returns>
         public Rectangle GetShootRectangle()
         {
             return new Rectangle((int)positionTir.X, (int)positionTir.Y, Width, Height);
         }
 
+        /// <summary>
+        /// Affiche la balle
+        /// </summary>
         public void Draw()
         {
             Globals.SpriteBatch.Draw(Texture, new Rectangle((int)positionTir.X, (int)positionTir.Y, Width, Height), Color.White);

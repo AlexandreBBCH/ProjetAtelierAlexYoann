@@ -1,7 +1,7 @@
 ﻿///Auteur : Alexandre Babich , Yoann Meier
 //Date : 17.10.2023
 //Page : SpawnManager.cs
-//Utilité : Manager des vague / des slimes  
+//Utilité : Manager des vague / des slimes
 ///Projet : ForestSurvivor V1 (2023)
 using ForestSurvivor.AllGlobals;
 using Microsoft.Xna.Framework;
@@ -96,9 +96,9 @@ namespace ForestSurvivor.AllEnnemies
                     {
                         TimeBetweenMonsterSpawn -= 0.2f;
                     }
-
                     DifficultyLevel += 3;
 
+                    // Génère les monstres du prochain niveau
                     int tmpdifficulty = DifficultyLevel;
                     int tmpSlime = 0;
                     int tmpSlimeShoot = 0;
@@ -124,7 +124,6 @@ namespace ForestSurvivor.AllEnnemies
                             tmpdifficulty -= 5;
                         }
                     }
-                    // New monster number
                     nbSlime += tmpSlime;
                     nbSlimeShoot = tmpSlimeShoot;
                     nbBigSlime = tmpBigSlime;
@@ -134,6 +133,9 @@ namespace ForestSurvivor.AllEnnemies
             }
         }
 
+        /// <summary>
+        /// Créer un slime
+        /// </summary>
         public static Ennemies CreateSlime()
         {
             Ennemies ennemies = new Ennemies(Globals.WIDTH_LITTLE_SLIME, Globals.HEIGHT_LITTLE_SLIME, Globals.LIFE_LITTLE_SLIME, Globals.SPEED_LITTLE_SLIME, Globals.DAMAGE_LITTLE_SLIME, Globals.DAMAGE_SPEED_LITTLE_SLIME);
@@ -141,6 +143,9 @@ namespace ForestSurvivor.AllEnnemies
             return ennemies;
         }
 
+        /// <summary>
+        /// Créer un gros Slime
+        /// </summary>
         public static BigSlime CreateBigSlime()
         {
             BigSlime ennemies = new BigSlime(115, 78, 5, 3, 2, 3);
@@ -148,6 +153,10 @@ namespace ForestSurvivor.AllEnnemies
             return ennemies;
         }
 
+        /// <summary>
+        /// Créer un chien et l'ajoute dans la liste
+        /// </summary>
+        /// <param name="player">Le joueur dont le chien va apparaître à coté</param>
         public static void CreateDog(Player player)
         {
             Dog dog = new Dog(96, 96, player.X - 100, player.Y - 100, 5, 10, 1, 0.5f);
@@ -155,6 +164,10 @@ namespace ForestSurvivor.AllEnnemies
             Globals.listDogs.Add(dog);
         }
 
+        /// <summary>
+        /// Créer un slime qui tire
+        /// </summary>
+        /// <returns></returns>
         public static SlimeShooter CreateShooterSlime()
         {
             SlimeShooter ennemies = new SlimeShooter(Globals.WIDTH_LITTLE_SLIME, Globals.HEIGHT_LITTLE_SLIME, Globals.LIFE_LITTLE_SLIME, Globals.SPEED_LITTLE_SLIME, Globals.DAMAGE_LITTLE_SLIME, 2);
@@ -163,6 +176,9 @@ namespace ForestSurvivor.AllEnnemies
             return ennemies;
         }
 
+        /// <summary>
+        /// Affiche le niveau actuel
+        /// </summary>
         public void DrawLevel()
         {
             Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, $"Level: {Level}", new Vector2(Globals.ScreenWidth - 300, 0), Color.White);

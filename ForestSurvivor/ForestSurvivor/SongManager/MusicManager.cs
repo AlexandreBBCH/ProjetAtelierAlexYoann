@@ -31,6 +31,10 @@ namespace ForestSurvivor.SongManager
             _idMusic = 0;
         }
 
+        /// <summary>
+        /// Charge toutes les musiques du jeu
+        /// </summary>
+        /// <param name="contentManager"></param>
         public void LoadMusic(ContentManager contentManager)
         {
             for (int i = 1; i <= NB_MUSIC; i++)
@@ -39,10 +43,16 @@ namespace ForestSurvivor.SongManager
                 song = contentManager.Load<Song>($"Music/music{i}");
                 AllMusic.Add(song);
             }
+            // Ajoute l'évenement pour changer de musique
             MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
+            // Lance la première musique
             MediaPlayer.Play(AllMusic[IdMusic]);
         }
 
+        /// <summary>
+        /// Charge tous les effets sonores
+        /// </summary>
+        /// <param name="contentManager"></param>
         public void LoadAllSoundEffect(ContentManager contentManager)
         {
             GlobalsSounds.shootEffect = contentManager.Load<SoundEffect>("Music/shoot");
@@ -66,11 +76,18 @@ namespace ForestSurvivor.SongManager
             GlobalsSounds.dogDied = contentManager.Load<SoundEffect>("Music/dogDied");
         }
 
+        /// <summary>
+        /// Lance un effet sonore
+        /// </summary>
+        /// <param name="soundEffect">l'effet sonore</param>
         public static void PlaySoundEffect(SoundEffect soundEffect)
         {
             soundEffect.Play(volume: GlobalsSounds.Sound / 100, pitch: 0, pan: 0);
         }
 
+        /// <summary>
+        /// Lance un son aléatoire de dégât du joueur
+        /// </summary>
         public static void PlayRandomHurtEffect()
         {
             Random rnd = new Random();
@@ -78,6 +95,9 @@ namespace ForestSurvivor.SongManager
             PlaySoundEffect(GlobalsSounds.listPlayerHurt[rndSound]);
         }
 
+        /// <summary>
+        /// Evenement pour passer à la musique suivant lorsqu'une musique se finit
+        /// </summary>
         private void MediaPlayer_MediaStateChanged(object sender, EventArgs e)
         {
             if (MediaPlayer.State == MediaState.Stopped)
@@ -94,6 +114,9 @@ namespace ForestSurvivor.SongManager
             }
         }
 
+        /// <summary>
+        /// Met à jour le son qui a peut être été modifié
+        /// </summary>
         public void Update()
         {
             MediaPlayer.Volume = GlobalsSounds.Musique / 100;

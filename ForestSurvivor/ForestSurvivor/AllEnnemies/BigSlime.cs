@@ -26,7 +26,7 @@ namespace ForestSurvivor.AllEnnemies
         }
 
         /// <summary>
-        /// Create 4 new slime when it died
+        /// Créer 4 slime autour de lui lors de sa mort
         /// </summary>
         public bool CreateNewLittleSlime()
         {
@@ -57,6 +57,7 @@ namespace ForestSurvivor.AllEnnemies
                     }
                     Globals.listLittleSlime.Add(ennemies);
                 }
+                // Lance le son d'explosion du slime, le supprime de la liste et génère une pomme
                 MusicManager.PlaySoundEffect(GlobalsSounds.bigSlimeExplosion);
                 Globals.listBigSlime.Remove(this);
                 Globals.nbBigSlimeKilled++;

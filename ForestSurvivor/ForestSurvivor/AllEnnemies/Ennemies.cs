@@ -28,21 +28,13 @@ namespace ForestSurvivor.AllEnnemies
         private float _damageSpeed;
         private bool _isDead;
         private Color _color;
-
-        // Ennemi touch player
         bool isHurt = false;
         float timerHurt = 0;
-
-
-        // Dog touch ennemi
         public bool isEnnemiHurtByDog = false;
         private bool canMakeDamage = true;
         private float timerDamage = 0;
-
-        // Shoot touch ennemi
         private float timerEnnemiHurt;
         bool hasShootTouchEnnemi = false;
-
         private Random rnd;
         private float timerSound;
 
@@ -70,7 +62,7 @@ namespace ForestSurvivor.AllEnnemies
             timerSound = 0;
             IsDead = false;
 
-            // Random spawn
+            // Apparait dans une bordure aléatoire de l'écran
             rnd = new Random();
             int border = rnd.Next(0, 4 + 1);
             switch (border)
@@ -100,7 +92,7 @@ namespace ForestSurvivor.AllEnnemies
 
         public void Update(Player player, GameTime gameTime)
         {
-            // Slime shooter don't follow player
+            // Si ce n'est pas le slime shooter (il hérite de cette classe) car il ne suit pas le joueur
             if (GetType() != typeof(SlimeShooter))
             {
                 if (!isEnnemiHurtByDog)
@@ -110,10 +102,9 @@ namespace ForestSurvivor.AllEnnemies
                     bool moreYcollided = false;
                     bool lessYcollided = false;
 
-                    // Collision with others ennemies
+                    // Collision avec les autres ennemies pour qu'ils ne soient pas les uns dans les autres
                     foreach (Ennemies ennemies in Globals.listLittleSlime)
                     {
-                        // If it's not us
                         if (GetEnnemieRectangle() != ennemies.GetEnnemieRectangle())
                         {
                             if (GetEnnemieRectangle().Intersects(ennemies.GetEnnemieRectangle()))
@@ -138,7 +129,7 @@ namespace ForestSurvivor.AllEnnemies
                         }
                     }
 
-                    // Follow player
+                    // Suit le joueur
                     if (X + Width <= player.X && !lessXcollided)
                     {
                         X += Speed;
@@ -160,6 +151,7 @@ namespace ForestSurvivor.AllEnnemies
                 }
                 else
                 {
+                    // temps entre les attaques
                     if (!canMakeDamage)
                     {
                         timerDamage += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -171,6 +163,7 @@ namespace ForestSurvivor.AllEnnemies
                     }
                     else
                     {
+                        // Inflige des dégâts au chien qui l'attaque
                         foreach (Dog dog in Globals.listDogs)
                         {
                             if (dog.GetRectangle().Intersects(GetEnnemieRectangle()))
@@ -190,7 +183,7 @@ namespace ForestSurvivor.AllEnnemies
                 }
             }
 
-            // Slime sound
+            // Son de mouvement du slime toute les 2sec
             timerSound += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (timerSound >= 2)
             {
@@ -199,7 +192,7 @@ namespace ForestSurvivor.AllEnnemies
             }
 
 
-            // Color Ennemies when is hurt
+            // Change la couleur pour rouge lors d'une blessure
             if (hasShootTouchEnnemi)
             {
                 timerEnnemiHurt += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -217,10 +210,8 @@ namespace ForestSurvivor.AllEnnemies
         }
 
         /// <summary>
-        /// Collision with player : the player take damage and his color change to red for a few seconds
+        /// Collision avec le joueur : le joueur prend des dégâts et sa couleur change pour du rouge pendant un peit instant
         /// </summary>
-        /// <param name="player"></param>
-        /// <param name="gameTime"></param>
         public void CollisionWithPlayer(Player player, GameTime gameTime)
         {
             if (isHurt)
@@ -234,7 +225,7 @@ namespace ForestSurvivor.AllEnnemies
             }
             if (GetEnnemieRectangle().Intersects(player.GetPlayerRectangle()))
             {
-                // Player take damage
+                // Joueur prend des dégâts
                 if (!isHurt)
                 {
                     if (player.Life - Damage < 0)
@@ -251,16 +242,20 @@ namespace ForestSurvivor.AllEnnemies
             }
         }
 
-
+        /// <summary>
+        /// Collision entre l'ennemi et un shoot
+        /// </summary>
+        /// <param name="shoot"></param>
         public bool CollisionWithBullet(Shoot shoot)
         {
-
+            // Si il y a une collision, supprime la balle et inflige des dégâts à l'ennemi
             if (shoot.GetShootRectangle().Intersects(GetEnnemieRectangle()))
             {
                 Globals.nbShootHasTouch++;
                 Globals.listShoots.Remove(shoot);
                 Life -= shoot.Damage;
                 hasShootTouchEnnemi = true;
+                // Supprime l'ennemi mort de la liste si il n'est pas gros car le gros à une fonction différente pour sa mort
                 if (Life <= 0)
                 {
                     IsDead = true;
@@ -281,12 +276,18 @@ namespace ForestSurvivor.AllEnnemies
             return hasShootTouchEnnemi;
         }
 
+        /// <summary>
+        /// L'ennmi prend des dégâts du chien
+        /// </summary>
+        /// <param name="dog"></param>
+        /// <returns></returns>
         public bool TakeDamageFromDog(Dog dog)
         {
             Life -= dog.Damage;
             hasShootTouchEnnemi = true;
             if (Life <= 0)
             {
+                // Supprime l'ennemi mort de la liste si il n'est pas gros car le gros à une fonction différente pour sa mort
                 IsDead = true;
                 if (GetType() == typeof(Ennemies))
                 {
@@ -305,11 +306,17 @@ namespace ForestSurvivor.AllEnnemies
             return false;
         }
 
+        /// <summary>
+        /// Retourne le rectangle de l'ennemi
+        /// </summary>
         public Rectangle GetEnnemieRectangle()
         {
             return new Rectangle(X, Y, Width, Height);
         }
 
+        /// <summary>
+        /// Affiche l'ennemi
+        /// </summary>
         public void Draw()
         {
             Globals.SpriteBatch.Draw(Texture, GetEnnemieRectangle(), Color);

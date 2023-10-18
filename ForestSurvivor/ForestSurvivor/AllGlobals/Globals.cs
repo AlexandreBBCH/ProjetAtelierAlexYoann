@@ -75,6 +75,9 @@ namespace ForestSurvivor.AllGlobals
         public static int ScreenHeight;
 
 
+        /// <summary>
+        /// Reset toutes les globals utiles pour relancer la partie
+        /// </summary>
         public static void ResetGlobals()
         {
             LauchGame = true;

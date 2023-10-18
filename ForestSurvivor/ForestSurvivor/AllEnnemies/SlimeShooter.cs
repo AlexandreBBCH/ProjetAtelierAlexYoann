@@ -47,6 +47,7 @@ namespace ForestSurvivor.AllEnnemies
 
         public void Shoot(GameTime gameTime, Player player)
         {
+            // Si il ne peut pas encore tiré, récupère la position de la cible 
             if (!canShoot)
             {
                 timerShoot += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -78,9 +79,12 @@ namespace ForestSurvivor.AllEnnemies
             }
             else
             {
+                // Le projectile avance
                 projectilePosition += direction * shootSpeed;
+                
                 if (!isEnnemiHurtByDog)
                 {
+                    // Si la balle touche le joueur, inflige des dégâts et lance un son de dégât du joueur
                     if (GetRectangleShoot().Intersects(player.GetPlayerRectangle()))
                     {
                         canShoot = false;
@@ -97,10 +101,10 @@ namespace ForestSurvivor.AllEnnemies
                 }
                 else
                 {
+                    // Si la balle touche le chien, inflige des dégâts et lance le son de douleur ou de mort
                     if (GetRectangleShoot().Intersects(dogShoot.GetRectangle()))
                     {
                         canShoot = false;
-                        // Music Dog hurt
                         dogShoot.IsHurt = true;
                         dogShoot.Life -= Damage;
                         if (dogShoot.Life <= 0)
@@ -112,7 +116,7 @@ namespace ForestSurvivor.AllEnnemies
                     }
                 }
 
-                // Out of screen
+                // Supprime le tir si il est en dehors de la map
                 if (projectilePosition.X < 0 || projectilePosition.Y < 0 || projectilePosition.X > Globals.ScreenWidth || projectilePosition.Y > Globals.ScreenHeight)
                 {
                     canShoot = false;
@@ -120,11 +124,18 @@ namespace ForestSurvivor.AllEnnemies
             }
         }
 
+        /// <summary>
+        /// Retourne le rectangle du projectile du slime
+        /// </summary>
+        /// <returns></returns>
         public Rectangle GetRectangleShoot()
         {
             return new Rectangle((int)projectilePosition.X, (int)projectilePosition.Y, 20, 10);
         }
 
+        /// <summary>
+        /// Affiche le tire du slime
+        /// </summary>
         public void DrawBullet()
         {
             if (canShoot)

@@ -105,21 +105,26 @@ namespace ForestSurvivor.Animals
             HealthBarDog = new HealthBar(GlobalsTexture.backHealDog, GlobalsTexture.frontHealDog, PvMax, new Vector2(X, Y + 100));
         }
 
+        /// <summary>
+        /// Animation du chien
+        /// </summary>
         public void Animation(GameTime gameTime)
         {
             DogAnimation.AnimateLooped(gameTime);
         }
+
         public void Update(Player player, GameTime gameTime)
         {
             DogAnimation.PositionX = _x;
             DogAnimation.PositionY = _y;
             Animation(gameTime);
 
+            // Barre de vie du chien
             HealthBarDog.SetPosition(position.X, position.Y + 100);
             HealthBarDog.Update(Life, gameTime);
 
 
-            // Dog take damage
+            // Lorsque le chien prend des dégâts, perd des points de vie, change de couleur et un son se lance
             if (IsHurt)
             {
                 Color = Color.Red;
@@ -135,6 +140,7 @@ namespace ForestSurvivor.Animals
 
             if (!isDead)
             {
+                // Si le chien n'a aucune cible, cherche la cible la plus proche
                 if (ennemiesTarget == null && bigSlimeTarget == null && shooterTarget == null && itemTarget == null && !hasTarget)
                 {
                     foreach (Ennemies ennemies in Globals.listLittleSlime)
@@ -224,14 +230,16 @@ namespace ForestSurvivor.Animals
                 }
                 else if (ennemiesTarget != null)
                 {
+                    // Va vers le slime tant que le chien ne tape pas l'ennemi
                     if (!ennemiesTarget.isEnnemiHurtByDog)
                     {
                         direction = new Vector2(ennemiesTarget.X - position.X, ennemiesTarget.Y - position.Y);
                         direction.Normalize();
                         position += direction * Speed;
-                        SetTextureWithDirection(direction);
+                        SetAnimationWithDirection(direction);
                     }
 
+                    // Si il y a une collision, inflige des dégâts
                     if (GetRectangle().Intersects(ennemiesTarget.GetEnnemieRectangle()))
                     {
                         ennemiesTarget.isEnnemiHurtByDog = true;
@@ -249,6 +257,7 @@ namespace ForestSurvivor.Animals
                         }
                     }
 
+                    // Remet la cible à 0 si elle n'existe plus
                     if (!Globals.listLittleSlime.Contains(ennemiesTarget))
                     {
                         ennemiesTarget = null;
@@ -259,14 +268,16 @@ namespace ForestSurvivor.Animals
                 }
                 else if (bigSlimeTarget != null)
                 {
+                    // Va vers le slime tant que le chien ne tape pas l'ennemi
                     if (!bigSlimeTarget.isEnnemiHurtByDog)
                     {
                         direction = new Vector2(bigSlimeTarget.X - position.X, bigSlimeTarget.Y - position.Y);
                         direction.Normalize();
                         position += direction * Speed;
-                        SetTextureWithDirection(direction);
+                        SetAnimationWithDirection(direction);
                     }
 
+                    // Si il y a une collision, inflige des dégâts
                     if (GetRectangle().Intersects(bigSlimeTarget.GetEnnemieRectangle()))
                     {
                         bigSlimeTarget.isEnnemiHurtByDog = true;
@@ -284,6 +295,7 @@ namespace ForestSurvivor.Animals
                         }
                     }
 
+                    // Remet la cible à 0 si elle n'existe plus
                     if (!Globals.listBigSlime.Contains(bigSlimeTarget))
                     {
                         bigSlimeTarget = null;
@@ -294,14 +306,16 @@ namespace ForestSurvivor.Animals
                 }
                 else if (shooterTarget != null)
                 {
+                    // Va vers le slime tant que le chien ne tape pas l'ennemi
                     if (!shooterTarget.isEnnemiHurtByDog)
                     {
                         direction = new Vector2(shooterTarget.X - position.X, shooterTarget.Y - position.Y);
                         direction.Normalize();
                         position += direction * Speed;
-                        SetTextureWithDirection(direction);
+                        SetAnimationWithDirection(direction);
                     }
 
+                    // Si il y a une collision, inflige des dégâts
                     if (GetRectangle().Intersects(shooterTarget.GetEnnemieRectangle()))
                     {
                         shooterTarget.dogShoot = this;
@@ -321,6 +335,7 @@ namespace ForestSurvivor.Animals
                         }
                     }
 
+                    // Remet la cible à 0 si elle n'existe plus
                     if (!Globals.listShootSlime.Contains(shooterTarget))
                     {
                         shooterTarget = null;
@@ -338,21 +353,23 @@ namespace ForestSurvivor.Animals
                         itemTarget.IsCollected = true;
                     }
 
+                    // Avance vers l'item si il n'a pas été collecté
                     if (!isItemCollected)
                     {
                         direction = new Vector2(itemTarget.X - position.X, itemTarget.Y - position.Y);
                         direction.Normalize();
                         position += direction * Speed;
-                        SetTextureWithDirection(direction);
+                        SetAnimationWithDirection(direction);
                     }
                     else
                     {
+                        // Avance jusqu'au joueur
                         if (timerBetweenTarget == 0)
                         {
                             direction = new Vector2(player.X - position.X, player.Y - position.Y);
                             direction.Normalize();
                             position += direction * Speed;
-                            SetTextureWithDirection(direction);
+                            SetAnimationWithDirection(direction);
                         }
 
                         if (GetRectangle().Intersects(player.GetPlayerRectangle()))
@@ -361,10 +378,12 @@ namespace ForestSurvivor.Animals
                         }
                         if (isPlayerTouch)
                         {
+                            // Donne l'effet au joueur
                             if (timerBetweenTarget == 0)
                             {
                                 itemTarget.AddEffect(player);
                             }
+                            // Remet la cible à 0
                             timerBetweenTarget += (float)gameTime.ElapsedGameTime.TotalSeconds;
                             if (timerBetweenTarget >= TIME_STOP_WHEN_COME_TO_PLAYER)
                             {
@@ -379,6 +398,7 @@ namespace ForestSurvivor.Animals
 
                     }
 
+                    // Remet la cible à 0 si elle n'existe plus
                     if (!Globals.listItems.Contains(itemTarget) && !isItemCollected)
                     {
                         itemTarget = null;
@@ -391,44 +411,47 @@ namespace ForestSurvivor.Animals
             }
             else
             {
+                // Affiche l'animation de mort
                 state = DogAnimationDir.DogDead;
                 SetAnimation();
             }
         }
 
         /// <summary>
-        /// Change la texture en fonction de la direction
+        /// Les Directions animées du chien
         /// </summary>
-        /// <param name="direction">direction ou se déplace le chien</param>
-        /// 
-
         enum DogAnimationDir
         {
             DogLeft, DogRight, DogTop, DogBottom, DogDead
         }
-        public void SetTextureWithDirection(Vector2 direction)
+
+        /// <summary>
+        /// Change l'animation du chien selon sa direction
+        /// </summary>
+        /// <param name="direction">direction du chien</param>
+        public void SetAnimationWithDirection(Vector2 direction)
         {
             float thresholdX = 0.2f; // Ajustez ce seuil en fonction de la largeur du chien
             float thresholdY = 0.2f; // Ajustez ce seuil en fonction de la hauteur du chien
 
+            // Chien vers la gauche
             if (direction.X <= -thresholdX && direction.Y >= -thresholdY)
             {
-                // Chien vers la gauche
                 state = DogAnimationDir.DogLeft;
             }
+            // Chien vers le bas
             else if (direction.Y >= thresholdY && Math.Abs(direction.X) < thresholdX)
             {
-                // Chien vers le bas
                 state = DogAnimationDir.DogBottom;
             }
+            // Chien vers la droite
             else if (direction.X >= thresholdX && direction.Y >= -thresholdY)
             {
-                // Chien vers la droite
                 state = DogAnimationDir.DogRight;
             }
+            // Chien vers le haut
             else if (direction.Y <= -thresholdY && Math.Abs(direction.X) < thresholdX)
             {
-                // Chien vers le haut
                 state = DogAnimationDir.DogTop;
             }
             SetAnimation();
@@ -436,6 +459,10 @@ namespace ForestSurvivor.Animals
 
 
         DogAnimationDir Laststate;
+
+        /// <summary>
+        /// Change l'animation du chien
+        /// </summary>
         public void SetAnimation()
         {
             switch (state)
@@ -469,8 +496,8 @@ namespace ForestSurvivor.Animals
         /// <summary>
         /// Récupère la distance entre 2 points avec la distance euclidienne
         /// </summary>
-        /// <param name="Xtarget"></param>
-        /// <param name="Ytarget"></param>
+        /// <param name="Xtarget">distance de la cible en X</param>
+        /// <param name="Ytarget">distance de la cible en Y</param>
         /// <returns></returns>
         public float GetDistanceBetween(int Xtarget, int Ytarget)
         {
@@ -479,12 +506,17 @@ namespace ForestSurvivor.Animals
             return (float)Math.Sqrt(xDistance * xDistance + yDistance * yDistance);
         }
 
-
+        /// <summary>
+        /// Retourne le rectangle du chien
+        /// </summary>
         public Rectangle GetRectangle()
         {
             return new Rectangle((int)position.X, (int)position.Y, (int)Width, (int)Height);
         }
 
+        /// <summary>
+        /// Affiche le chien et sa barre de vie
+        /// </summary>
         public void Draw()
         {
             DogAnimation.PositionX = _x;

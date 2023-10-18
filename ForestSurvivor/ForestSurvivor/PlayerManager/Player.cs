@@ -36,7 +36,6 @@ namespace ForestSurvivor
         private int mouvementDirection;
         private bool canShoot;
         private float timerPlayerHurt;
-        private Random rnd;
         private bool canMakeSoundHurt;
         private bool _isSpeedItemAcivated;
         private float _tmpSpeedTimer;
@@ -82,7 +81,6 @@ namespace ForestSurvivor
             IsSpeedItemAcivated = false;
             IsPlayerHurt = false;
             timerPlayerHurt = 0;
-            rnd = new Random();
             canMakeSoundHurt = false;
         }
 
@@ -284,6 +282,8 @@ namespace ForestSurvivor
                 }
             }
 
+            // Collision avec les ennemies
+
             foreach (Ennemies ennemies in Globals.listLittleSlime)
             {
                 ennemies.CollisionWithPlayer(this, gameTime);
@@ -299,6 +299,8 @@ namespace ForestSurvivor
                 slimeShooter.CollisionWithPlayer(this, gameTime);
             }
 
+            // Créer les petits slime lors de la mort du gros slime
+
             foreach (BigSlime bigSlime in Globals.listBigSlime)
             {
                 bool hasBigSlimeDied = false;
@@ -309,30 +311,30 @@ namespace ForestSurvivor
                 }
             }
 
-            #region player is dead
-            if (Life == 0)
-            {
-
-            }
-
-            #endregion
+            // Item temporaire
             if (IsSpeedItemAcivated) ResetSpeed(gameTime);
             if (IsDamageItemAcivated) ResetDamage(gameTime);
         }
 
+        /// <summary>
+        /// Retourne le rectangle du player
+        /// </summary>
         public Rectangle GetPlayerRectangle()
         {
             return new Rectangle((int)X, (int)Y, (int)Width, (int)Height);
         }
 
         /// <summary>
-        /// Draw the player
+        /// Draw le player
         /// </summary>
         public void Draw()
         {
             Globals.SpriteBatch.Draw(Texture, GetPlayerRectangle(), PlayerColor);
         }
 
+        /// <summary>
+        /// Remet la vitesse par défaut lorsque le temps de boost est dépassé
+        /// </summary>
         public void ResetSpeed(GameTime gameTime)
         {
             TmpSpeedTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -345,8 +347,9 @@ namespace ForestSurvivor
 
         }
 
-
-
+        /// <summary>
+        /// Remet les dégâts par défaut lorsque le temps de boost est dépassé
+        /// </summary>
         public void ResetDamage(GameTime gameTime)
         {
             TmpDamageTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -359,7 +362,9 @@ namespace ForestSurvivor
 
         }
 
-
+        /// <summary>
+        /// Si le joueur est mort
+        /// </summary>
         public bool IsDead()
         {
             if (Life <= 0)
