@@ -26,7 +26,12 @@ namespace ForestSurvivor.AllItems
              random= new Random();
         }
 
-
+        /// <summary>
+        /// Genere des items de maniere aleatoire
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="gameTime"></param>
+        /// <param name="spawnTime"></param>
         public void GenerateItem(Player player,GameTime gameTime,float spawnTime)
         {
             timeSpawn += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -51,6 +56,11 @@ namespace ForestSurvivor.AllItems
 
 
         }
+        /// <summary>
+        /// Genere un item a la mort d'un enemie
+        /// </summary>
+        /// <param name="bigSlime"></param>
+        /// <param name="player"></param>
         public void GenerateItemDeath(BigSlime bigSlime,Player player)
         {
 
@@ -60,11 +70,6 @@ namespace ForestSurvivor.AllItems
                 };
                 int randomItem = random.Next(0, itemsNameList.Count());
                 new Items(bigSlime.X, bigSlime.Y, itemsNameList[randomItem], player);
-       
-
-            
-
-
         }
     }
 

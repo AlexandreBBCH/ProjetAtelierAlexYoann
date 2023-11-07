@@ -78,6 +78,9 @@ namespace ForestSurvivor.Ui
             return new Rectangle((int)_x, (int)_y, _width, _height);
         }
 
+        /// <summary>
+        /// Attribution d'utilisation en fonction du bouton
+        /// </summary>
         public void UseIt()
         {
 
@@ -92,8 +95,8 @@ namespace ForestSurvivor.Ui
                     Globals.IsResume = true;
                     break;
                 case "BackMenu":
-                        Globals.Back = true;
-                        Globals.LauchGame = false;
+                     Globals.Back = true;
+                     Globals.LauchGame = false;
                     break;
                 case "Resume":
                     Globals.Back = true;
@@ -118,6 +121,11 @@ namespace ForestSurvivor.Ui
             }
         }
 
+        /// <summary>
+        /// Renvoie true si la souris survole et clique sur l'element
+        /// </summary>
+        /// <param name="mouseState"></param>
+        /// <returns></returns>
         public bool IsClicked(MouseState mouseState)
         {
             if (GetRectangle().Contains(mouseState.Position) && mouseState.LeftButton == ButtonState.Pressed)

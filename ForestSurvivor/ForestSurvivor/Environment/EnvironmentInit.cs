@@ -40,16 +40,18 @@ namespace ForestSurvivor.Environment
 
 
 
-
+        /// <summary>
+        /// Initialise les donnée de l'environnement nécéssair
+        /// </summary>
         public void GenerateEnvironment()
         {
+
             List<string> spawners = new List<string>
-         {
-        "Bush",
-        "Rock",
-        "BushBerrie"
-        //"Tree"
-         };
+            {
+                "Bush",
+                "Rock",
+                "BushBerrie"
+            };
 
             int minX = Globals.graphics.PreferredBackBufferWidth / 4; // Définir la limite gauche de la zone centrale
             int maxX = 3 * Globals.graphics.PreferredBackBufferWidth / 4; // Définir la limite droite de la zone centrale

@@ -52,12 +52,16 @@ namespace ForestSurvivor.Environment
         }
         public void UpdateSpawner(GameTime gameTime, Player player)
         {
-            IsCollided(player);
             if (IsAnimated)
             {
                 AnimationSheet.UpdateAnimation(gameTime);
             }
         }
+        /// <summary>
+        /// Verifie la collision du joueur
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
         public bool IsCollided(Player player)
         {
 
@@ -74,7 +78,6 @@ namespace ForestSurvivor.Environment
                 AnimationSheet.PositionX = X;
                 AnimationSheet.PositionY = Y;
                 AnimationSheet.DrawAnimation(GetSpawnerRectangle(), Color.White);
-
             }
             else
             {
@@ -85,7 +88,10 @@ namespace ForestSurvivor.Environment
         }
 
 
-
+        /// <summary>
+        /// Set les propriété des element au demmarage de la page en fonction de celle recupéré aléatoirement
+        /// </summary>
+        /// <param name="spawnerName"></param>
         public void SetSpawner(string spawnerName)
         {
 

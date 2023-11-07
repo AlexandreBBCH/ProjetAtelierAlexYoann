@@ -31,6 +31,8 @@ namespace ForestSurvivor.CardManager
         private string _textInfos;
         private string _buffName;
         private bool wasLeftButtonPressedLastFrame = false;
+        private bool CardEffectEnabled = false;
+
         public float X { get => _x; set => _x = value; }
         public float Y { get => _y; set => _y = value; }
         public int Width { get => _width; set => _width = value; }
@@ -38,6 +40,7 @@ namespace ForestSurvivor.CardManager
         public string TextInfos { get => _textInfos; set => _textInfos = value; }
         public string BuffName { get => _buffName; set => _buffName = value; }
         public float TextX { get => _textX; set => _textX = value; }
+        public bool CardEffectEnabled1 { get => CardEffectEnabled; set => CardEffectEnabled = value; }
 
         public Card(string textInfos, string buffName)
         {
@@ -60,8 +63,16 @@ namespace ForestSurvivor.CardManager
         {
             return new Rectangle(X, Y, Width, Height);
         }
-        bool CardEffectEnabled = false;
 
+        /// <summary>
+        /// Verifie si cliquer 
+        /// </summary>
+        /// <param name="mouseState"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         public bool IsClicked(MouseState mouseState, int x, int y, int width, int height)
         {
             if (GetRectangle(x, y, width, height).Contains(mouseState.Position) && mouseState.LeftButton == ButtonState.Pressed)
@@ -87,6 +98,11 @@ namespace ForestSurvivor.CardManager
             }
             return false;
         }
+
+        /// <summary>
+        /// Attribue les effet en fonction du nom de litem
+        /// </summary>
+        /// <param name="player"></param>
         public void ApplyCardEffect(Player player)
         {
             CardEffectEnabled = false;

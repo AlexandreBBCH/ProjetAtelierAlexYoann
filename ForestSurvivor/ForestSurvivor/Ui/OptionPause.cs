@@ -28,23 +28,22 @@ namespace ForestSurvivor.Ui
         int compteur = 0;
         int _resumeState;
         bool _isResume;
-        //OptionClickable _textLauchGame = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3 + 250, 400, 200, 80, GlobalsTexture.titleFont, "Play", "Start","Option");
         OptionClickable _addMusique = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.2f, Globals.graphics.PreferredBackBufferHeight / 2.5f, 60, 60, "-", "RetireMusique", "Option", "Image", null, GlobalsTexture.Minus);
         OptionClickable _retireMusique = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 1.75f, Globals.graphics.PreferredBackBufferHeight / 2.5f, 60, 60, "+", "AddMusique", "Option", "Image", null, GlobalsTexture.Plus);
         OptionClickable _addSound = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.2f, Globals.graphics.PreferredBackBufferHeight / 2f, 60, 60, "-", "RetireSound", "Option", "Image", null, GlobalsTexture.Minus);
         OptionClickable _retireSound = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 1.75f, Globals.graphics.PreferredBackBufferHeight / 2f, 60, 60, "+", "AddSound", "Option", "Image", null, GlobalsTexture.Plus);
-
-
         OptionClickable _textResume = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 2.3f, Globals.graphics.PreferredBackBufferHeight / 1.5f, 200, 80, "Retour", "Resume", "Option", "Font", GlobalsTexture.titleFont, null);
         OptionClickable _textMainMenu = new OptionClickable(Globals.graphics.PreferredBackBufferWidth / 3f, Globals.graphics.PreferredBackBufferHeight / 1.2f, 650, 80, "Menu Principal", "BackMenu", "Option", "Font", GlobalsTexture.titleFont, null);
+     
         public OptionPause()
         {
             _resumeState = 4;
             _isResume = false;
-
         }
 
         public bool IsResume { get => _isResume; set => _isResume = value; }
+
+
 
         public void OptionUpdate(GameTime gameTime, MouseState mouseState)
         {
@@ -60,7 +59,7 @@ namespace ForestSurvivor.Ui
 
       
 
-                if ((Keyboard.GetState().IsKeyDown(Keys.Escape) && !isOpen) || Globals.IsResume)  
+            if ((Keyboard.GetState().IsKeyDown(Keys.Escape) && !isOpen) || Globals.IsResume)  
             {
                 Globals.ButtonEnabled = false;
                 Globals.ButtonEnabledMain = false;

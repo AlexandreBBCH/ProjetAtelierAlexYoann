@@ -40,7 +40,10 @@ namespace ForestSurvivor.AllItems
         }
 
 
-        
+        /// <summary>
+        /// Le manager des effets
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void UpdateEffect(GameTime gameTime)
         {
 
@@ -70,7 +73,9 @@ namespace ForestSurvivor.AllItems
             }
         }
 
-
+        /// <summary>
+        /// Affiche un icone sur le coins superieur droit du joueur
+        /// </summary>
         public void DisplayEffectItem()
         {
           Globals.SpriteBatch.Draw(EffectDisplay, new Rectangle((int)Player.X + 100, (int)Player.Y - 20, 44, 44), Color.White);

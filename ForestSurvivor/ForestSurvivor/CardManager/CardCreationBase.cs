@@ -20,6 +20,9 @@ namespace ForestSurvivor.CardManager
 {
     internal class CardCreationBase
     {
+        /// <summary>
+        /// Création des moule de carte bonus
+        /// </summary>
         public void CreateCard()
         {
             Card PvMaxCard = new Card("+PV MAX", "MaxPv");

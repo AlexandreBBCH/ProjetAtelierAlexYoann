@@ -29,7 +29,11 @@ namespace ForestSurvivor.CardManager
             Globals.actualCards = GetLvlCard(3);
             timerClick = 0;
         }
-
+        /// <summary>
+        /// Recupere des cartes aléatoire différentes
+        /// </summary>
+        /// <param name="nbCard"></param>
+        /// <returns></returns>
         public List<Card> GetLvlCard(int nbCard)
         {
             List<Card> lvlCards = new List<Card>();

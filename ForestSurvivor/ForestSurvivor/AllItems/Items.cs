@@ -73,7 +73,11 @@ namespace ForestSurvivor.AllItems
             IsCollided(player);
         }
 
-
+        /// <summary>
+        /// Verifie la collision
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
         public bool IsCollided(Player player)
         {
 
@@ -88,7 +92,10 @@ namespace ForestSurvivor.AllItems
             }
             return false;
         }
-
+        /// <summary>
+        /// Ajout d'effet
+        /// </summary>
+        /// <param name="player"></param>
         public void AddEffect(Player player)
         {
             if (Speed > 0) new EffectItems(player, ItemName);
@@ -103,7 +110,12 @@ namespace ForestSurvivor.AllItems
             return new Rectangle(_x, _y, _width, _height);
         }
 
-        //Fonction qui sert juste a init les items de base sans intelligence
+
+        /// <summary>
+        ////Fonction qui sert juste a init les items de base sans intelligence
+        /// </summary>
+        /// <param name="itemName"></param>
+        /// <param name="player"></param>
         public void SetItem(string itemName,Player player)
         {
 
