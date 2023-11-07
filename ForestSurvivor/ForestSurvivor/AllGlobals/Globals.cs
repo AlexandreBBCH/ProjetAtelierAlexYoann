@@ -38,6 +38,7 @@ namespace ForestSurvivor.AllGlobals
         public static bool LevelTime = false;
         public static bool Pause = false;
         public static bool LevelUpPause = false;
+        public static bool canSerialize = true;
 
 
 
@@ -70,7 +71,6 @@ namespace ForestSurvivor.AllGlobals
         public static int nbShoot = 0;
         public static int nbShootHasTouch = 0;
 
-
         public static int ScreenWidth;
         public static int ScreenHeight;
 
@@ -93,6 +93,7 @@ namespace ForestSurvivor.AllGlobals
             LevelTime = false;
             Pause = false;
             LevelUpPause = false;
+            canSerialize = true;
 
             nbSlimeKilled = 0;
             nbBigSlimeKilled = 0;

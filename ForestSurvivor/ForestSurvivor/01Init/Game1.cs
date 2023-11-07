@@ -296,7 +296,11 @@ namespace ForestSurvivor
                         Globals.nbShooterSlimeKilled,
                         pourcentageShootSucessfull
                     };
-                    Globals.Serializer("bestscore.txt", newData);
+                    if (Globals.canSerialize)
+                    {
+                        Globals.Serializer("bestscore.txt", newData);
+                        Globals.canSerialize = false;
+                    }
                 }
 
                 // Affiche le menu de fin de partie
