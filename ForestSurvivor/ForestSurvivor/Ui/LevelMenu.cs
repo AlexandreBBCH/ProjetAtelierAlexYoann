@@ -27,8 +27,6 @@ namespace ForestSurvivor.Ui
 
             if (!Globals.LauchGame)
             {
-
-
                 Globals.SpriteBatch.Draw(GlobalsTexture.Background2D, new Rectangle(0, 0, Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight), Color.White);
                 Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "Survival Forest ", new Vector2(Globals.graphics.PreferredBackBufferWidth / 3, Globals.graphics.PreferredBackBufferHeight / 5f), Color.White);
 
@@ -47,7 +45,6 @@ namespace ForestSurvivor.Ui
         public void UpdateMainMenu(GameTime gameTime, MouseState mouseState)
         {
 
-            //_message = mouseState.X.ToString() + " " + mouseState.Y;
             foreach (var button in Globals.optionClickables)
             {
                 if (button.IsClicked(mouseState))

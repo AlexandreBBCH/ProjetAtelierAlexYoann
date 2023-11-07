@@ -46,7 +46,6 @@ namespace ForestSurvivor.Ui
             {
                 Globals.SpriteBatch.Draw(GlobalsTexture.Background2D, new Rectangle(0,0,Globals.graphics.PreferredBackBufferWidth, Globals.graphics.PreferredBackBufferHeight), Color.White);
                 Globals.SpriteBatch.DrawString(GlobalsTexture.titleFont, "Survival Forest ", new Vector2(Globals.graphics.PreferredBackBufferWidth / 3,  Globals.graphics.PreferredBackBufferHeight / 5f), Color.White);
-
                 // Draw best score
                 Globals.SpriteBatch.DrawString(GlobalsTexture.textGamefont, "Best Score :", new Vector2(Globals.ScreenWidth / 1.45f, Globals.ScreenHeight / 3f + 20), Color.White);
                 Globals.SpriteBatch.DrawString(GlobalsTexture.textMenufont, $"Best level : {DataBestGame[0]}", new Vector2(Globals.ScreenWidth / 1.45f, Globals.ScreenHeight / 3f + 120), Color.White);
@@ -54,8 +53,6 @@ namespace ForestSurvivor.Ui
                 Globals.SpriteBatch.DrawString(GlobalsTexture.textMenufont, $"Big slime killed : {DataBestGame[2]}", new Vector2(Globals.ScreenWidth / 1.45f, Globals.ScreenHeight / 3f + 220), Color.White);
                 Globals.SpriteBatch.DrawString(GlobalsTexture.textMenufont, $"Slime shooter killed : {DataBestGame[3]}", new Vector2(Globals.ScreenWidth / 1.45f, Globals.ScreenHeight / 3f + 270), Color.White);
                 Globals.SpriteBatch.DrawString(GlobalsTexture.textMenufont, $"Shoot sucessfull rate : {DataBestGame[4]}%", new Vector2(Globals.ScreenWidth / 1.45f, Globals.ScreenHeight / 3f + 320), Color.White);
-                
-
                 foreach (var textClick in Globals.optionClickables)
                 {
                     if (textClick.Where == "MainMenu")
@@ -70,7 +67,6 @@ namespace ForestSurvivor.Ui
         public void UpdateMainMenu(GameTime gameTime,MouseState mouseState)
         {
 
-            //_message = mouseState.X.ToString() + " " + mouseState.Y;
             foreach (var button in Globals.optionClickables)
             {
                 if (button.IsClicked(mouseState))
